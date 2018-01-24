@@ -1,2 +1,2 @@
 # graduation
-Ad blocking program using image process
+OCR based smart household ledger
