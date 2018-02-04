@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "878201846658",
+    "firebase_url": "https://smared-d1166.firebaseio.com",
+    "project_id": "smared-d1166",
+    "storage_bucket": "smared-d1166.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878201846658:android:5cb4b49d8e29d08e",
+        "android_client_info": {
+          "package_name": "kr.ac.kpu.block.smared"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "878201846658-j4jacj69kqltiq5gcrji7olhft7rm3k4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.ac.kpu.block.smared",
+            "certificate_hash": "f3b3e0a785ce68725774ed736327e0a1a01fa7df"
+          }
+        },
+        {
+          "client_id": "878201846658-kjl4p8m0dp6tc520d6kj8je6cuuvako2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdhOMm7i_jZhQ4GfmqJl3MdY_zuiZIocg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "878201846658-kjl4p8m0dp6tc520d6kj8je6cuuvako2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
