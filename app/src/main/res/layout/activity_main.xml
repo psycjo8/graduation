@@ -8,6 +8,9 @@
     android:background="@color/colorPrimary"
     tools:context="kr.ac.kpu.block.smared.MainActivity">
 
+
+
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -75,6 +78,13 @@
     </RelativeLayout>
 
 
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:id="@+id/pbLogin"
+        android:visibility="gone"
+        />
 
 
 </RelativeLayout>

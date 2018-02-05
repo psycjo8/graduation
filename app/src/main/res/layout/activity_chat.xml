@@ -9,8 +9,33 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_alignParentRight="true"
         android:text="Finish"
         android:id="@+id/btnFinish"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/my_recycler_view"
+        android:scrollbars="vertical"
+        android:layout_below="@+id/btnFinish"
+        android:layout_above="@+id/etText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="메시지 입력"
+        android:layout_toLeftOf="@id/btnSend"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/etText"
+
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Send"
+        android:id="@+id/btnSend"
         />
 </RelativeLayout>
