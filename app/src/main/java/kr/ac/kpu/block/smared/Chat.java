@@ -1,8 +1,5 @@
 package kr.ac.kpu.block.smared;
 
-/**
- * Created by psycj on 2018-02-05.
- */
 
 public class Chat {
     public String email;

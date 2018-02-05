@@ -46,8 +46,12 @@ public class MainActivity extends AppCompatActivity {
                 stEmail = etEmail.getText().toString();
                 stPassword = etPassword.getText().toString();
 
-                //Toast.makeText(MainActivity.this, stEmail + "," + stPassword, Toast.LENGTH_SHORT).show();
-                registerUser(stEmail,stPassword);
+                if(stEmail.isEmpty() || stEmail.equals("") || stPassword.isEmpty() || stPassword.equals("") ) {
+                    Toast.makeText(MainActivity.this, "입력이 없습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    registerUser(stEmail,stPassword);
+                }
+
             }
         });
 
@@ -57,7 +61,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 stEmail = etEmail.getText().toString();
                 stPassword = etPassword.getText().toString();
-                userLogin(stEmail,stPassword);
+
+                if(stEmail.isEmpty() || stEmail.equals("") || stPassword.isEmpty() || stPassword.equals("") ) {
+                    Toast.makeText(MainActivity.this, "입력이 없습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    userLogin(stEmail,stPassword);
+                }
+
                 //Toast.makeText(MainActivity.this, "LOGIN", Toast.LENGTH_SHORT).show();
 
             }

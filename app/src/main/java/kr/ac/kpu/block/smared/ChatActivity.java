@@ -99,7 +99,7 @@ public class ChatActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mChat= new ArrayList<>();
         // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(mChat);
+        mAdapter = new MyAdapter(mChat,email);
         mRecyclerView.setAdapter(mAdapter);
 
         DatabaseReference myRef = database.getReference("chats");
@@ -108,6 +108,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Chat chat = dataSnapshot.getValue(Chat.class);
                 mChat.add(chat);
+                mRecyclerView.scrollToPosition(mChat.size()-1);
                 mAdapter.notifyItemInserted(mChat.size() - 1);
 
             }

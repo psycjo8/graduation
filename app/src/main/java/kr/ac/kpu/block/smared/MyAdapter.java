@@ -11,6 +11,7 @@ import java.util.List;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private String[] mDataset;
     List<Chat> mChat;
+    String stEmail;
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -24,19 +25,32 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter( List<Chat> mChat) {
+    public MyAdapter( List<Chat> mChat , String email) {
         this.mChat = mChat;
+        this.stEmail = email;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(mChat.get(position).getEmail().equals(stEmail)) {
+            return 1;
+        } else {
+            return 2;
+        }
     }
 
     // Create new views (invoked by the layout manager)
     @Override
     public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
-        // create a new view
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.my_text_view, parent, false);
-        // set the view's size, margins, paddings and layout parameters
-
+        View v;
+        if (viewType == 1) {
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.my_text_view, parent, false);
+        } else {
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.right_text_view, parent, false);
+        }
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
