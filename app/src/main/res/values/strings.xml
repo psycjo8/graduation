@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">SmaRed</string>
+    <string name="title_home">홈</string>
+    <string name="title_friends">친구</string>
+    <string name="title_profile">프로필</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

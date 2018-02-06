@@ -77,14 +77,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart() {
+    public void onStart() { // 유저 체크
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         //updateUI(currentUser);
     }
 
-    public void registerUser(String email,String password) {
+    public void registerUser(String email,String password) { // 회원 가입
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void userLogin(String email, String password) {
+    private void userLogin(String email, String password) { // 로그인 체크 - firebase
         pbLogin.setVisibility(View.VISIBLE);
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -124,8 +124,9 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                            // updateUI(user);
-                            Intent in = new Intent(MainActivity.this, ChatActivity.class);
+                            Intent in = new Intent(MainActivity.this, TabActivity.class);
                             startActivity(in);
+                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());

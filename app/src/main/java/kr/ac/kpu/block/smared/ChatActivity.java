@@ -72,7 +72,7 @@ public class ChatActivity extends AppCompatActivity {
                     chat.put("email", email);
                     chat.put("text",stText);
                     myRef.setValue(chat);
-
+                    etText.setText("");
 
 
                 }
