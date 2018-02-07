@@ -1,6 +1,7 @@
 package kr.ac.kpu.block.smared;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.*;
 import com.google.firebase.*;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Hashtable;
 
 public class MainActivity extends AppCompatActivity {
     String TAG = "MainActivity";
@@ -26,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     EditText etPassword;
     ProgressBar pbLogin;
     private FirebaseAuth mAuth;
-
+    DatabaseReference myRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         etEmail = (EditText) findViewById(R.id.etEmail);
         etPassword = (EditText) findViewById(R.id.etPassword);
         pbLogin = (ProgressBar) findViewById(R.id.pbLogin);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("users");
         mAuth = FirebaseAuth.getInstance();
 
         Button btnRegister = (Button) findViewById(R.id.btnRegister);
@@ -92,14 +99,21 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            Toast.makeText(MainActivity.this, "Authentication success.",
+                            Toast.makeText(MainActivity.this, "회원가입 성공",
                                     Toast.LENGTH_SHORT).show();
+
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            Hashtable<String, String> profile   // HashTable로 연결
+                                    = new Hashtable<String, String>();
+                            profile.put("email", stEmail);
+                            profile.put("photo","");
+                            myRef.child(user.getUid()).setValue(profile);
                            // updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(MainActivity.this, "회원가입 실패",
                                     Toast.LENGTH_SHORT).show();
                            // updateUI(null);
                         }
@@ -120,17 +134,24 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
-                            Toast.makeText(MainActivity.this, "Authentication success.",
+                            Toast.makeText(MainActivity.this, "로그인 성공",
                                     Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
+                            SharedPreferences sharedPreferences = getSharedPreferences("email",MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("uid",user.getUid());
+                            editor.putString("email",user.getEmail());
+                            editor.apply();
+
+
                            // updateUI(user);
                             Intent in = new Intent(MainActivity.this, TabActivity.class);
                             startActivity(in);
-                            finish();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(MainActivity.this, "로그인 실패",
                                     Toast.LENGTH_SHORT).show();
                           //  updateUI(null);
                         }
