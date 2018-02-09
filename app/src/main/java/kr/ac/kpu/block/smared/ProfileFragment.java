@@ -214,6 +214,7 @@ public class ProfileFragment extends Fragment {
                 Hashtable<String, String> profile   // HashTable로 연결
                         = new Hashtable<String, String>();
                 profile.put("email", stEmail);
+                profile.put("key",stUid);
                 profile.put("photo",photoUrl);
                 myRef.child(stUid).setValue(profile);
                 myRef.addListenerForSingleValueEvent(new ValueEventListener() {

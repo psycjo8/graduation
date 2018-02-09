@@ -4,6 +4,7 @@ package kr.ac.kpu.block.smared;
 public class Friend {
     public String email;
     public String photo;
+    public String key;
 
 
     public Friend() {
@@ -22,7 +23,17 @@ public class Friend {
         return photo;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public void setPhoto(String photo) {
         this.photo = photo;
+
+
     }
 }

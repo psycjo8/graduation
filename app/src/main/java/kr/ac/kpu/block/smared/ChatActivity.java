@@ -1,5 +1,6 @@
 package kr.ac.kpu.block.smared;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,6 +49,10 @@ public class ChatActivity extends AppCompatActivity {
            email = user.getEmail();
         }
 
+        Intent in = getIntent();
+        final String stChatId = in.getStringExtra("friendUid");
+
+
         etText = (EditText) findViewById(R.id.etText);
         btnSend = (Button) findViewById(R.id.btnSend);
         btnSend.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +69,7 @@ public class ChatActivity extends AppCompatActivity {
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String formattedDate = df.format(c.getTime());
 
-                    DatabaseReference myRef = database.getReference("chats").child(formattedDate);
+                    DatabaseReference myRef = database.getReference("users").child(stChatId).child("chat").child(formattedDate);
 
 
                     Hashtable<String, String> chat   // HashTable로 연결
@@ -102,7 +107,7 @@ public class ChatActivity extends AppCompatActivity {
         mAdapter = new MyAdapter(mChat,email);
         mRecyclerView.setAdapter(mAdapter);
 
-        DatabaseReference myRef = database.getReference("chats");
+        DatabaseReference myRef = database.getReference("users").child(stChatId).child("chat");
         myRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

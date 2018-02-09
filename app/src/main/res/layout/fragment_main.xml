@@ -4,13 +4,11 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:clickable="true"
-    tools:context="kr.ac.kpu.block.smared.FriendsFragment">
+    tools:context="kr.ac.kpu.block.smared.MainFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvFriend"
-        android:scrollbars="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+
+
+
 </RelativeLayout>
