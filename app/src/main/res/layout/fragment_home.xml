@@ -1,5 +1,6 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
@@ -7,9 +8,22 @@
     tools:context="kr.ac.kpu.block.smared.HomeFragment">
 
 
-    <TextView
+    <fragment android:name="kr.ac.kpu.block.smared.LedgerRegFragment"
+        android:id="@+id/ledger"
+        android:layout_below="@+id/lednavi"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="안녕" />
+        android:layout_height="match_parent" />
 
-</FrameLayout>
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/lednavi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
+        android:background="?android:attr/windowBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/lednavi" />
+
+</RelativeLayout>

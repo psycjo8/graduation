@@ -46,10 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnRegister = (Button) findViewById(R.id.btnRegister);
 
-
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) {  // 회원가입 버튼 클릭 시
                 stEmail = etEmail.getText().toString();
                 stPassword = etPassword.getText().toString();
 
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         Button btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) {   // 로그인 버튼 클릭 시
                 stEmail = etEmail.getText().toString();
                 stPassword = etPassword.getText().toString();
 

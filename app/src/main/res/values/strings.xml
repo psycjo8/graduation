@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">SmaRed</string>
+
     <string name="title_home">홈</string>
     <string name="title_friends">친구</string>
     <string name="title_profile">프로필</string>
+
+    <string name="title_input">가계부 기록</string>
+    <string name="title_output">가계부 확인</string>
+    <string name="title_statistic">통계</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
