@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string-array name="useItem">
+        <item>의류비</item>
+        <item>식비</item>
+        <item>주거비</item>
+        <item>교통비</item>
+        <item>생필품</item>
+        <item>기타</item>
+    </string-array>
+</resources>
+

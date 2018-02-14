@@ -31,7 +31,6 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView; //
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    String[] myDataset = {"안녕", "오늘", "뭐했어?", "영화볼래?"};
 
     EditText etText;
     Button btnSend;
@@ -45,7 +44,6 @@ public class ChatActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance(); // Firebase Database 연결
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser(); // 유저 정보 추출
         if (user != null) {
-
            email = user.getEmail();
         }
 

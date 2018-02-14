@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar pbLogin;
     private FirebaseAuth mAuth;
     DatabaseReference myRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

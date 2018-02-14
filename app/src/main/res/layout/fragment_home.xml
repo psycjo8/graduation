@@ -8,7 +8,7 @@
     tools:context="kr.ac.kpu.block.smared.HomeFragment">
 
 
-    <fragment android:name="kr.ac.kpu.block.smared.LedgerRegFragment"
+    <fragment android:name="kr.ac.kpu.block.smared.MainFragment"
         android:id="@+id/ledger"
         android:layout_below="@+id/lednavi"
         android:layout_width="match_parent"

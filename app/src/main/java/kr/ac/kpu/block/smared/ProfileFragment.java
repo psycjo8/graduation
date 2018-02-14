@@ -163,8 +163,8 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,   // 외부저장소 권한 응답
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {    // 외부저장소 권한 응답
         switch (requestCode) {
             case 1: {
                 // If request is cancelled, the result arrays are empty.

@@ -2,6 +2,7 @@ package kr.ac.kpu.block.smared;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,6 +23,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     List<Friend> mFriend;  // email,photo,key 저장
     String stEmail;
     Context context;
+
+    SharedPreferences sharedPreferences;
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -30,6 +34,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         public TextView tvEmail;
         public ImageView ivUser;
         public Button btnChat;
+
+
         public ViewHolder(View itemView) {
             super(itemView);
             tvEmail  = (TextView) itemView.findViewById(R.id.tvEmail);
@@ -53,6 +59,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_friend, parent, false);
 
+        sharedPreferences = context.getSharedPreferences("email",Context.MODE_PRIVATE);
+        stEmail =  sharedPreferences.getString("email","");
+
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
@@ -63,26 +72,27 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
-        holder.tvEmail.setText(mFriend.get(position).getEmail());
-        String stPhoto = mFriend.get(position).getPhoto();
+            holder.tvEmail.setText(mFriend.get(position).getEmail());
+            String stPhoto = mFriend.get(position).getPhoto();
 
-        if (TextUtils.isEmpty(stPhoto)) {
+            if (TextUtils.isEmpty(stPhoto)) {
 
-        } else {
-            Picasso.with(context).load(stPhoto).fit().centerInside().into(holder.ivUser);
+            } else {
+                Picasso.with(context).load(stPhoto).fit().centerInside().into(holder.ivUser);
 
+            }
+
+            holder.btnChat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String stFriendId = mFriend.get(position).getKey();
+                    Intent in = new Intent(context, ChatActivity.class);
+                    in.putExtra("friendUid", stFriendId);
+                    context.startActivity(in);
+                }
+            });
         }
 
-        holder.btnChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String stFriendId = mFriend.get(position).getKey();
-                Intent in = new Intent(context, ChatActivity.class);
-                in.putExtra("friendUid",stFriendId);
-                context.startActivity(in);
-            }
-        });
-    }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
