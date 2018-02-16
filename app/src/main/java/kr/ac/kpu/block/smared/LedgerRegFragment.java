@@ -1,6 +1,7 @@
 package kr.ac.kpu.block.smared;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,19 +28,24 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class LedgerRegFragment extends android.app.Fragment {
 
     FirebaseDatabase database;
     DatabaseReference myRef;
     FirebaseUser user;
+    Context context;
 
     String stUseItem;
     String stPrice;
     String stPaymemo;
     Calendar c = Calendar.getInstance(); // Firebase내에 날짜로 저장
-    SimpleDateFormat month = new SimpleDateFormat("yyyy-M");
+    SimpleDateFormat year = new SimpleDateFormat("yyyy");
+    SimpleDateFormat month = new SimpleDateFormat("M");
     SimpleDateFormat day = new SimpleDateFormat("d");
+    String stYear = year.format(c.getTime());
     String stMonth = month.format(c.getTime());
     String stDay = day.format(c.getTime());
 
@@ -51,7 +57,6 @@ public class LedgerRegFragment extends android.app.Fragment {
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("users");
         user = FirebaseAuth.getInstance().getCurrentUser();
-
 
         View v = inflater.inflate(R.layout.fragment_ledger_reg, container, false);
 
@@ -78,16 +83,15 @@ public class LedgerRegFragment extends android.app.Fragment {
         cvCalender.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
-
-                stMonth = (year+"-"+(month+1));
+                stYear = Integer.toString(year);
+                stMonth = Integer.toString(month+1);
                 stDay = Integer.toString(day);
-                Toast.makeText(getActivity(), stMonth, Toast.LENGTH_SHORT).show();
+               Toast.makeText(getActivity(), stYear+"-"+stMonth+"-"+stDay, Toast.LENGTH_SHORT).show();
             }
         });
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 stPrice = etPrice.getText().toString();
                 stPaymemo = etPaymemo.getText().toString();
                 c = Calendar.getInstance();
@@ -98,10 +102,12 @@ public class LedgerRegFragment extends android.app.Fragment {
                 ledger.put("useItem", stUseItem);
                 ledger.put("price", stPrice);
                 ledger.put("paymemo",stPaymemo);
+
+
                 if (rbConsume.isChecked()) {
-                    myRef.child(user.getUid()).child("Ledger").child(stMonth).child(stDay).child("consume").child(stTime).setValue(ledger);
+                    myRef.child(user.getUid()).child("Ledger").child(stYear).child(stMonth).child(stDay).child("consume").child(stTime).setValue(ledger);
                 } else {
-                    myRef.child(user.getUid()).child("Ledger").child(stMonth).child(stDay).child("Income").child(stTime).setValue(ledger);
+                    myRef.child(user.getUid()).child("Ledger").child(stYear).child(stMonth).child(stDay).child("Income").child(stTime).setValue(ledger);
                 }
 
                 Toast.makeText(getActivity(), "저장하였습니다.", Toast.LENGTH_SHORT).show();

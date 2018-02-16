@@ -9,8 +9,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:text="Finish"
+        android:layout_alignParentLeft="true"
+        android:text="이전"
         android:id="@+id/btnFinish"
         />
 
