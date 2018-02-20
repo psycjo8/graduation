@@ -1,6 +1,8 @@
 package kr.ac.kpu.block.smared;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,18 +15,25 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,49 +51,78 @@ import java.util.Hashtable;
 
 public class ProfileFragment extends Fragment {
     ImageView ivUser;
+    TextView tvNickname;
+    Button btnChangePhoto;
+    Button btnChangeNickname;
+    Button btnLogout;
+    Button btnWithdrawal;
     private StorageReference mStorageRef;
     Bitmap bitmap;
     String stUid;
     String stEmail;
+    String stNickname;
     String TAG = getClass().getSimpleName();
+    int regStatus = 1;
     ProgressBar pbLogin;
+
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+    FirebaseUser user;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        tvNickname = (TextView) v.findViewById(R.id.tvNickname);
+        btnChangePhoto = (Button) v.findViewById(R.id.btnChangePhoto);
+        btnLogout =  (Button) v.findViewById(R.id.btnLogout);
+        btnChangeNickname = (Button) v.findViewById(R.id.btnChangeNickname);
+        btnWithdrawal = (Button) v.findViewById(R.id.btnWithdrawal);
+
+        ivUser  = (ImageView) v.findViewById(R.id.ivUser);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
         mStorageRef = FirebaseStorage.getInstance().getReference();
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("email",Context.MODE_PRIVATE);
         stUid = sharedPreferences.getString("uid","");
         stEmail = sharedPreferences.getString("email","");
+
         pbLogin = (ProgressBar) v.findViewById(R.id.pbLogin);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
-        myRef.child("users").child(stUid).addListenerForSingleValueEvent(new ValueEventListener() {
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
+        myRef.child("users").child(stUid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                String value = dataSnapshot.getValue().toString();
-                String stPhoto = dataSnapshot.child("photo").getValue().toString();
+                if(regStatus==0) {
+                getActivity().finish();
+                }   else {
 
-                if(TextUtils.isEmpty(stPhoto)) {
-                    pbLogin.setVisibility(getView().GONE);
-                } else {
-                    pbLogin.setVisibility(getView().VISIBLE);
-                    Picasso.with(getActivity()).load(stPhoto).fit().centerInside().into(ivUser, new Callback.EmptyCallback() {
-                        @Override public void onSuccess() {
-                            // Index 0 is the image view.
-                            Log.d(TAG, "SUCCESS");
-                            pbLogin.setVisibility(getView().GONE);
-                        }
-                    });
-                }
+                    String value = dataSnapshot.getValue().toString();
+                    String stPhoto = dataSnapshot.child("photo").getValue().toString();
+                    stNickname = dataSnapshot.child("nickname").getValue().toString();
+                    tvNickname.setText("닉네임 : " + stNickname);
+
+                    if (TextUtils.isEmpty(stPhoto)) {
+                        pbLogin.setVisibility(getView().GONE);
+                    } else {
+                        pbLogin.setVisibility(getView().VISIBLE);
+                        Picasso.with(getActivity()).load(stPhoto).fit().centerInside().into(ivUser, new Callback.EmptyCallback() {
+                            @Override
+                            public void onSuccess() {
+                                // Index 0 is the image view.
+                                Log.d(TAG, "SUCCESS");
+                                pbLogin.setVisibility(getView().GONE);
+                            }
+                        });
+                    }
 
 
-                Log.d(TAG, "Value is: " + value);
-            }
+                    Log.d(TAG, "Value is: " + value);
+                }  }
 
             @Override
             public void onCancelled(DatabaseError error) {
@@ -121,8 +159,8 @@ public class ProfileFragment extends Fragment {
         }
         // Inflate the layout for this fragment
 
-        ivUser  = (ImageView) v.findViewById(R.id.ivUser);
-        ivUser.setOnClickListener(new View.OnClickListener() {
+
+        btnChangePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -130,7 +168,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        Button btnLogout =  (Button) v.findViewById(R.id.btnLogout);
+
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,6 +177,72 @@ public class ProfileFragment extends Fragment {
                 getActivity().finish();
             }
         });
+
+        btnChangeNickname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alertdialog = new AlertDialog.Builder(getActivity());
+                final EditText etNickname = new EditText(getActivity());
+                alertdialog.setTitle("닉네임 변경");
+                alertdialog.setView(etNickname);
+
+                alertdialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        stNickname = etNickname.getText().toString();
+                        tvNickname.setText("닉네임 : "+ stNickname);
+                        myRef.child("users").child(stUid).child("nickname").setValue(stNickname);
+                    }
+                });
+                alertdialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                    }
+                });
+                alertdialog.show();
+            }
+        });
+
+
+        btnWithdrawal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alertdialog = new AlertDialog.Builder(getActivity());
+                alertdialog.setMessage("정말 탈퇴하시겠습니까?");
+
+                alertdialog.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        user.delete()
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            regStatus=0;
+                                            myRef.child("users").child(stUid).removeValue();
+
+                                            Log.d(TAG, "User account deleted.");
+
+                                            Toast.makeText(getActivity(),"계정이 삭제되었습니다.",Toast.LENGTH_SHORT).show();
+                                            getActivity().finish();
+                                        }
+                                    }
+                                });
+                    }
+                });
+                alertdialog.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                alertdialog.show();
+
+            }
+        });
+
 
 
 
@@ -154,6 +258,7 @@ public class ProfileFragment extends Fragment {
 
         Uri image = data.getData();
         try {
+            pbLogin.setVisibility(getView().VISIBLE);
             bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),image);
             ivUser.setImageBitmap(bitmap);
             uploadImage();
@@ -224,7 +329,7 @@ public class ProfileFragment extends Fragment {
                         Log.d("profile",s);
                         if (dataSnapshot != null) {
                             Toast.makeText(getActivity(), "사진 업로드 완료",Toast.LENGTH_SHORT).show();
-
+                            pbLogin.setVisibility(getView().GONE);
                         }
                     }
 

@@ -1,14 +1,19 @@
 package kr.ac.kpu.block.smared;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -27,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     String TAG = "MainActivity";
     String stEmail;
     String stPassword;
+    String stNickname;
     EditText etEmail;
     EditText etPassword;
     ProgressBar pbLogin;
@@ -45,19 +51,64 @@ public class MainActivity extends AppCompatActivity {
         myRef = database.getReference("users");
         mAuth = FirebaseAuth.getInstance();
 
+
         Button btnRegister = (Button) findViewById(R.id.btnRegister);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {  // 회원가입 버튼 클릭 시
-                stEmail = etEmail.getText().toString();
-                stPassword = etPassword.getText().toString();
+                final AlertDialog.Builder alertdialog = new AlertDialog.Builder(MainActivity.this);
+                final EditText email = new EditText(MainActivity.this);
+                final EditText password = new EditText(MainActivity.this);
+                final EditText nickname = new EditText(MainActivity.this);
+                LinearLayout layout = new LinearLayout(MainActivity.this);
 
-                if(stEmail.isEmpty() || stEmail.equals("") || stPassword.isEmpty() || stPassword.equals("") ) {
-                    Toast.makeText(MainActivity.this, "입력이 없습니다.", Toast.LENGTH_SHORT).show();
-                } else {
-                    registerUser(stEmail,stPassword);
-                }
+                email.setHint("Email을 입력해주세요");
+                password.setHint("비밀번호을 입력해주세요");
+                nickname.setHint("닉네임을 입력해주세요");
+
+                password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                layout.setOrientation(LinearLayout.VERTICAL);
+                layout.addView(email);
+                layout.addView(password);
+                layout.addView(nickname);
+                alertdialog.setView(layout);
+
+
+
+
+                alertdialog.setTitle("회원가입");
+                alertdialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        stEmail = email.getText().toString();
+                        stPassword = password.getText().toString();
+                        stNickname = nickname.getText().toString();
+                        if(stEmail.isEmpty() || stPassword.isEmpty() || stNickname.isEmpty()) {
+                            Toast.makeText(MainActivity.this, "양식을 모두 채워주세요", Toast.LENGTH_SHORT).show();
+                        } else {
+                            registerUser(stEmail,stPassword,stNickname);
+                        }
+                    }
+                });
+
+
+
+
+
+                alertdialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                    }
+                });
+                AlertDialog alert = alertdialog.create();
+                alert.show();
+
+
+
 
             }
         });
@@ -91,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         //updateUI(currentUser);
     }
 
-    public void registerUser(String email,String password) { // 회원 가입
+    public void registerUser(String email, String password, final String nickname) { // 회원 가입
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -109,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
                             profile.put("email", stEmail);
                             profile.put("photo","");
                             profile.put("key",user.getUid());
+                            profile.put("nickname",nickname);
                             myRef.child(user.getUid()).setValue(profile);
                            // updateUI(user);
                         } else {

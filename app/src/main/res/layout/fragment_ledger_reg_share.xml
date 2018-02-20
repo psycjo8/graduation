@@ -1,0 +1,124 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:clickable="true"
+    android:orientation="vertical"
+    tools:context="kr.ac.kpu.block.smared.ShareLedgerRegFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RadioGroup
+        android:id="@+id/rgChoice2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="120dp">
+
+
+    <RadioButton
+        android:id="@+id/rbConsume2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="지출" />
+
+
+    <RadioButton
+        android:id="@+id/rbIncome2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:text="수입" />
+
+        </RadioGroup>
+
+
+    <CalendarView
+        android:id="@+id/cvCalender2"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@+id/rgChoice2"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cvCalender2"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:text="분류"
+        android:textColor="#000000"
+        android:textSize="18sp"/>
+
+    <Spinner
+        android:id="@+id/spnUseitem2"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cvCalender2"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="100dp"
+        android:entries="@array/useItem"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spnUseitem2"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="30dp"
+        android:text="금액"
+        android:textColor="#000000"
+        android:textSize="18sp"/>
+    <EditText
+        android:id="@+id/etPrice2"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spnUseitem2"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="100dp"
+        android:hint="금액을 입력해 주세요"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spnUseitem2"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="310dp"
+        android:text="원"
+        android:textColor="#000000"
+        android:textSize="18sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etPrice2"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
+        android:text="내용"
+        android:textColor="#000000"
+        android:textSize="18sp"/>
+    <EditText
+        android:id="@+id/etPaymemo2"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etPrice2"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="100dp"
+        android:hint="내용을 입력해 주세요"
+        />
+    <Button
+        android:id="@+id/btnSave2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etPrice2"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="300dp"
+        android:text="저장"
+        />
+
+
+
+
+
+
+</RelativeLayout>

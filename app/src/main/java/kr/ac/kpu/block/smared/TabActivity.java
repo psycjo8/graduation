@@ -25,8 +25,8 @@ public class TabActivity extends AppCompatActivity {
                    fragment = new HomeFragment();
                     switchFragment(fragment);
                     return true;
-                case R.id.navigation_friends:
-                   fragment = new FriendsFragment();
+                case R.id.navigation_share:
+                   fragment = new ShareFragment();
                    switchFragment(fragment);
                     return true;
                 case R.id.navigation_profile:

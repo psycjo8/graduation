@@ -74,19 +74,23 @@ public class LedgerViewFragment extends android.app.Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot yearSnapshot : dataSnapshot.getChildren()) { // 년
-                   ledger[i].setYear(yearSnapshot.getKey());
+
                //     Toast.makeText(getActivity(),yearSnapshot.getKey(),Toast.LENGTH_SHORT).show();
                     for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) { // 월
-                       ledger[i].setMonth(monthSnapshot.getKey());
+
                         //Toast.makeText(getActivity(),monthSnapshot.getKey(),Toast.LENGTH_SHORT).show();
                         for (DataSnapshot daySnapshot : monthSnapshot.getChildren()) { // 일
-                            ledger[i].setDay(daySnapshot.getKey());
+
                          //  Toast.makeText(getActivity(),daySnapshot.getKey(),Toast.LENGTH_SHORT).show();
                             for (DataSnapshot classfySnapshot : daySnapshot.getChildren()) { // 분류
-                               ledger[i].setClassfy(classfySnapshot.getKey());
+
 
                                // Toast.makeText(getActivity(),classfySnapshot.getKey(),Toast.LENGTH_SHORT).show();
                                 for (DataSnapshot timesSnapshot : classfySnapshot.getChildren()) { //
+                                    ledger[i].setClassfy(classfySnapshot.getKey());
+                                    ledger[i].setYear(yearSnapshot.getKey());
+                                    ledger[i].setMonth(monthSnapshot.getKey());
+                                    ledger[i].setDay(daySnapshot.getKey());
                                     ledger[i].setTimes(timesSnapshot.getKey());
                                //     Toast.makeText(getActivity(),timesSnapshot.getKey(),Toast.LENGTH_SHORT).show();
 
