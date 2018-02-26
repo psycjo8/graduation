@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:clickable="true"
-    tools:context="kr.ac.kpu.block.smared.HomeFragment">
+    tools:context="kr.ac.kpu.block.smared.ShareFragment">
 
 
     <fragment android:name="kr.ac.kpu.block.smared.MainFragment"

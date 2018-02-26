@@ -258,7 +258,7 @@ public class ProfileFragment extends Fragment {
 
         Uri image = data.getData();
         try {
-            pbLogin.setVisibility(getView().VISIBLE);
+
             bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),image);
             ivUser.setImageBitmap(bitmap);
             uploadImage();
@@ -329,7 +329,7 @@ public class ProfileFragment extends Fragment {
                         Log.d("profile",s);
                         if (dataSnapshot != null) {
                             Toast.makeText(getActivity(), "사진 업로드 완료",Toast.LENGTH_SHORT).show();
-                            pbLogin.setVisibility(getView().GONE);
+
                         }
                     }
 

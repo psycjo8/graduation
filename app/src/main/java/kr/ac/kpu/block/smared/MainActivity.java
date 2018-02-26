@@ -75,9 +75,6 @@ public class MainActivity extends AppCompatActivity {
                 layout.addView(nickname);
                 alertdialog.setView(layout);
 
-
-
-
                 alertdialog.setTitle("회원가입");
                 alertdialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override

@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="120dp">
+        android:layout_marginLeft="20dp">
 
 
     <RadioButton
@@ -34,6 +34,22 @@
         android:text="수입" />
 
         </RadioGroup>
+
+    <Button
+        android:id="@+id/btnChoiceLed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="180dp"
+        android:text="가계부 선택"
+        />
+    <Button
+        android:id="@+id/btnInvite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="280dp"
+        android:text="초대"
+        />
+
 
 
     <CalendarView
@@ -116,8 +132,13 @@
         android:text="저장"
         />
 
-
-
+    <Button
+        android:id="@+id/btnOpenChat"
+        android:layout_below="@id/btnSave2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="채팅방 열기"
+        />
 
 
 

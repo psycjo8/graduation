@@ -73,42 +73,7 @@ public class LedgerViewFragment extends android.app.Fragment {
         myRef.child(user.getUid()).child("Ledger").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot yearSnapshot : dataSnapshot.getChildren()) { // 년
-
-               //     Toast.makeText(getActivity(),yearSnapshot.getKey(),Toast.LENGTH_SHORT).show();
-                    for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) { // 월
-
-                        //Toast.makeText(getActivity(),monthSnapshot.getKey(),Toast.LENGTH_SHORT).show();
-                        for (DataSnapshot daySnapshot : monthSnapshot.getChildren()) { // 일
-
-                         //  Toast.makeText(getActivity(),daySnapshot.getKey(),Toast.LENGTH_SHORT).show();
-                            for (DataSnapshot classfySnapshot : daySnapshot.getChildren()) { // 분류
-
-
-                               // Toast.makeText(getActivity(),classfySnapshot.getKey(),Toast.LENGTH_SHORT).show();
-                                for (DataSnapshot timesSnapshot : classfySnapshot.getChildren()) { //
-                                    ledger[i].setClassfy(classfySnapshot.getKey());
-                                    ledger[i].setYear(yearSnapshot.getKey());
-                                    ledger[i].setMonth(monthSnapshot.getKey());
-                                    ledger[i].setDay(daySnapshot.getKey());
-                                    ledger[i].setTimes(timesSnapshot.getKey());
-                               //     Toast.makeText(getActivity(),timesSnapshot.getKey(),Toast.LENGTH_SHORT).show();
-
-                                   ledgerContent = timesSnapshot.getValue(LedgerContent.class);
-                                   ledger[i].setPaymemo(ledgerContent.getPaymemo()); ;
-                                   ledger[i].setPrice(ledgerContent.getPrice()); ;
-                                   ledger[i].setUseItem(ledgerContent.getUseItem()); ;
-
-                                   mLedger.add(ledger[i]);
-                                    mAdapter.notifyItemInserted(mLedger.size() - 1);
-                                    i++;
-
-                                    }
-                                }
-                            }
-                        }
-                    }
-
+               ledgerView(dataSnapshot);
                 }
 
 
@@ -123,6 +88,53 @@ public class LedgerViewFragment extends android.app.Fragment {
 
         return v;
     }
+
+
+
+    public void ledgerView(DataSnapshot dataSnapshot) {
+
+        for (DataSnapshot yearSnapshot : dataSnapshot.getChildren()) { // 년
+
+            //     Toast.makeText(getActivity(),yearSnapshot.getKey(),Toast.LENGTH_SHORT).show();
+            for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) { // 월
+
+                //Toast.makeText(getActivity(),monthSnapshot.getKey(),Toast.LENGTH_SHORT).show();
+                for (DataSnapshot daySnapshot : monthSnapshot.getChildren()) { // 일
+
+                    //  Toast.makeText(getActivity(),daySnapshot.getKey(),Toast.LENGTH_SHORT).show();
+                    for (DataSnapshot classfySnapshot : daySnapshot.getChildren()) { // 분류
+
+
+                        // Toast.makeText(getActivity(),classfySnapshot.getKey(),Toast.LENGTH_SHORT).show();
+                        for (DataSnapshot timesSnapshot : classfySnapshot.getChildren()) { //
+                            ledger[i].setClassfy(classfySnapshot.getKey());
+                            ledger[i].setYear(yearSnapshot.getKey());
+                            ledger[i].setMonth(monthSnapshot.getKey());
+                            ledger[i].setDay(daySnapshot.getKey());
+                            ledger[i].setTimes(timesSnapshot.getKey());
+                            //     Toast.makeText(getActivity(),timesSnapshot.getKey(),Toast.LENGTH_SHORT).show();
+
+                            ledgerContent = timesSnapshot.getValue(LedgerContent.class);
+                            ledger[i].setPaymemo(ledgerContent.getPaymemo()); ;
+                            ledger[i].setPrice(ledgerContent.getPrice()); ;
+                            ledger[i].setUseItem(ledgerContent.getUseItem()); ;
+
+                            mLedger.add(ledger[i]);
+                            mAdapter.notifyItemInserted(mLedger.size() - 1);
+                            i++;
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+
+
 }
 
 

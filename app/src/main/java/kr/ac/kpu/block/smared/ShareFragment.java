@@ -44,16 +44,16 @@ public class ShareFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_home, container, false);
+        View v = inflater.inflate(R.layout.fragment_share, container, false);
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        LedgerRegFragment fragment = new LedgerRegFragment();
-        fragmentTransaction.add(R.id.ledger,fragment);
+        ShareLedgerRegFragment fragment = new ShareLedgerRegFragment();
+        fragmentTransaction.add(R.id.shareledger,fragment);
         fragmentTransaction.commit();
 
 
-        BottomNavigationView navigation = (BottomNavigationView) v.findViewById(R.id.lednavi);
+        BottomNavigationView navigation = (BottomNavigationView) v.findViewById(R.id.sharenavi);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         return v;
     }
@@ -62,7 +62,7 @@ public class ShareFragment extends Fragment {
     public void switchFragment(Fragment fragment) {
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.ledger, fragment);
+        transaction.replace(R.id.shareledger, fragment);
 // Commit the transaction
         transaction.commit();
 
