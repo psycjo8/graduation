@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +20,22 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 
 public class ShareLedgerRegFragment extends android.app.Fragment {
@@ -43,6 +52,8 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
     String stChatname;
     String stEmail;
     String stUid;
+    CharSequence selectChatname;
+    String joinChatname;
     Calendar c = Calendar.getInstance(); // Firebase내에 날짜로 저장
     SimpleDateFormat year = new SimpleDateFormat("yyyy");
     SimpleDateFormat month = new SimpleDateFormat("M");
@@ -51,6 +62,7 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
     String stMonth = month.format(c.getTime());
     String stDay = day.format(c.getTime());
     int saveItem;
+    List<String> listItems = new ArrayList<String>();
     @Override
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,7 +90,7 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
         stEmail = sharedPreferences.getString("email","");
         stUid = sharedPreferences.getString("uid","");
 
-        spnUseitem.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spnUseitem.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {   // 분류 선택
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 stUseItem = (String) adapterView.getItemAtPosition(i);
@@ -89,16 +101,16 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
             }
         });
 
-        cvCalender.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        cvCalender.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {   // 달력 선택, 날짜 입력
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {  // 달력 선택, 날짜 입력
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
                 stYear = Integer.toString(year);
                 stMonth = Integer.toString(month+1);
                 stDay = Integer.toString(day);
                Toast.makeText(getActivity(), stYear+"-"+stMonth+"-"+stDay, Toast.LENGTH_SHORT).show();
             }
         });
-        btnSave.setOnClickListener(new View.OnClickListener() {
+        btnSave.setOnClickListener(new View.OnClickListener() {   // 저장버튼 클릭
             @Override
             public void onClick(View view) {
                 stPrice = etPrice.getText().toString();
@@ -127,10 +139,14 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
             }
         });
 
-                btnChoiceLed.setOnClickListener(new View.OnClickListener() {
+        viewLedgerName();
+        btnChoiceLed.setOnClickListener(new View.OnClickListener() {   // 가계부 선택 버튼 클릭
                     @Override
                     public void onClick(View view) {
-                         CharSequence[] test={stChatname,stChatname,stEmail}; // 해야할거
+
+
+                        viewLedgerName();
+                       final CharSequence[] test = listItems.toArray(new CharSequence[listItems.size()]);
                         AlertDialog.Builder alertdialog= new AlertDialog.Builder(getActivity());
 
                         alertdialog.setTitle("가계부를 골라주세요");
@@ -160,14 +176,15 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
 
                                         Hashtable<String, String> makeChat   // HashTable로 연결
                                                 = new Hashtable<String, String>();
-                                        Map<String, Object> testMap = new HashMap<>();
+
 
 
                                     stChatname = editText.getText().toString();
                                         makeChat.put("chatname",stChatname);
                                     chatRef.child(chatId).setValue(makeChat);
                                     chatRef.child(chatId).child("user").child(stUid).setValue(stEmail);
-
+                                        listItems.clear(); // 가계부 생성시 초기화 후 다시 가계부 뷰 리스트 채움
+                                        viewLedgerName();
                                         Toast.makeText(getActivity(), "가계부가 생성되었습니다.", Toast.LENGTH_SHORT).show();
                                     }
                                 });
@@ -185,6 +202,7 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
                         alertdialog.setPositiveButton("선택", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                  selectChatname=test[saveItem];
 
                             }
                         });
@@ -196,12 +214,51 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
                         });
                         AlertDialog alert = alertdialog.create();
                         alert.show();
+                        listItems.clear();
+                    }
+                }); // 가계부 선택 버튼 종료
+
+
+        btnInvite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alertdialog = new AlertDialog.Builder(getActivity());
+                final EditText editText = new EditText(getActivity());
+                alertdialog.setTitle("초대할 이메일을 입력해주세요");
+                alertdialog.setView(editText);
+                alertdialog.setPositiveButton("초대", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for(DataSnapshot emailSnapshot : dataSnapshot.getChildren()) {
+                                if ( editText.getText().toString().equals(emailSnapshot.child("email").getValue(String.class))) {
+                                    Toast.makeText(getActivity(), emailSnapshot.child("nickname").getValue(String.class)+"님을 "+selectChatname+" 가계부에 초대하였습니다.", Toast.LENGTH_SHORT).show(); // 미완성
+                                } else {
+                                    Toast.makeText(getActivity(), "사용자가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                     }
                 });
+                alertdialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-
-
+                    }
+                });
+                AlertDialog alert = alertdialog.create();
+                alert.show();
+            }
+        });
 
 
 
@@ -212,5 +269,33 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
         return v;
     }
 
+    public void viewLedgerName() {
+
+        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot chatSnapshot : dataSnapshot.getChildren()) {
+
+                    for (DataSnapshot userSnapshot : chatSnapshot.getChildren()) {
+
+                        for (DataSnapshot uidSnapshot : userSnapshot.getChildren())
+                        {
+                            if(uidSnapshot.getKey().equals(stUid)) {
+                                joinChatname = chatSnapshot.child("chatname").getValue(String.class);
+                                listItems.add(joinChatname);
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 
 }

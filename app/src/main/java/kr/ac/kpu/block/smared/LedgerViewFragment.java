@@ -73,12 +73,8 @@ public class LedgerViewFragment extends android.app.Fragment {
         myRef.child(user.getUid()).child("Ledger").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-               ledgerView(dataSnapshot);
+                ledgerView(dataSnapshot);
                 }
-
-
-
-
 
             @Override
             public void onCancelled(DatabaseError error) {
