@@ -116,6 +116,7 @@ public class LedgerViewFragment extends android.app.Fragment {
                             ledger[i].setUseItem(ledgerContent.getUseItem()); ;
 
                             mLedger.add(ledger[i]);
+                            mRecyclerView.scrollToPosition(mLedger.size()-1);
                             mAdapter.notifyItemInserted(mLedger.size() - 1);
                             i++;
 

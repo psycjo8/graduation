@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +19,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Comment;
 
@@ -35,26 +38,36 @@ public class ChatActivity extends AppCompatActivity {
     EditText etText;
     Button btnSend;
     String email;
-    String uid;
+
     FirebaseDatabase database;
     List<Chat> mChat;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        final String[] photo = new String[1];
+        final String[] nickname = new String[1];
         database = FirebaseDatabase.getInstance(); // Firebase Database 연결
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser(); // 유저 정보 추출
-        if (user != null) {
-           email = user.getEmail();
-           uid = user.getUid();
-        }
+        etText = (EditText) findViewById(R.id.etText);
+        btnSend = (Button) findViewById(R.id.btnSend);
+        mRecyclerView = (RecyclerView) findViewById(R.id.rvChat);
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser(); // 유저 정보 추출
+        DatabaseReference photoRef = database.getReference("users").child(user.getUid());
         Intent in = getIntent();
         final String stChatId = in.getStringExtra("chatUid");
 
+        if (user != null) {
+            email = user.getEmail();
 
-        etText = (EditText) findViewById(R.id.etText);
-        btnSend = (Button) findViewById(R.id.btnSend);
+        }
+
+
+
+
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,13 +82,14 @@ public class ChatActivity extends AppCompatActivity {
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String formattedDate = df.format(c.getTime());
 
-                    DatabaseReference myRef = database.getReference("users").child(stChatId).child("chat").child(formattedDate);
+                    DatabaseReference myRef = database.getReference("chats").child(stChatId).child("chat").child(formattedDate);
 
 
                     Hashtable<String, String> chat   // HashTable로 연결
                             = new Hashtable<String, String>();
                     chat.put("email", email);
                     chat.put("text",stText);
+
                     myRef.setValue(chat);
                     etText.setText("");
 
@@ -93,8 +107,24 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.rvChat);
 
+        photoRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                photo[0] = dataSnapshot.child("photo").getValue(String.class);
+                nickname[0] = dataSnapshot.child("nickname").getValue(String.class);
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        Toast.makeText(ChatActivity.this, photo[0]+","+nickname[0], Toast.LENGTH_SHORT).show();
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
@@ -104,10 +134,12 @@ public class ChatActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mChat= new ArrayList<>();
         // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(mChat,email);
+        mAdapter = new MyAdapter(mChat,email,photo[0],nickname[0]);
         mRecyclerView.setAdapter(mAdapter);
 
-        DatabaseReference myRef = database.getReference("users").child(stChatId).child("chat");
+
+
+        DatabaseReference myRef = database.getReference("chats").child(stChatId).child("chat");
         myRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -139,6 +171,8 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 
 }

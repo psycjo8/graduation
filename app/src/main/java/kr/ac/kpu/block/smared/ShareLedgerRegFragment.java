@@ -128,9 +128,9 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
 
 
                 if (rbConsume.isChecked()) {
-                    myRef.child(user.getUid()).child("Ledger").child(stYear).child(stMonth).child(stDay).child("consume").child(stTime).setValue(ledger);
+                    chatRef.child(selectChatuid).child("Ledger").child(stYear).child(stMonth).child(stDay).child("consume").child(stTime).setValue(ledger);
                 } else {
-                    myRef.child(user.getUid()).child("Ledger").child(stYear).child(stMonth).child(stDay).child("Income").child(stTime).setValue(ledger);
+                    chatRef.child(selectChatuid).child("Ledger").child(stYear).child(stMonth).child(stDay).child("Income").child(stTime).setValue(ledger);
                 }
 
                 Toast.makeText(getActivity(), "저장하였습니다.", Toast.LENGTH_SHORT).show();
@@ -266,7 +266,7 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
         btnOpenChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent in = new Intent(context, ChatActivity.class);
+                Intent in = new Intent(getActivity(), ChatActivity.class);
                 in.putExtra("chatUid", selectChatuid);
                 in.putExtra("chatName",selectChatname);
                 startActivity(in);
