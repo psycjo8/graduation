@@ -3,6 +3,7 @@ package kr.ac.kpu.block.smared;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -47,12 +48,13 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
     Context context;
 
     String stUseItem;
-    String stPrice;
-    String stPaymemo;
-    String stChatname;
+    String stPrice; // 금액
+    String stPaymemo; // 내용
+    String stChatname;// 채팅방 이름 = 가계부 이름
     String stEmail;
     String stUid;
     CharSequence selectChatname;
+    String selectChatuid;
     String joinChatname;
     Calendar c = Calendar.getInstance(); // Firebase내에 날짜로 저장
     SimpleDateFormat year = new SimpleDateFormat("yyyy");
@@ -203,6 +205,7 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                   selectChatname=test[saveItem];
+                                  setChatUid();
 
                             }
                         });
@@ -234,9 +237,9 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for(DataSnapshot emailSnapshot : dataSnapshot.getChildren()) {
                                 if ( editText.getText().toString().equals(emailSnapshot.child("email").getValue(String.class))) {
-                                    Toast.makeText(getActivity(), emailSnapshot.child("nickname").getValue(String.class)+"님을 "+selectChatname+" 가계부에 초대하였습니다.", Toast.LENGTH_SHORT).show(); // 미완성
-                                } else {
-                                    Toast.makeText(getActivity(), "사용자가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                                    inviteUser(emailSnapshot.child("key").getValue(String.class),emailSnapshot.child("email").getValue(String.class));  // CHATS에 UID 키 저장, 이메일 값 저장
+                                    Toast.makeText(getActivity(), emailSnapshot.child("nickname").getValue(String.class)+"님을 "+selectChatname+" 가계부에 초대하였습니다.", Toast.LENGTH_SHORT).show();
+
                                 }
                             }
                         }
@@ -260,7 +263,17 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
             }
         });
 
+        btnOpenChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(context, ChatActivity.class);
+                in.putExtra("chatUid", selectChatuid);
+                in.putExtra("chatName",selectChatname);
+                startActivity(in);
 
+
+            }
+        });
 
 
 
@@ -297,5 +310,31 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
         });
 
     }
+
+    public void inviteUser(String uid, String email) {
+        Map<String, Object> invite = new HashMap<>();
+        invite.put(uid, email);
+        chatRef.child(selectChatuid).child("user").updateChildren(invite);
+    }
+
+    public void setChatUid() {
+        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot chatSnapshot : dataSnapshot.getChildren()) {
+                    if ( chatSnapshot.child("chatname").getValue(String.class).equals(selectChatname) ) {
+                        selectChatuid = chatSnapshot.getKey();
+                        //  Toast.makeText(getActivity(), selectChatuid, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
 }

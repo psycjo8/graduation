@@ -35,6 +35,7 @@ public class ChatActivity extends AppCompatActivity {
     EditText etText;
     Button btnSend;
     String email;
+    String uid;
     FirebaseDatabase database;
     List<Chat> mChat;
     @Override
@@ -45,10 +46,11 @@ public class ChatActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser(); // 유저 정보 추출
         if (user != null) {
            email = user.getEmail();
+           uid = user.getUid();
         }
 
         Intent in = getIntent();
-        final String stChatId = in.getStringExtra("friendUid");
+        final String stChatId = in.getStringExtra("chatUid");
 
 
         etText = (EditText) findViewById(R.id.etText);
