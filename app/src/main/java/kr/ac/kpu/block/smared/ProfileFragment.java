@@ -109,7 +109,7 @@ public class ProfileFragment extends Fragment {
                     if (TextUtils.isEmpty(stPhoto)) {
                         pbLogin.setVisibility(getView().GONE);
                     } else {
-                        pbLogin.setVisibility(getView().VISIBLE);
+
                         Picasso.with(getActivity()).load(stPhoto).fit().centerInside().into(ivUser, new Callback.EmptyCallback() {
                             @Override
                             public void onSuccess() {
@@ -165,6 +165,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(i,1);
+                pbLogin.setVisibility(getView().VISIBLE);
             }
         });
 
@@ -260,8 +261,8 @@ public class ProfileFragment extends Fragment {
         try {
 
             bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),image);
-            ivUser.setImageBitmap(bitmap);
             uploadImage();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -321,6 +322,7 @@ public class ProfileFragment extends Fragment {
                 profile.put("email", stEmail);
                 profile.put("key",stUid);
                 profile.put("photo",photoUrl);
+                profile.put("nickname",stNickname);
                 myRef.child(stUid).setValue(profile);
                 myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -328,8 +330,9 @@ public class ProfileFragment extends Fragment {
                         String s = dataSnapshot.getValue().toString();
                         Log.d("profile",s);
                         if (dataSnapshot != null) {
-                            Toast.makeText(getActivity(), "사진 업로드 완료",Toast.LENGTH_SHORT).show();
 
+                            Toast.makeText(getActivity(), "사진 업로드 완료",Toast.LENGTH_SHORT).show();
+                            ivUser.setImageBitmap(bitmap);
                         }
                     }
 

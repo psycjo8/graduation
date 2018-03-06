@@ -1,6 +1,7 @@
 package kr.ac.kpu.block.smared;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -35,15 +36,16 @@ public class LedgerViewFragment extends android.app.Fragment {
 
     FirebaseDatabase database;
     DatabaseReference myRef;
+    DatabaseReference chatRef;
     FirebaseUser user;
-
     Ledger ledger[] = new Ledger[1000];
 
     int i =0;
-
-
+    int caseCheck=1; // 1일경우 일반 가계부 뷰, 2일경우 공유 가계부 뷰
     LedgerContent ledgerContent = new LedgerContent();
     List<Ledger> mLedger ;
+    String selectChatuid;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,8 +56,11 @@ public class LedgerViewFragment extends android.app.Fragment {
         i=0;
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("users");
+        chatRef = database.getReference("chats");
         user = FirebaseAuth.getInstance().getCurrentUser();
-
+   //     Bundle bundle = getArguments();
+  //        caseCheck = bundle.getInt("caseCheck",1);
+  //      selectChatuid = bundle.getString("chatUid");
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_ledger_view, container, false);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.rvLedger);
@@ -70,17 +75,37 @@ public class LedgerViewFragment extends android.app.Fragment {
         mAdapter = new LedgerAdapter(mLedger, getActivity());
         mRecyclerView.setAdapter(mAdapter);
 
-        myRef.child(user.getUid()).child("Ledger").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ledgerView(dataSnapshot);
-                }
+        switch (caseCheck) {
+            case 1:
+                myRef.child(user.getUid()).child("Ledger").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        ledgerView(dataSnapshot);
+                    }
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-         });
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+                break;
+            case 2:
+                chatRef.child(selectChatuid).child("Ledger").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        ledgerView(dataSnapshot);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+                break;
+           default: break;
+
+        }
+
 
         return v;
     }

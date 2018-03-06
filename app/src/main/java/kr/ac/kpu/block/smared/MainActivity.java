@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                         if(stEmail.isEmpty() || stPassword.isEmpty() || stNickname.isEmpty()) {
                             Toast.makeText(MainActivity.this, "양식을 모두 채워주세요", Toast.LENGTH_SHORT).show();
                         } else {
-                            registerUser(stEmail,stPassword,stNickname);
+                            registerUser(stEmail,stPassword);
                         }
                     }
                 });
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         //updateUI(currentUser);
     }
 
-    public void registerUser(String email, String password, final String nickname) { // 회원 가입
+    public void registerUser(String email, String password) { // 회원 가입
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                             profile.put("email", stEmail);
                             profile.put("photo","");
                             profile.put("key",user.getUid());
-                            profile.put("nickname",nickname);
+                            profile.put("nickname",stNickname);
                             myRef.child(user.getUid()).setValue(profile);
                            // updateUI(user);
                         } else {

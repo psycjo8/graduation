@@ -12,7 +12,8 @@
     <RadioGroup
         android:id="@+id/rgChoice2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
+
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp">
@@ -38,14 +39,14 @@
     <Button
         android:id="@+id/btnChoiceLed"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginLeft="180dp"
         android:text="가계부 선택"
         />
     <Button
         android:id="@+id/btnInvite"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginLeft="280dp"
         android:text="초대"
         />
@@ -71,7 +72,7 @@
 
     <Spinner
         android:id="@+id/spnUseitem2"
-        android:layout_width="250dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cvCalender2"
         android:layout_marginTop="30dp"
@@ -134,8 +135,10 @@
 
     <Button
         android:id="@+id/btnOpenChat"
-        android:layout_below="@id/btnSave2"
-        android:layout_width="match_parent"
+        android:layout_below="@+id/cvCalender2"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="235dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="채팅방 열기"
         />

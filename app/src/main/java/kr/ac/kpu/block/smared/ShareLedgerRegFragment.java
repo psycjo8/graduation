@@ -1,6 +1,7 @@
 package kr.ac.kpu.block.smared;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -53,7 +54,7 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
     String stChatname;// 채팅방 이름 = 가계부 이름
     String stEmail;
     String stUid;
-    CharSequence selectChatname;
+    CharSequence selectChatname = "";
     String selectChatuid;
     String joinChatname;
     Calendar c = Calendar.getInstance(); // Firebase내에 날짜로 저장
@@ -115,33 +116,39 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {   // 저장버튼 클릭
             @Override
             public void onClick(View view) {
-                stPrice = etPrice.getText().toString();
-                stPaymemo = etPaymemo.getText().toString();
-                c = Calendar.getInstance();
-                SimpleDateFormat time = new SimpleDateFormat("HHmmss");
-                String stTime = time.format(c.getTime());
-                Hashtable<String, String> ledger   // HashTable로 연결
-                        = new Hashtable<String, String>();
-                ledger.put("useItem", stUseItem);
-                ledger.put("price", stPrice);
-                ledger.put("paymemo",stPaymemo);
-
-
-                if (rbConsume.isChecked()) {
-                    chatRef.child(selectChatuid).child("Ledger").child(stYear).child(stMonth).child(stDay).child("consume").child(stTime).setValue(ledger);
+                if (selectChatname.toString().isEmpty()) {
+                    Toast.makeText(getActivity(), "가계부를 선택후 이용해주세요", Toast.LENGTH_SHORT).show();
                 } else {
-                    chatRef.child(selectChatuid).child("Ledger").child(stYear).child(stMonth).child(stDay).child("Income").child(stTime).setValue(ledger);
+                    stPrice = etPrice.getText().toString();
+                    stPaymemo = etPaymemo.getText().toString();
+                    c = Calendar.getInstance();
+                    SimpleDateFormat time = new SimpleDateFormat("HHmmss");
+                    String stTime = time.format(c.getTime());
+                    Hashtable<String, String> ledger   // HashTable로 연결
+                            = new Hashtable<String, String>();
+                    ledger.put("useItem", stUseItem);
+                    ledger.put("price", stPrice);
+                    ledger.put("paymemo", stPaymemo);
+
+
+                    if (rbConsume.isChecked()) {
+                        chatRef.child(selectChatuid).child("Ledger").child(stYear).child(stMonth).child(stDay).child("consume").child(stTime).setValue(ledger);
+                    } else {
+                        chatRef.child(selectChatuid).child("Ledger").child(stYear).child(stMonth).child(stDay).child("Income").child(stTime).setValue(ledger);
+                    }
+
+                    Toast.makeText(getActivity(), "저장하였습니다.", Toast.LENGTH_SHORT).show();
+                    etPrice.setText("");
+                    etPaymemo.setText("");
                 }
-
-                Toast.makeText(getActivity(), "저장하였습니다.", Toast.LENGTH_SHORT).show();
-                etPrice.setText("");
-                etPaymemo.setText("");
-
 
             }
         });
 
         viewLedgerName();
+
+
+
         btnChoiceLed.setOnClickListener(new View.OnClickListener() {   // 가계부 선택 버튼 클릭
                     @Override
                     public void onClick(View view) {
@@ -206,6 +213,12 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                   selectChatname=test[saveItem];
                                   setChatUid();
+                           //     Fragment fragment = new LedgerViewFragment();
+                           //     Bundle bundle = new Bundle(2); // 파라미터는 전달할 데이터 개수
+                            //    bundle.putString("chatUid", selectChatuid);// key , value
+                            //    bundle.putInt("caseCheck",2);
+                            //    fragment.setArguments(bundle);
+
 
                             }
                         });
@@ -225,23 +238,66 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
         btnInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder alertdialog = new AlertDialog.Builder(getActivity());
-                final EditText editText = new EditText(getActivity());
-                alertdialog.setTitle("초대할 이메일을 입력해주세요");
-                alertdialog.setView(editText);
-                alertdialog.setPositiveButton("초대", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                if (selectChatname.toString().isEmpty()) {
+                    Toast.makeText(getActivity(), "가계부를 선택후 이용해주세요", Toast.LENGTH_SHORT).show();
+                } else {
+                    AlertDialog.Builder alertdialog = new AlertDialog.Builder(getActivity());
+                    final EditText editText = new EditText(getActivity());
+                    alertdialog.setTitle("초대할 이메일을 입력해주세요");
+                    alertdialog.setView(editText);
+                    alertdialog.setPositiveButton("초대", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for(DataSnapshot emailSnapshot : dataSnapshot.getChildren()) {
-                                if ( editText.getText().toString().equals(emailSnapshot.child("email").getValue(String.class))) {
-                                    inviteUser(emailSnapshot.child("key").getValue(String.class),emailSnapshot.child("email").getValue(String.class));  // CHATS에 UID 키 저장, 이메일 값 저장
-                                    Toast.makeText(getActivity(), emailSnapshot.child("nickname").getValue(String.class)+"님을 "+selectChatname+" 가계부에 초대하였습니다.", Toast.LENGTH_SHORT).show();
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot emailSnapshot : dataSnapshot.getChildren()) {
+                                        if (editText.getText().toString().equals(emailSnapshot.child("email").getValue(String.class))) {
+                                            inviteUser(emailSnapshot.child("key").getValue(String.class), emailSnapshot.child("email").getValue(String.class));  // CHATS에 UID 키 저장, 이메일 값 저장
+                                            Toast.makeText(getActivity(), emailSnapshot.child("nickname").getValue(String.class) + "님을 " + selectChatname + " 가계부에 초대하였습니다.", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
 
                                 }
-                            }
+                            });
+
+                        }
+                    });
+                    alertdialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    AlertDialog alert = alertdialog.create();
+                    alert.show();
+                }
+            }
+        });
+
+        btnOpenChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectChatname.toString().isEmpty()) {
+                    Toast.makeText(getActivity(), "가계부를 선택후 이용해주세요", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    myRef.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String photo = dataSnapshot.child("photo").getValue(String.class);
+                            String nickname = dataSnapshot.child("nickname").getValue(String.class);
+                            Intent in = new Intent(getActivity(), ChatActivity.class);
+                            in.putExtra("chatUid", selectChatuid);
+                            in.putExtra("chatName", selectChatname);
+                            in.putExtra("photo",photo);
+                            in.putExtra("nickname",nickname);
+                            startActivity(in);
                         }
 
                         @Override
@@ -250,27 +306,7 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
                         }
                     });
 
-                    }
-                });
-                alertdialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-                AlertDialog alert = alertdialog.create();
-                alert.show();
-            }
-        });
-
-        btnOpenChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent in = new Intent(getActivity(), ChatActivity.class);
-                in.putExtra("chatUid", selectChatuid);
-                in.putExtra("chatName",selectChatname);
-                startActivity(in);
-
+                }
 
             }
         });
@@ -324,7 +360,7 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
                 for (DataSnapshot chatSnapshot : dataSnapshot.getChildren()) {
                     if ( chatSnapshot.child("chatname").getValue(String.class).equals(selectChatname) ) {
                         selectChatuid = chatSnapshot.getKey();
-                        //  Toast.makeText(getActivity(), selectChatuid, Toast.LENGTH_SHORT).show();
+
                     }
                 }
             }

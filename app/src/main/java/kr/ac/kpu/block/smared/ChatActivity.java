@@ -38,7 +38,8 @@ public class ChatActivity extends AppCompatActivity {
     EditText etText;
     Button btnSend;
     String email;
-
+    String photo;
+    String nickname;
     FirebaseDatabase database;
     List<Chat> mChat;
 
@@ -48,18 +49,17 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        final String[] photo = new String[1];
-        final String[] nickname = new String[1];
         database = FirebaseDatabase.getInstance(); // Firebase Database 연결
         etText = (EditText) findViewById(R.id.etText);
         btnSend = (Button) findViewById(R.id.btnSend);
         mRecyclerView = (RecyclerView) findViewById(R.id.rvChat);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser(); // 유저 정보 추출
-        DatabaseReference photoRef = database.getReference("users").child(user.getUid());
+
         Intent in = getIntent();
         final String stChatId = in.getStringExtra("chatUid");
-
+                photo = in.getStringExtra("photo");
+                nickname = in.getStringExtra("nickname");
         if (user != null) {
             email = user.getEmail();
 
@@ -76,8 +76,6 @@ public class ChatActivity extends AppCompatActivity {
                 if (stText.equals("") || stText.isEmpty()) { // 공백 체크
                     Toast.makeText(ChatActivity.this, "내용을 입력해 주세요.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(ChatActivity.this, email+","+stText, Toast.LENGTH_SHORT).show();
-
                     Calendar c = Calendar.getInstance(); // Firebase내에 날짜로 저장
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String formattedDate = df.format(c.getTime());
@@ -89,7 +87,8 @@ public class ChatActivity extends AppCompatActivity {
                             = new Hashtable<String, String>();
                     chat.put("email", email);
                     chat.put("text",stText);
-
+                    chat.put("photo",photo);
+                    chat.put("nickname",nickname);
                     myRef.setValue(chat);
                     etText.setText("");
 
@@ -108,23 +107,10 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
-        photoRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                photo[0] = dataSnapshot.child("photo").getValue(String.class);
-                nickname[0] = dataSnapshot.child("nickname").getValue(String.class);
 
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
 
-        Toast.makeText(ChatActivity.this, photo[0]+","+nickname[0], Toast.LENGTH_SHORT).show();
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
@@ -134,7 +120,7 @@ public class ChatActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mChat= new ArrayList<>();
         // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(mChat,email,photo[0],nickname[0]);
+        mAdapter = new MyAdapter(mChat,email,ChatActivity.this);
         mRecyclerView.setAdapter(mAdapter);
 
 

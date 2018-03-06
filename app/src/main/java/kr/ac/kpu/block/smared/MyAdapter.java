@@ -1,11 +1,15 @@
 package kr.ac.kpu.block.smared;
 
-import android.content.Intent;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -13,8 +17,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private String[] mDataset;
     List<Chat> mChat;
     String stEmail;
-    String stPhoto;
-    String stNickname;
+    Context context;
 
 
 
@@ -25,21 +28,22 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         // each data item is just a string in this case
         public TextView mTextView;
         public TextView tvChatid;
+        public ImageView ivChatimage;
 
         public ViewHolder(View itemView) {
 
             super(itemView);
             mTextView = (TextView) itemView.findViewById(R.id.mTextView);
             tvChatid = (TextView) itemView.findViewById(R.id.tvChatid);
+            ivChatimage = (ImageView) itemView.findViewById(R.id.ivChatimage);
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter( List<Chat> mChat , String email , String photo, String nickname) {
+    public MyAdapter( List<Chat> mChat , String email, Context context) {
         this.mChat = mChat;
         this.stEmail = email;
-        this.stPhoto = photo;
-        this.stNickname = nickname;
+        this.context = context;
 
     }
 
@@ -63,7 +67,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                     .inflate(R.layout.my_text_view, parent, false);
         } else {
             v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.right_text_view, parent, false);
+                    .inflate(R.layout.they_text_view, parent, false);
         }
         ViewHolder vh = new ViewHolder(v);
         return vh;
@@ -75,7 +79,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.mTextView.setText(mChat.get(position).getText());
-     //   holder.tvChatid.setText(stNickname);
+        holder.tvChatid.setText(mChat.get(position).getNickname());
+        if (TextUtils.isEmpty(mChat.get(position).getPhoto())) {
+
+        } else {
+            Picasso.with(context).load(mChat.get(position).getPhoto()).fit().centerInside().into(holder.ivChatimage);
+
+        }
+
 
 
     }
