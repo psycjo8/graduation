@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,8 +25,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 
 public class LedgerViewFragment extends android.app.Fragment {
@@ -43,8 +48,17 @@ public class LedgerViewFragment extends android.app.Fragment {
     int i =0;
     int caseCheck=1; // 1일경우 일반 가계부 뷰, 2일경우 공유 가계부 뷰
     LedgerContent ledgerContent = new LedgerContent();
-    List<Ledger> mLedger ;
+    List<Ledger> mLedger ; // 불러온 전체 가계부 목록
+
+    int index=0;  // 년,월 인덱스
+    Set<String> selectMonth = new HashSet<String>(); // 년,월 중복제거용
+    List<String> monthList; // 중복 제거된 년,월 저장
     String selectChatuid;
+    String parsing;
+
+    ImageButton ibLastMonth; // 왼쪽 화살표
+    TextView tvLedgerMonth; // 년,월 출력부
+    ImageButton ibNextMonth; // 오른쪽 화살표
 
 
     @Override
@@ -63,6 +77,11 @@ public class LedgerViewFragment extends android.app.Fragment {
   //      selectChatuid = bundle.getString("chatUid");
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_ledger_view, container, false);
+        ibLastMonth = (ImageButton) v.findViewById(R.id.ibLastMonth);
+        ibNextMonth = (ImageButton) v.findViewById(R.id.ibNextMonth);
+        tvLedgerMonth = (TextView) v.findViewById(R.id.tvLedgerMonth);
+
+
         mRecyclerView = (RecyclerView) v.findViewById(R.id.rvLedger);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -75,12 +94,53 @@ public class LedgerViewFragment extends android.app.Fragment {
         mAdapter = new LedgerAdapter(mLedger, getActivity());
         mRecyclerView.setAdapter(mAdapter);
 
+
+
+        ibLastMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if( index != 0) {
+                    index--;
+                   tvLedgerMonth.setText(monthList.get(index));
+                    parsing= monthList.get(index).replaceAll("[^0-9]", "");
+                    Toast.makeText(getActivity(), parsing, Toast.LENGTH_SHORT).show();
+                } else {
+                    index = monthList.size() - 1;
+                    tvLedgerMonth.setText(monthList.get(index));
+                    parsing= monthList.get(index).replaceAll("[^0-9]", "");
+                    Toast.makeText(getActivity(), parsing, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        ibNextMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (index != monthList.size() - 1) {
+                    index++;
+                    tvLedgerMonth.setText(monthList.get(index));
+                    parsing= monthList.get(index).replaceAll("[^0-9]", "");
+                    Toast.makeText(getActivity(), parsing, Toast.LENGTH_SHORT).show();
+                } else {
+                    index = 0;
+                    tvLedgerMonth.setText(monthList.get(index));
+                    parsing= monthList.get(index).replaceAll("[^0-9]", "");
+                    Toast.makeText(getActivity(), parsing, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         switch (caseCheck) {
             case 1:
                 myRef.child(user.getUid()).child("Ledger").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        ledgerView(dataSnapshot);
+                        ledgerView(dataSnapshot); // 유저 가계부 전체 리스트 생성
+                        monthList = new ArrayList(selectMonth); // 년 월만 빼서 따로 리스트 생성
+                        Collections.sort(monthList);
+                        tvLedgerMonth.setText(monthList.get(monthList.size()-1));
+                        parsing = monthList.get(monthList.size()-1).replaceAll("[^0-9]", "");
+                        index = monthList.size()-1;
                     }
 
                     @Override
@@ -106,7 +166,6 @@ public class LedgerViewFragment extends android.app.Fragment {
 
         }
 
-
         return v;
     }
 
@@ -131,6 +190,8 @@ public class LedgerViewFragment extends android.app.Fragment {
                             ledger[i].setClassfy(classfySnapshot.getKey());
                             ledger[i].setYear(yearSnapshot.getKey());
                             ledger[i].setMonth(monthSnapshot.getKey());
+                            selectMonth.add(ledger[i].getYear()+"년 "+ledger[i].getMonth()+"월");
+
                             ledger[i].setDay(daySnapshot.getKey());
                             ledger[i].setTimes(timesSnapshot.getKey());
                             //     Toast.makeText(getActivity(),timesSnapshot.getKey(),Toast.LENGTH_SHORT).show();

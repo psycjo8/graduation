@@ -19,6 +19,7 @@ import java.util.List;
 public class LedgerAdapter extends RecyclerView.Adapter<LedgerAdapter.ViewHolder> {
 
     List<Ledger> mLedger;
+    String parsing;
     Context context;
 
     // Provide a reference to the views for each data item
