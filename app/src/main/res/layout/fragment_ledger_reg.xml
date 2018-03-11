@@ -51,7 +51,8 @@
         android:layout_marginLeft="30dp"
         android:text="분류"
         android:textColor="#000000"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:id="@+id/textView" />
 
     <Spinner
         android:id="@+id/spnUseitem"
@@ -116,9 +117,14 @@
         android:text="저장"
         />
 
-
-
-
+    <Button
+        android:id="@+id/btnOcr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/textView"
+        android:text="OCR" />
 
 
 </RelativeLayout>

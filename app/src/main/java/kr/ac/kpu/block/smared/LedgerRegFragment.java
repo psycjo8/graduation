@@ -1,18 +1,15 @@
 package kr.ac.kpu.block.smared;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -25,10 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Hashtable;
-
-import static android.content.Context.MODE_PRIVATE;
 
 
 public class LedgerRegFragment extends android.app.Fragment {
@@ -67,6 +61,7 @@ public class LedgerRegFragment extends android.app.Fragment {
         CalendarView cvCalender = (CalendarView) v.findViewById(R.id.cvCalender);
         final RadioButton rbConsume = (RadioButton) v.findViewById(R.id.rbConsume);
         RadioButton rbIncome = (RadioButton) v.findViewById(R.id.rbIncome);
+        Button btnOcr = (Button)v.findViewById(R.id.btnOcr);
 
 
         spnUseitem.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -118,7 +113,13 @@ public class LedgerRegFragment extends android.app.Fragment {
             }
         });
 
-
+        btnOcr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ImageActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return v;
     }
