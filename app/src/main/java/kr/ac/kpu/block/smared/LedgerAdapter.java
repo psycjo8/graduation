@@ -33,6 +33,7 @@ public class LedgerAdapter extends RecyclerView.Adapter<LedgerAdapter.ViewHolder
         public TextView tvUseitem;
         public TextView tvPrice;
         public TextView tvPaymemo;
+        public TextView tvChoice;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -40,7 +41,7 @@ public class LedgerAdapter extends RecyclerView.Adapter<LedgerAdapter.ViewHolder
             tvUseitem= (TextView) itemView.findViewById(R.id.tvUseitem);
             tvPrice = (TextView) itemView.findViewById(R.id.tvPrice);
             tvPaymemo = (TextView) itemView.findViewById(R.id.tvPaymemo);
-
+            tvChoice = (TextView) itemView.findViewById(R.id.tvChoice);
         }
     }
 
@@ -66,8 +67,9 @@ public class LedgerAdapter extends RecyclerView.Adapter<LedgerAdapter.ViewHolder
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
          holder.btnDay.setText(mLedger.get(position).getYear()+"-"+mLedger.get(position).getMonth()+"-"+mLedger.get(position).getDay());
+         holder.tvChoice.setText("[ "+mLedger.get(position).getClassfy() + " ]");
          holder.tvUseitem.setText("분류 : " + mLedger.get(position).getUseItem());
-         holder.tvPrice.setText("가격 : " + mLedger.get(position).getPrice());
+         holder.tvPrice.setText("가격 : " + mLedger.get(position).getPrice() + "원");
          holder.tvPaymemo.setText("내용 : " + mLedger.get(position).getPaymemo());
 
 

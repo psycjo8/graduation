@@ -13,8 +13,18 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
-        android:id="@+id/tvUseitem"
+        android:id="@+id/tvChoice"
         android:layout_below="@id/btnDay"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/tvUseitem"
+        android:layout_below="@+id/tvChoice"
+
         />
     <TextView
         android:layout_width="wrap_content"
@@ -22,7 +32,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:id="@+id/tvPrice"
-        android:layout_below="@+id/tvUseitem"
+       android:layout_below="@+id/tvChoice"
+        android:layout_toRightOf="@+id/tvUseitem"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -31,6 +42,7 @@
         android:layout_marginLeft="10dp"
         android:id="@+id/tvPaymemo"
         android:layout_below="@+id/tvPrice"
+
         />
 
 

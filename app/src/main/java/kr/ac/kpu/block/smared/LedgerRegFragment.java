@@ -105,9 +105,9 @@ public class LedgerRegFragment extends android.app.Fragment {
 
 
                 if (rbConsume.isChecked()) {
-                    myRef.child(user.getUid()).child("Ledger").child(stYear).child(stMonth).child(stDay).child("consume").child(stTime).setValue(ledger);
+                    myRef.child(user.getUid()).child("Ledger").child(stYear).child(stMonth).child(stDay).child("지출").child(stTime).setValue(ledger);
                 } else {
-                    myRef.child(user.getUid()).child("Ledger").child(stYear).child(stMonth).child(stDay).child("Income").child(stTime).setValue(ledger);
+                    myRef.child(user.getUid()).child("Ledger").child(stYear).child(stMonth).child(stDay).child("수입").child(stTime).setValue(ledger);
                 }
 
                 Toast.makeText(getActivity(), "저장하였습니다.", Toast.LENGTH_SHORT).show();

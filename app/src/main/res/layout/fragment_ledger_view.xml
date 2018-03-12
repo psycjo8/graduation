@@ -39,8 +39,36 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvLedger"
         android:layout_below="@id/ibNextMonth"
+
         android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="420dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTotalincome"
+        android:text="수입 합계"
+        android:textSize="15dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/rvLedger"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTotalconsume"
+        android:layout_below="@id/tvTotalincome"
+        android:layout_centerHorizontal="true"
+        android:text="지출 합계"
+        android:textSize="15dp"/>
+
+    <TextView
+        android:id="@+id/tvPlusMinus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvTotalconsume"
+        android:text="수익"
+        android:textSize="15dp"
+        android:layout_centerHorizontal="true"
+        />
 
 </RelativeLayout>

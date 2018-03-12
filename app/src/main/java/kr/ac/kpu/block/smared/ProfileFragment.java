@@ -257,15 +257,20 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {  // 이미지뷰 파일 업로드
         super.onActivityResult(requestCode, resultCode, data);
 
-        Uri image = data.getData();
         try {
+            Uri image = data.getData();
+            try {
 
-            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),image);
-            uploadImage();
+                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),image);
+                uploadImage();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (NullPointerException e) {
+            pbLogin.setVisibility(getView().GONE);
         }
+
     }
 
     @Override
@@ -329,7 +334,7 @@ public class ProfileFragment extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String s = dataSnapshot.getValue().toString();
                         Log.d("profile",s);
-                        if (dataSnapshot != null) {
+                        if (dataSnapshot != null ) {
 
                             Toast.makeText(getActivity(), "사진 업로드 완료",Toast.LENGTH_SHORT).show();
                             ivUser.setImageBitmap(bitmap);
