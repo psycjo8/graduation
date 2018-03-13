@@ -27,7 +27,7 @@ public class OCRActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ocr);
+        setContentView(R.layout.activity_image_processing);
 
         //이미지 디코딩을 위한 초기화
         if(imgFile.exists()) {

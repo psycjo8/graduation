@@ -1,181 +1,257 @@
 package kr.ac.kpu.block.smared;
 
-import java.io.File;
-
+import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-public class ImageActivity extends Activity implements OnClickListener
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class ImageActivity extends Activity implements View.OnClickListener
 {
-    private static final int PICK_FROM_CAMERA = 0;
-    private static final int PICK_FROM_ALBUM = 1;
-    private static final int CROP_FROM_CAMERA = 2;
+    private ImageView imgMain;
+    private Button btnCamera, btnAlbum;
 
-    private Uri mImageCaptureUri;
-    private ImageView mPhotoImageView;
-    private Button mButton1, mButton2, mButton3;
+    private static final int PICK_FROM_CAMERA = 1;
+    private static final int PICK_FROM_ALBUM = 2;
+    private static final int CROP_FROM_CAMERA = 3;
+
+    private Uri photoUri;
+    private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA};
+    private static final int MULTIPLE_PERMISSIONS = 101;
+
+    private String mCurrentPhotoPath;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
-
-        mButton1 = (Button) findViewById(R.id.button2);
-        mButton2 = (Button) findViewById(R.id.button4);
-        mButton3 = (Button) findViewById(R.id.button5);
-        mPhotoImageView = (ImageView) findViewById(R.id.imageInput);
-
-        mButton1.setOnClickListener(this);
-        mButton2.setOnClickListener(this);
-        mButton3.setOnClickListener(this);
+        checkPermissions();
+        initView();
     }
 
-    /**
-     * 카메라에서 이미지 가져오기
-     */
-    private void doTakePhotoAction()
-    {
-    /*
-     * 참고 해볼곳
-     * http://2009.hfoss.org/Tutorial:Camera_and_Gallery_Demo
-     * http://stackoverflow.com/questions/1050297/how-to-get-the-url-of-the-captured-image
-     * http://www.damonkohler.com/2009/02/android-recipes.html
-     * http://www.firstclown.us/tag/android/
-     */
+    private boolean checkPermissions() {
+        int result;
+        List<String> permissionList = new ArrayList<>();
+        for (String pm : permissions) {
+            result = ContextCompat.checkSelfPermission(this, pm);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                permissionList.add(pm);
+            }
+        }
+        if (!permissionList.isEmpty()) {
+            ActivityCompat.requestPermissions(this, permissionList.toArray(new String[permissionList.size()]), MULTIPLE_PERMISSIONS);
+            return false;
+        }
+        return true;
+    }
 
+    private void initView() {
+        imgMain = (ImageView) findViewById(R.id.imageInput);
+        btnCamera = (Button) findViewById(R.id.button2);
+        btnAlbum = (Button) findViewById(R.id.button3);
+
+        btnCamera.setOnClickListener(this);
+        btnAlbum.setOnClickListener(this);
+    }
+
+    private void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        // 임시로 사용할 파일의 경로를 생성
-        String url = "tmp_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
-        mImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), url));
-
-        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-        // 특정기기에서 사진을 저장못하는 문제가 있어 다음을 주석처리 합니다.
-        //intent.putExtra("return-data", true);
-        startActivityForResult(intent, PICK_FROM_CAMERA);
+        File photoFile = null;
+        try {
+            photoFile = createImageFile();
+        } catch (IOException e) {
+            Toast.makeText(ImageActivity.this, "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            finish();
+            e.printStackTrace();
+        }
+        if (photoFile != null) {
+            photoUri = FileProvider.getUriForFile(ImageActivity.this,
+                    "kr.ac.kpu.block.smared.provider", photoFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+            startActivityForResult(intent, PICK_FROM_CAMERA);
+        }
     }
 
-    /**
-     * 앨범에서 이미지 가져오기
-     */
-    private void doTakeAlbumAction()
-    {
-        // 앨범 호출
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
+        String imageFileName = "nostest_" + timeStamp + "_";
+        File storageDir = new File(Environment.getExternalStorageDirectory() + "/NOSTest/");
+        if (!storageDir.exists()) {
+            storageDir.mkdirs();
+        }
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
+    }
+
+    private void goToAlbum() {
         Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
+        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
         startActivityForResult(intent, PICK_FROM_ALBUM);
     }
 
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if(resultCode != RESULT_OK)
-        {
-            return;
-        }
-
-        switch(requestCode)
-        {
-            case CROP_FROM_CAMERA:
-            {
-                // 크롭이 된 이후의 이미지를 넘겨 받습니다.
-                // 이미지뷰에 이미지를 보여준다거나 부가적인 작업 이후에
-                // 임시 파일을 삭제합니다.
-                final Bundle extras = data.getExtras();
-
-                if(extras != null)
-                {
-                    Bitmap photo = extras.getParcelable("data");
-                    mPhotoImageView.setImageBitmap(photo);
-                }
-
-                // 임시 파일 삭제
-                File f = new File(mImageCaptureUri.getPath());
-                if(f.exists())
-                {
-                    f.delete();
-                }
-
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button2:
+                takePhoto();
                 break;
-            }
-
-            case PICK_FROM_ALBUM:
-            {
-                // 이후의 처리가 카메라와 같으므로 일단  break없이 진행합니다.
-                // 실제 코드에서는 좀더 합리적인 방법을 선택하시기 바랍니다.
-
-                mImageCaptureUri = data.getData();
-            }
-
-            case PICK_FROM_CAMERA:
-            {
-                // 이미지를 가져온 이후의 리사이즈할 이미지 크기를 결정합니다.
-                // 이후에 이미지 크롭 어플리케이션을 호출하게 됩니다.
-
-                Intent intent = new Intent("com.android.camera.action.CROP");
-                intent.setDataAndType(mImageCaptureUri, "image/*");
-
-                intent.putExtra("outputX", 90);
-                intent.putExtra("outputY", 90);
-                intent.putExtra("aspectX", 1);
-                intent.putExtra("aspectY", 1);
-                intent.putExtra("scale", true);
-                intent.putExtra("return-data", true);
-                startActivityForResult(intent, CROP_FROM_CAMERA);
-
+            case R.id.button3:
+                goToAlbum();
                 break;
-            }
         }
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId())
-        {
-            case R.id.button2: //사진 촬영 버튼이 눌렸을 경우
-                DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        doTakePhotoAction();
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MULTIPLE_PERMISSIONS: {
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < permissions.length; i++) {
+                        if (permissions[i].equals(this.permissions[0])) {
+                            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                                showNoPermissionToastAndFinish();
+                            }
+                        } else if (permissions[i].equals(this.permissions[1])) {
+                            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                                showNoPermissionToastAndFinish();
+
+                            }
+                        } else if (permissions[i].equals(this.permissions[2])) {
+                            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                                showNoPermissionToastAndFinish();
+
+                            }
+                        }
                     }
-                };
+                } else {
+                    showNoPermissionToastAndFinish();
+                }
+                return;
+            }
+        }
+    }
 
-                DialogInterface.OnClickListener albumListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        doTakeAlbumAction();
-                    }
-                };
+    private void showNoPermissionToastAndFinish() {
+        Toast.makeText(this, "권한 요청에 동의 해주셔야 이용 가능합니다. 설정에서 권한 허용 하시기 바랍니다.", Toast.LENGTH_SHORT).show();
+        finish();
+    }
 
-                DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                };
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) {
+            Toast.makeText(this, "취소 되었습니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (requestCode == PICK_FROM_ALBUM) {
+            if (data == null) {
+                return;
+            }
+            photoUri = data.getData();
+            cropImage();
+        } else if (requestCode == PICK_FROM_CAMERA) {
+            cropImage();
+            // 갤러리에 나타나게
+            MediaScannerConnection.scanFile(ImageActivity.this,
+                    new String[]{photoUri.getPath()}, null,
+                    new MediaScannerConnection.OnScanCompletedListener() {
+                        public void onScanCompleted(String path, Uri uri) {
+                        }
+                    });
+        } else if (requestCode == CROP_FROM_CAMERA) {
+            imgMain.setImageURI(null);
+            imgMain.setImageURI(photoUri);
+        }
+    }
 
-                new AlertDialog.Builder(this)
-                        .setTitle("업로드할 이미지 선택")
-                        .setPositiveButton("사진촬영", cameraListener)
-                        .setNeutralButton("앨범선택", albumListener)
-                        .setNegativeButton("취소", cancelListener)
-                        .show();
-                break;
-            case R.id.button4: //확인 버튼을 눌렀을 경우(이미지 존재 여부 체크 필요)
-                break;
+    //Android N crop image
+    public void cropImage() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            this.grantUriPermission("camera", photoUri,
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(photoUri, "image/*");
 
+        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            grantUriPermission(list.get(0).activityInfo.packageName, photoUri,
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        int size = list.size();
+        if (size == 0) {
+            Toast.makeText(this, "취소 되었습니다.", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            Toast.makeText(this, "용량이 큰 사진의 경우 시간이 오래 걸릴 수 있습니다.", Toast.LENGTH_SHORT).show();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            }
+            intent.putExtra("crop", "true");
+            intent.putExtra("aspectX", 1);
+            intent.putExtra("aspectY", 1);
+            intent.putExtra("scale", true);
+            File croppedFileName = null;
+            try {
+                croppedFileName = createImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            File folder = new File(Environment.getExternalStorageDirectory() + "/NOSTest/");
+            File tempFile = new File(folder.toString(), croppedFileName.getName());
+
+            photoUri = FileProvider.getUriForFile(ImageActivity.this,
+                    "kr.ac.kpu.block.smared.provider", tempFile);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            }
+
+            intent.putExtra("return-data", false);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+            intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+
+            Intent i = new Intent(intent);
+            ResolveInfo res = list.get(0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                i.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+                grantUriPermission(res.activityInfo.packageName, photoUri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+            i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+            startActivityForResult(i, CROP_FROM_CAMERA);
         }
     }
 }
