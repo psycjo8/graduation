@@ -125,6 +125,15 @@ public class ImageActivity extends Activity implements View.OnClickListener
             case R.id.button3:
                 goToAlbum();
                 break;
+            case R.id.button4:
+                Intent intent = new Intent(ImageActivity.this, ImageProcessingActivity.class);
+                intent.putExtra("FILEPATH", photoUri);
+                startActivity(intent);
+                break;
+            case R.id.button5:
+                finish();
+                break;
+
         }
     }
 
