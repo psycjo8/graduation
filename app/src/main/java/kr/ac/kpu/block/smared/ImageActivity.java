@@ -32,7 +32,7 @@ import java.util.List;
 public class ImageActivity extends Activity implements View.OnClickListener
 {
     private ImageView imgMain;
-    private Button btnCamera, btnAlbum;
+    private Button btnCamera, btnAlbum, btnNext, btnCancel;
 
     private static final int PICK_FROM_CAMERA = 1;
     private static final int PICK_FROM_ALBUM = 2;
@@ -72,11 +72,15 @@ public class ImageActivity extends Activity implements View.OnClickListener
 
     private void initView() {
         imgMain = (ImageView) findViewById(R.id.imageInput);
-        btnCamera = (Button) findViewById(R.id.button2);
-        btnAlbum = (Button) findViewById(R.id.button3);
+        btnCamera = (Button) findViewById(R.id.buttonI1);
+        btnAlbum = (Button) findViewById(R.id.buttonI2);
+        btnNext = (Button) findViewById(R.id.buttonI3);
+        btnCancel = (Button) findViewById(R.id.buttonI4);
 
         btnCamera.setOnClickListener(this);
         btnAlbum.setOnClickListener(this);
+        btnNext.setOnClickListener(this);
+        btnCancel.setOnClickListener(this);
     }
 
     private void takePhoto() {
@@ -119,18 +123,18 @@ public class ImageActivity extends Activity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button2:
+            case R.id.buttonI1:
                 takePhoto();
                 break;
-            case R.id.button3:
+            case R.id.buttonI2:
                 goToAlbum();
                 break;
-            case R.id.button4:
+            case R.id.buttonI3:
                 Intent intent = new Intent(ImageActivity.this, ImageProcessingActivity.class);
                 intent.putExtra("FILEPATH", photoUri);
                 startActivity(intent);
                 break;
-            case R.id.button5:
+            case R.id.buttonI4:
                 finish();
                 break;
 

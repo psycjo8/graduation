@@ -172,7 +172,7 @@ public class ImageProcessingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_image_processing);
 
         imageVIewInput = (ImageView)findViewById(R.id.imageViewInput);
         imageVIewOuput = (ImageView)findViewById(R.id.imageViewOutput);
@@ -209,6 +209,11 @@ public class ImageProcessingActivity extends AppCompatActivity {
 
         loadImage("ball.jpg", img_input.getNativeObjAddr());
     }
+
+    /**
+     * A native method that is implemented by the 'native-lib' native library,
+     * which is packaged with this application.
+     */
 
     /**
      * A native method that is implemented by the 'native-lib' native library,

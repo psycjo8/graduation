@@ -18,18 +18,18 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/buttonI1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="사진 업로드" />
+            android:text="카메라" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/buttonI2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Button" />
+            android:text="갤러리" />
 
     </LinearLayout>
 
@@ -40,14 +40,14 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/buttonI3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="다음" />
+            android:text="이미지 처리" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/buttonI4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

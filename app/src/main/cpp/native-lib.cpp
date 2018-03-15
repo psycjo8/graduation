@@ -9,7 +9,7 @@ using namespace std;
 
 extern "C"{
 JNIEXPORT void JNICALL
-Java_com_example_user_myapplication_PreprocessImage_loadImage(JNIEnv *env, jobject instance,
+Java_kr_ac_kpu_block_smared_ImageProcessingActivity_loadImage(JNIEnv *env, jobject instance,
                                                            jstring imageFileName_, jlong img) {
     Mat &img_input = *(Mat *) img;
 
@@ -23,7 +23,7 @@ Java_com_example_user_myapplication_PreprocessImage_loadImage(JNIEnv *env, jobje
 }
 
 JNIEXPORT void JNICALL
-Java_com_example_user_myapplication_PreprocessImage_imageprocessing(JNIEnv *env, jobject instance,
+Java_kr_ac_kpu_block_smared_ImageProcessingActivity_imageprocessing(JNIEnv *env, jobject instance,
                                                                  jlong inputImage,
                                                                  jlong outputImage) {
     Mat &img_input = *(Mat *) inputImage;
