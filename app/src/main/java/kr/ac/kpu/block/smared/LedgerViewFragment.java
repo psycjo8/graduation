@@ -315,7 +315,7 @@ public class LedgerViewFragment extends android.app.Fragment {
         }
         tvTotalincome.setText("수입 합계 : " + totalIncome + "원");
         tvTotalconsume.setText("지출 합계 : " + totalConsume + "원");
-        tvPlusMinus.setText("수익 : " + (totalIncome - totalConsume));
+        tvPlusMinus.setText("수익 : " + (totalIncome - totalConsume) + "원");
         totalIncome=0;
         totalConsume=0;
 

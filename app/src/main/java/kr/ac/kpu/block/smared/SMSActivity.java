@@ -7,15 +7,36 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SMSActivity extends AppCompatActivity {
     static final int SMS_RECEIVE_PERMISSON=1;
-
+    RecyclerView mRecyclerView;
+    LinearLayoutManager mLayoutManager;
+    SMSAdapter mAdapter;
+    List<String> mBody;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.rvSMS);
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mBody = new ArrayList<>();
+
+        // specify an adapter (see also next example)
+        mAdapter = new SMSAdapter(mBody, this);
+        mRecyclerView.setAdapter(mAdapter);
 
         //권한이 부여되어 있는지 확인
         int permissonCheck= ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_SMS);
@@ -44,8 +65,8 @@ public class SMSActivity extends AppCompatActivity {
 
         Uri allMessage = Uri.parse("content://sms/inbox");
         Cursor cur = this.getContentResolver().query(allMessage,null,null,null,null);
-        int count = cur.getCount();
-        Toast.makeText(this, "SMS Count = " + count , Toast.LENGTH_SHORT).show();
+        int count = 0;
+
         String msg = "";
         String date = "";
         String protocol = "";
@@ -53,18 +74,23 @@ public class SMSActivity extends AppCompatActivity {
         while (cur.moveToNext()) {
 
             if (cur.getString(cur.getColumnIndex("body")).contains("신한체크승인")) {
+
                 msg = cur.getString(cur.getColumnIndex("body"));
                 protocol = cur.getString(cur.getColumnIndex("address"));
                 date = cur.getString(cur.getColumnIndex("date"));
-                Toast.makeText(this, protocol + "", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, protocol + " >> " + date + " >> " + msg, Toast.LENGTH_SHORT).show();
+                count ++;
 
+                mBody.add(msg);
+                mRecyclerView.scrollToPosition(0);
+                mAdapter.notifyItemInserted(mBody.size() - 1);
             }
 
 
 
 
         }
-
+        Toast.makeText(this, "SMS Count = " + count , Toast.LENGTH_SHORT).show();
     }
 
     public void onRequestPermissionsResult(int requestCode, String permissions[], int grantResults[]){

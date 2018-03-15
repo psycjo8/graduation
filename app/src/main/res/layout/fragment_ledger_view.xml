@@ -42,7 +42,7 @@
 
         android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="400dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
         android:text="수익"
         android:textSize="15dp"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
+
         />
 
 </RelativeLayout>
