@@ -60,6 +60,7 @@ public class LedgerViewFragment extends android.app.Fragment {
     String selectChatuid;
     String parsing;
 
+
     ImageButton ibLastMonth; // 왼쪽 화살표
     TextView tvLedgerMonth; // 년,월 출력부
     ImageButton ibNextMonth; // 오른쪽 화살표
@@ -79,11 +80,16 @@ public class LedgerViewFragment extends android.app.Fragment {
         myRef = database.getReference("users");
         chatRef = database.getReference("chats");
         user = FirebaseAuth.getInstance().getCurrentUser();
-   //     Bundle bundle = getArguments();
-  //        caseCheck = bundle.getInt("caseCheck",1);
-  //      selectChatuid = bundle.getString("chatUid");
+
+
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_ledger_view, container, false);
+
+        // 받아야돼..
+      //  Bundle bundle = this.getArguments();
+       // caseCheck = bundle.getInt("caseCheck");
+      //  selectChatuid = bundle.getString("chatUid",selectChatuid);
+
         ibLastMonth = (ImageButton) v.findViewById(R.id.ibLastMonth);
         ibNextMonth = (ImageButton) v.findViewById(R.id.ibNextMonth);
         tvLedgerMonth = (TextView) v.findViewById(R.id.tvLedgerMonth);
@@ -126,7 +132,7 @@ public class LedgerViewFragment extends android.app.Fragment {
                     }
                     tvTotalincome.setText("수입 합계 : " + totalIncome + "원");
                     tvTotalconsume.setText("지출 합계 : " + totalConsume + "원");
-                    tvPlusMinus.setText("수익 : " + (totalIncome - totalConsume));
+                    tvPlusMinus.setText("수익 : " + (totalIncome - totalConsume) + "원");
                     totalIncome=0;
                     totalConsume=0;
                     tempAdapter = new LedgerAdapter(tempLedger,getActivity());
@@ -151,7 +157,7 @@ public class LedgerViewFragment extends android.app.Fragment {
                     }
                     tvTotalincome.setText("수입 합계 : " + totalIncome + "원");
                     tvTotalconsume.setText("지출 합계 : " + totalConsume + "원");
-                    tvPlusMinus.setText("수익 : " + (totalIncome - totalConsume));
+                    tvPlusMinus.setText("수익 : " + (totalIncome - totalConsume) + "원");
                     totalIncome=0;
                     totalConsume=0;
                     tempAdapter = new LedgerAdapter(tempLedger,getActivity());
@@ -207,7 +213,7 @@ public class LedgerViewFragment extends android.app.Fragment {
                     }
                     tvTotalincome.setText("수입 합계 : " + totalIncome + "원");
                     tvTotalconsume.setText("지출 합계 : " + totalConsume + "원");
-                    tvPlusMinus.setText("수익 : " + (totalIncome - totalConsume));
+                    tvPlusMinus.setText("수익 : " + (totalIncome - totalConsume) + "원");
                     totalIncome=0;
                     totalConsume=0;
                     tempAdapter = new LedgerAdapter(tempLedger,getActivity());

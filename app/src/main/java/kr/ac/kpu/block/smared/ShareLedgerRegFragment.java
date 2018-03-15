@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -40,6 +41,8 @@ import java.util.Map;
 import static android.content.ContentValues.TAG;
 
 
+
+
 public class ShareLedgerRegFragment extends android.app.Fragment {
 
     FirebaseDatabase database;
@@ -66,7 +69,9 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
     String stDay = day.format(c.getTime());
     int saveItem;
     List<String> listItems = new ArrayList<String>();
-    @Override
+
+
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -155,11 +160,11 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
 
 
                         viewLedgerName();
-                       final CharSequence[] test = listItems.toArray(new CharSequence[listItems.size()]);
+                       final CharSequence[] select = listItems.toArray(new CharSequence[listItems.size()]);
                         AlertDialog.Builder alertdialog= new AlertDialog.Builder(getActivity());
 
                         alertdialog.setTitle("가계부를 골라주세요");
-                        alertdialog.setSingleChoiceItems(test, -1, new DialogInterface.OnClickListener() {
+                        alertdialog.setSingleChoiceItems(select, -1, new DialogInterface.OnClickListener() {
 
                                     public void onClick(DialogInterface dialog, int item) {
 
@@ -211,13 +216,10 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
                         alertdialog.setPositiveButton("선택", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                  selectChatname=test[saveItem];
+                                  selectChatname=select[saveItem];
                                   setChatUid();
-                           //     Fragment fragment = new LedgerViewFragment();
-                           //     Bundle bundle = new Bundle(2); // 파라미터는 전달할 데이터 개수
-                            //    bundle.putString("chatUid", selectChatuid);// key , value
-                            //    bundle.putInt("caseCheck",2);
-                            //    fragment.setArguments(bundle);
+
+
 
 
                             }
@@ -314,7 +316,6 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
 
 
 
-
         return v;
     }
 
@@ -361,6 +362,10 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
                     if ( chatSnapshot.child("chatname").getValue(String.class).equals(selectChatname) ) {
                         selectChatuid = chatSnapshot.getKey();
 
+
+
+
+
                     }
                 }
             }
@@ -372,5 +377,13 @@ public class ShareLedgerRegFragment extends android.app.Fragment {
         });
     }
 
-
+    @Override
+    public void onDestroyView() { // 넘겨야돼
+        super.onDestroyView();
+        LedgerViewFragment fragment = new LedgerViewFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("chatUid",selectChatuid);
+        bundle.putInt("caseCheck",2);
+        fragment.setArguments(bundle);
+    }
 }

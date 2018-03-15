@@ -1,6 +1,7 @@
 package kr.ac.kpu.block.smared;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -67,6 +68,16 @@ public class LedgerRegFragment extends android.app.Fragment {
         CalendarView cvCalender = (CalendarView) v.findViewById(R.id.cvCalender);
         final RadioButton rbConsume = (RadioButton) v.findViewById(R.id.rbConsume);
         RadioButton rbIncome = (RadioButton) v.findViewById(R.id.rbIncome);
+        Button btnSMS = (Button) v.findViewById(R.id.btnSMS);
+
+
+        btnSMS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(getActivity(),SMSActivity.class);
+                startActivity(in);
+            }
+        });
 
 
         spnUseitem.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

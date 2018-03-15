@@ -3,6 +3,7 @@ package kr.ac.kpu.block.smared;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,10 +12,12 @@ import android.widget.TextView;
 import android.support.design.widget.BottomNavigationView;
 import android.widget.Toast;
 
-public class TabActivity extends AppCompatActivity {
+public class TabActivity extends AppCompatActivity  {
 
     Fragment fragment;
+
     long lastPressted;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -39,7 +42,7 @@ public class TabActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
 
@@ -76,4 +79,6 @@ public class TabActivity extends AppCompatActivity {
 
 
     }
+
+
 }

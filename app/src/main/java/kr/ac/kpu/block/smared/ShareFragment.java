@@ -6,12 +6,14 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-public class ShareFragment extends Fragment {
+public class ShareFragment extends Fragment{
 
 
         Fragment fragment;
@@ -46,6 +48,8 @@ public class ShareFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_share, container, false);
 
+
+
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         ShareLedgerRegFragment fragment = new ShareLedgerRegFragment();
@@ -55,6 +59,7 @@ public class ShareFragment extends Fragment {
 
         BottomNavigationView navigation = (BottomNavigationView) v.findViewById(R.id.sharenavi);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
         return v;
     }
 

@@ -34,8 +34,12 @@
         android:text="수입" />
 
         </RadioGroup>
-
-
+    <Button
+        android:id="@+id/btnSMS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="sms"
+        />
     <CalendarView
         android:id="@+id/cvCalender"
         android:layout_width="match_parent"
