@@ -7,9 +7,13 @@
     tools:context="kr.ac.kpu.block.smared.LedgerStatFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <com.github.mikephil.charting.charts.PieChart
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="360dp"
+        android:id="@+id/piechart">
+
+    </com.github.mikephil.charting.charts.PieChart>
+
 
 </FrameLayout>

@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         Button btnRegister = (Button) findViewById(R.id.btnRegister);
+        etEmail.setText("test@naver.com");
+        etPassword.setText("lookup");
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override

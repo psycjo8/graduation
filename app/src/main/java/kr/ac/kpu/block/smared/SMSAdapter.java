@@ -7,15 +7,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
 public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> {
 
-    List<String> mBody;
-
+    List<SMS> mBody;
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+    FirebaseUser user;
     Context context;
-
+    LedgerContent mledgerContent[] = new LedgerContent[1000];
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -24,17 +32,22 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> {
 
 
         public Button btnSMSDay;
-        public TextView tvSMSBody;
-
+        public TextView tvSMSPaymemo;
+        public TextView tvSMSPrice;
+        public TextView tvSMSTime;
+        public Button btnAddSMS;
 
         public ViewHolder(View itemView) {
             super(itemView);
             btnSMSDay = (Button) itemView.findViewById(R.id.btnSMSDay);
-            tvSMSBody= (TextView) itemView.findViewById(R.id.tvSMSBody);
+            tvSMSPaymemo= (TextView) itemView.findViewById(R.id.tvSMSPaymemo);
+            tvSMSPrice= (TextView) itemView.findViewById(R.id.tvSMSPrice);
+            tvSMSTime= (TextView) itemView.findViewById(R.id.tvSMSTime);
+            btnAddSMS = (Button) itemView.findViewById(R.id.btnAddSMS);
         }
     }
 
-    public SMSAdapter(List<String> mBody , Context context) {
+    public SMSAdapter(List<SMS> mBody , Context context) {
         this.mBody = mBody;
         this.context = context;
     }
@@ -43,6 +56,12 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> {
     @Override
     public SMSAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                     int viewType) {
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("users");
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        for (int i=0; i<1000; i++) {
+            mledgerContent[i] = new LedgerContent();
+        }
         View v;
         v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_sms, parent, false);
@@ -56,8 +75,21 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
-        holder.tvSMSBody.setText(mBody.get(position).toString());
+      holder.tvSMSPaymemo.setText(mBody.get(position).getPayMemo());
+      holder.btnSMSDay.setText(mBody.get(position).getYear()+"-"+mBody.get(position).getMonth()+"-"+mBody.get(position).getDay());
+      holder.tvSMSPrice.setText("[지출] -" + mBody.get(position).getPrice()+"원");
+      holder.tvSMSTime.setText(mBody.get(position).getTime());
 
+      mledgerContent[position].setPaymemo(mBody.get(position).getPayMemo());
+      mledgerContent[position].setPrice(mBody.get(position).getPrice());
+      mledgerContent[position].setUseItem("기타");
+      holder.btnAddSMS.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              myRef.child(user.getUid()).child("Ledger").child(mBody.get(position).getYear()).child(mBody.get(position).getMonth()).child(mBody.get(position).getDay()).child("지출").child(mBody.get(position).getTime()).setValue(mledgerContent[position]);
+              Toast.makeText(context, "가계부에 추가되었습니다.", Toast.LENGTH_SHORT).show();
+          }
+      });
         }
 
 

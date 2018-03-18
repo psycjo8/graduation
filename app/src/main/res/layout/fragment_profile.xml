@@ -27,6 +27,7 @@
         android:layout_below="@+id/tvTitle"
         android:layout_marginTop="20dp"
         android:background="#eeeeee"
+        android:scaleType="fitXY"
         />
     <ProgressBar
         android:layout_width="50dp"

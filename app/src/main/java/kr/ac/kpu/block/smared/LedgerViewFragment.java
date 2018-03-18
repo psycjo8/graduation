@@ -110,7 +110,6 @@ public class LedgerViewFragment extends android.app.Fragment {
         mRecyclerView.setAdapter(mAdapter);
 
 
-
         ibLastMonth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

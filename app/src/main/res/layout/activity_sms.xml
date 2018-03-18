@@ -21,7 +21,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:textColor="#000000"
-        android:text="N건의 기록이 확인되었습니다."/>
+        android:text="0건의 기록이 확인되었습니다."/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvSMS"
