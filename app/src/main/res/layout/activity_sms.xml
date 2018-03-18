@@ -26,17 +26,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvSMS"
         android:layout_below="@+id/tvCountSMS"
-
         android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="400dp"/>
-    <Button
-        android:id="@+id/btnSaveSMS"
-        android:layout_width="150dp"
-        android:layout_centerHorizontal="true"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/rvSMS"
-        android:text="저장"
-        />
+        android:layout_height="wrap_content"/>
+
 </RelativeLayout>

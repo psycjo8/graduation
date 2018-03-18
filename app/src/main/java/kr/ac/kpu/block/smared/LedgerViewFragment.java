@@ -52,7 +52,7 @@ public class LedgerViewFragment extends android.app.Fragment {
     int totalConsume=0;
     LedgerContent ledgerContent = new LedgerContent();
     List<Ledger> mLedger ; // 불러온 전체 가계부 목록
-    List<Ledger> tempLedger ; // 불러온 전체 가계부 목록
+    List<Ledger> tempLedger ; // 불러온 부분 가계부 목록
 
     int index=0;  // 년,월 인덱스
     Set<String> selectMonth = new HashSet<String>(); // 년,월 중복제거용

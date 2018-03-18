@@ -77,8 +77,8 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> {
 
       holder.tvSMSPaymemo.setText(mBody.get(position).getPayMemo());
       holder.btnSMSDay.setText(mBody.get(position).getYear()+"-"+mBody.get(position).getMonth()+"-"+mBody.get(position).getDay());
-      holder.tvSMSPrice.setText("[지출] -" + mBody.get(position).getPrice()+"원");
-      holder.tvSMSTime.setText(mBody.get(position).getTime());
+      holder.tvSMSPrice.setText("-" + mBody.get(position).getPrice()+"원");
+      holder.tvSMSTime.setText("[신한체크]" + mBody.get(position).getTime());
 
       mledgerContent[position].setPaymemo(mBody.get(position).getPayMemo());
       mledgerContent[position].setPrice(mBody.get(position).getPrice());

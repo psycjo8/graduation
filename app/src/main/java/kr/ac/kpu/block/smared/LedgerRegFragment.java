@@ -94,9 +94,10 @@ public class LedgerRegFragment extends android.app.Fragment {
         cvCalender.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
+
                 stYear = Integer.toString(year);
-                stMonth = Integer.toString(month+1);
-                stDay = Integer.toString(day);
+                stMonth = String.format("%02d",month+1);
+                stDay = String.format("%02d",day);
                Toast.makeText(getActivity(), stYear+"-"+stMonth+"-"+stDay, Toast.LENGTH_SHORT).show();
             }
         });
