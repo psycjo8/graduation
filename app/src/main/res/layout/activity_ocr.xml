@@ -1,36 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+    android:id="@+id/activity_ocr"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="kr.ac.kpu.block.smared.ImageProcessingActivity">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:background="#ffffff"
-        android:id="@+id/ImageContainer">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="이미지" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/imageView"
-            android:src="@drawable/ic_launcher_background"/>
-
-    </RelativeLayout>
+    tools:context="kr.ac.kpu.block.smared.OCRActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="42dp"
-        android:layout_below="@id/ImageContainer"
         android:clickable="true"
         android:background="#166e78"
+        android:onClick="processImage"
         android:id="@+id/OCRButtonContainer">
 
         <TextView

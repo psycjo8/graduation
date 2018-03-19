@@ -15,7 +15,7 @@ Java_kr_ac_kpu_block_smared_ImageProcessingActivity_loadImage(JNIEnv *env, jobje
 
     const char *nativeFileNameString = env->GetStringUTFChars(imageFileName_, JNI_FALSE);
 
-    string baseDir("/storage/emulated/0/");
+    string baseDir("/storage/emulated/0/SmaRed/");
     baseDir.append(nativeFileNameString);
     const char *pathDir = baseDir.c_str();
 
@@ -33,8 +33,8 @@ Java_kr_ac_kpu_block_smared_ImageProcessingActivity_imageprocessing(JNIEnv *env,
     cvtColor(img_input, img_input, CV_BGR2GRAY);
     GaussianBlur(img_input, img_input, Size(7,7), 1.5, 1.5);
     adaptiveThreshold(img_input, img_input, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY, 31, 5);
-    morphologyEx(img_input, img_input, MORPH_CLOSE, element5);
-    erode(img_input, img_output, element5, Point(-1,-1), 1, BORDER_DEFAULT, morphologyDefaultBorderValue());
+    morphologyEx(img_input, img_output, MORPH_CLOSE, element5);
+    //erode(img_input, img_output, element5, Point(-1,-1), 1, BORDER_DEFAULT, morphologyDefaultBorderValue());
 
 }
 

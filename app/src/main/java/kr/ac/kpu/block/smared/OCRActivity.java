@@ -22,12 +22,12 @@ public class OCRActivity extends AppCompatActivity {
     Bitmap image; //사용되는 이미지
     private TessBaseAPI mTess; //Tess API reference
     String datapath = ""; //언어데이터가 있는 경로
-    File imgFile = new File("/storage/emulated/0/myImage/s1.jpg");
+    File imgFile = new File("/storage/emulated/0/SmaRed/s2.jpg");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_processing);
+        setContentView(R.layout.activity_ocr);
 
         //이미지 디코딩을 위한 초기화
         if(imgFile.exists()) {

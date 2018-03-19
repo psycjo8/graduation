@@ -34,6 +34,7 @@ public class ImageProcessingActivity extends AppCompatActivity {
     ImageView imageVIewOuput;
     private Mat img_input;
     private Mat img_output;
+    String ImagePath;
 
     private static final String TAG = "opencv";
     static final int PERMISSION_REQUEST_CODE = 1;
@@ -110,7 +111,8 @@ public class ImageProcessingActivity extends AppCompatActivity {
     }
 
     private void copyFile(String filename) {
-        String baseDir = Environment.getExternalStorageDirectory().getPath();
+        //String baseDir = Environment.getExternalStorageDirectory().getPath();
+        String baseDir = "/storage/emulated/0/SmaRed";
         String pathDir = baseDir + File.separator + filename;
 
         AssetManager assetManager = this.getAssets();
@@ -170,12 +172,21 @@ public class ImageProcessingActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_processing);
 
         imageVIewInput = (ImageView)findViewById(R.id.imageViewInput);
         imageVIewOuput = (ImageView)findViewById(R.id.imageViewOutput);
+
+        Intent intent = getIntent();
+        ImagePath = intent.getStringExtra("ipath");
 
         if (!hasPermissions(PERMISSIONS)) { //퍼미션 허가를 했었는지 여부를 확인
             requestNecessaryPermissions(PERMISSIONS);//퍼미션 허가안되어 있다면 사용자에게 요청
@@ -198,24 +209,19 @@ public class ImageProcessingActivity extends AppCompatActivity {
         Utils.matToBitmap(img_output, bitmapOutput);
         imageVIewOuput.setImageBitmap(bitmapOutput);
 
-        SaveBitmapToFileCache(bitmapOutput, "/storage/emulated/0/myImage/", "s1.jpg");
+        SaveBitmapToFileCache(bitmapOutput, "/storage/emulated/0/SmaRed/", "s2.jpg");
     }
 
     private void read_image_file() {
-        copyFile("ball.jpg");
+       // copyFile(ImagePath);
 
         img_input = new Mat();
         img_output = new Mat();
 
-        loadImage("ball.jpg", img_input.getNativeObjAddr());
+        loadImage(ImagePath, img_input.getNativeObjAddr());
     }
 
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-
-    /**
+    /*
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */

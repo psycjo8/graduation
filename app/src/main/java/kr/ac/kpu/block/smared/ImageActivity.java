@@ -45,6 +45,8 @@ public class ImageActivity extends Activity implements View.OnClickListener
     private static final int MULTIPLE_PERMISSIONS = 101;
 
     private String mCurrentPhotoPath;
+    private String ImagePath = "";
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,13 +105,14 @@ public class ImageActivity extends Activity implements View.OnClickListener
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
-        String imageFileName = "nostest_" + timeStamp + "_";
-        File storageDir = new File(Environment.getExternalStorageDirectory() + "/NOSTest/");
+        String imageFileName = "smared_" + timeStamp + "_";
+        File storageDir = new File(Environment.getExternalStorageDirectory() + "/SmaRed/");
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        ImagePath = image.getName();
         return image;
     }
 
@@ -131,7 +134,7 @@ public class ImageActivity extends Activity implements View.OnClickListener
                 break;
             case R.id.buttonI3:
                 Intent intent = new Intent(ImageActivity.this, ImageProcessingActivity.class);
-                intent.putExtra("FILEPATH", photoUri);
+                intent.putExtra("ipath", ImagePath);
                 startActivity(intent);
                 break;
             case R.id.buttonI4:
@@ -239,7 +242,7 @@ public class ImageActivity extends Activity implements View.OnClickListener
                 e.printStackTrace();
             }
 
-            File folder = new File(Environment.getExternalStorageDirectory() + "/NOSTest/");
+            File folder = new File(Environment.getExternalStorageDirectory() + "/SmaRed/");
             File tempFile = new File(folder.toString(), croppedFileName.getName());
 
             photoUri = FileProvider.getUriForFile(ImageActivity.this,
