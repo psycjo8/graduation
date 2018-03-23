@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
@@ -35,7 +36,7 @@ public class ImageProcessingActivity extends AppCompatActivity {
     private Mat img_input;
     private Mat img_output;
     String ImagePath;
-
+    ProgressBar pbLogins;
     private static final String TAG = "opencv";
     static final int PERMISSION_REQUEST_CODE = 1;
     String[] PERMISSIONS  = {"android.permission.WRITE_EXTERNAL_STORAGE"};
@@ -184,7 +185,8 @@ public class ImageProcessingActivity extends AppCompatActivity {
 
         imageVIewInput = (ImageView)findViewById(R.id.imageViewInput);
         imageVIewOuput = (ImageView)findViewById(R.id.imageViewOutput);
-
+        pbLogins = (ProgressBar)findViewById(R.id.pbLogins);
+        pbLogins.setVisibility(View.GONE);
         Intent intent = getIntent();
         ImagePath = intent.getStringExtra("ipath");
 
@@ -229,7 +231,9 @@ public class ImageProcessingActivity extends AppCompatActivity {
     public native void imageprocessing(long inputImage, long outputImage);
 
     public void onImageClick(View view) {
-        Intent intent=new Intent(ImageProcessingActivity.this,OCRActivity.class);
+        pbLogins.setVisibility(View.VISIBLE);
+        Intent intent=new Intent(ImageProcessingActivity.this,CloudActivity.class);
         startActivity(intent);
+        pbLogins.setVisibility(View.GONE);
     }
 }

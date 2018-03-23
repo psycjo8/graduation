@@ -1,6 +1,7 @@
 package kr.ac.kpu.block.smared;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,13 +10,11 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -257,15 +255,20 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {  // 이미지뷰 파일 업로드
         super.onActivityResult(requestCode, resultCode, data);
 
-        Uri image = data.getData();
         try {
+            Uri image = data.getData();
+            try {
 
-            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),image);
-            uploadImage();
+                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),image);
+                uploadImage();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (NullPointerException e) {
+            pbLogin.setVisibility(getView().GONE);
         }
+
     }
 
     @Override
@@ -317,19 +320,19 @@ public class ProfileFragment extends Fragment {
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference("users");
 
-                Hashtable<String, String> profile   // HashTable로 연결
-                        = new Hashtable<String, String>();
+                Hashtable<String, Object> profile   // HashTable로 연결
+                        = new Hashtable<>();
                 profile.put("email", stEmail);
                 profile.put("key",stUid);
                 profile.put("photo",photoUrl);
                 profile.put("nickname",stNickname);
-                myRef.child(stUid).setValue(profile);
+                myRef.child(stUid).updateChildren(profile);
                 myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String s = dataSnapshot.getValue().toString();
                         Log.d("profile",s);
-                        if (dataSnapshot != null) {
+                        if (dataSnapshot != null ) {
 
                             Toast.makeText(getActivity(), "사진 업로드 완료",Toast.LENGTH_SHORT).show();
                             ivUser.setImageBitmap(bitmap);

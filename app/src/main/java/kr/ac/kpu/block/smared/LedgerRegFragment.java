@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.sql.BatchUpdateException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Hashtable;
@@ -62,7 +63,7 @@ public class LedgerRegFragment extends android.app.Fragment {
         final RadioButton rbConsume = (RadioButton) v.findViewById(R.id.rbConsume);
         RadioButton rbIncome = (RadioButton) v.findViewById(R.id.rbIncome);
         Button btnOcr = (Button)v.findViewById(R.id.btnOcr);
-
+        Button btnSMS = (Button)v.findViewById(R.id.btnSMS) ;
 
         spnUseitem.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -117,6 +118,14 @@ public class LedgerRegFragment extends android.app.Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ImageActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnSMS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SMSActivity.class);
                 startActivity(intent);
             }
         });

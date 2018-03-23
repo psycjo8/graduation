@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ShareFragment extends Fragment {
+public class ShareFragment extends Fragment{
 
 
         Fragment fragment;
@@ -27,7 +27,7 @@ public class ShareFragment extends Fragment {
                     switchFragment(fragment);
                     return true;
                 case R.id.lednavi_output:
-                    fragment = new LedgerViewFragment();
+                    fragment = new ShareLedgerViewFragment();
                     switchFragment(fragment);
                     return true;
                 case R.id.lednavi_statistic:
@@ -46,6 +46,8 @@ public class ShareFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_share, container, false);
 
+
+
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         ShareLedgerRegFragment fragment = new ShareLedgerRegFragment();
@@ -55,6 +57,7 @@ public class ShareFragment extends Fragment {
 
         BottomNavigationView navigation = (BottomNavigationView) v.findViewById(R.id.sharenavi);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
         return v;
     }
 

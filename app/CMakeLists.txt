@@ -4,7 +4,7 @@
 
 
 set(pathOpenCv C:/OpenCV-android-sdk)
-set(pathProject C:/Users/JKS/AndroidStudioProjects/SmaRed)
+set(pathProject D:/SmaRed)
 
 cmake_minimum_required(VERSION 3.4.1)
 

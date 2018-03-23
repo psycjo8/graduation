@@ -39,14 +39,14 @@
     <Button
         android:id="@+id/btnChoiceLed"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="180dp"
         android:text="가계부 선택"
         />
     <Button
         android:id="@+id/btnInvite"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="280dp"
         android:text="초대"
         />
@@ -95,6 +95,7 @@
         android:layout_below="@+id/spnUseitem2"
         android:layout_marginTop="15dp"
         android:layout_marginLeft="100dp"
+        android:inputType="number"
         android:hint="금액을 입력해 주세요"/>
     <TextView
         android:layout_width="wrap_content"

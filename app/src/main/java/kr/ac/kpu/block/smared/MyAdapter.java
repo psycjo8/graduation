@@ -40,7 +40,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter( List<Chat> mChat , String email, Context context) {
+    public MyAdapter(List<Chat> mChat , String email, Context context) {
         this.mChat = mChat;
         this.stEmail = email;
         this.context = context;

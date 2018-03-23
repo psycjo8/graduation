@@ -1,24 +1,19 @@
 package kr.ac.kpu.block.smared;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class LedgerAdapter extends RecyclerView.Adapter<LedgerAdapter.ViewHolder> {
 
     List<Ledger> mLedger;
+    String parsing;
     Context context;
 
     // Provide a reference to the views for each data item
@@ -32,6 +27,7 @@ public class LedgerAdapter extends RecyclerView.Adapter<LedgerAdapter.ViewHolder
         public TextView tvUseitem;
         public TextView tvPrice;
         public TextView tvPaymemo;
+        public TextView tvChoice;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -39,7 +35,7 @@ public class LedgerAdapter extends RecyclerView.Adapter<LedgerAdapter.ViewHolder
             tvUseitem= (TextView) itemView.findViewById(R.id.tvUseitem);
             tvPrice = (TextView) itemView.findViewById(R.id.tvPrice);
             tvPaymemo = (TextView) itemView.findViewById(R.id.tvPaymemo);
-
+            tvChoice = (TextView) itemView.findViewById(R.id.tvChoice);
         }
     }
 
@@ -65,8 +61,9 @@ public class LedgerAdapter extends RecyclerView.Adapter<LedgerAdapter.ViewHolder
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
          holder.btnDay.setText(mLedger.get(position).getYear()+"-"+mLedger.get(position).getMonth()+"-"+mLedger.get(position).getDay());
+         holder.tvChoice.setText("[ "+mLedger.get(position).getClassfy() + " ]");
          holder.tvUseitem.setText("분류 : " + mLedger.get(position).getUseItem());
-         holder.tvPrice.setText("가격 : " + mLedger.get(position).getPrice());
+         holder.tvPrice.setText("가격 : " + mLedger.get(position).getPrice() + "원");
          holder.tvPaymemo.setText("내용 : " + mLedger.get(position).getPaymemo());
 
 

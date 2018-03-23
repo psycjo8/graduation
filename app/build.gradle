@@ -26,6 +26,13 @@ android {
             path "CMakeLists.txt"
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+repositories{
+    maven {url "https://jitpack.io"}
 }
 
 dependencies {
@@ -43,7 +50,11 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:26.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     implementation project(':openCVLibrary310')
-    compile 'com.rmtheis:tess-two:8.0.0'
+    compile 'com.rmtheis:tess-two:7.0.0'
+    compile 'com.github.PhilJay:MpAndroidChart:v3.0.2'
+    compile 'com.google.api-client:google-api-client-android:1.23.0' exclude module: 'httpclient'
+    compile 'com.google.http-client:google-http-client-gson:1.23.0' exclude module: 'httpclient'
+    compile 'com.google.apis:google-api-services-vision:v1-rev369-1.23.0'
 }
 
 

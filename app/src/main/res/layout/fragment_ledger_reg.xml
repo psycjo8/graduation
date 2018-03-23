@@ -26,12 +26,12 @@
         android:text="지출" />
 
 
-    <RadioButton
-        android:id="@+id/rbIncome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:text="수입" />
+        <RadioButton
+            android:id="@+id/rbIncome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="수입" />
 
         </RadioGroup>
 
@@ -126,5 +126,14 @@
         android:layout_alignStart="@+id/textView"
         android:text="OCR" />
 
-
+    <Button
+        android:id="@+id/btnSMS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_toEndOf="@+id/rgChoice"
+        android:layout_toRightOf="@+id/rgChoice"
+        android:text="sms" />
 </RelativeLayout>

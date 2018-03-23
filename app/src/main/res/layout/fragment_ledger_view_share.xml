@@ -4,41 +4,42 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:clickable="true"
-    tools:context="kr.ac.kpu.block.smared.LedgerViewFragment">
+    tools:context="kr.ac.kpu.block.smared.ShareLedgerViewFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <ImageButton
-        android:id="@+id/ibLastMonth"
+        android:id="@+id/ibLastMonth2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="85dp"
         android:src="@drawable/ic_chevron_left_black_24dp"
-
+        android:layout_below="@+id/spnSelectLedger"
         android:background="#ffffff"
         />
     <TextView
-        android:id="@+id/tvLedgerMonth"
+        android:id="@+id/tvLedgerMonth2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/ibLastMonth"
+        android:layout_toRightOf="@id/ibLastMonth2"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="9dp"
         android:textSize="20dp"
         android:textColor="#000000"
-        android:text="불러오는 중"/>
+        android:text="불러오는 중"
+        android:layout_below="@+id/spnSelectLedger"/>
     <ImageButton
-        android:id="@+id/ibNextMonth"
+        android:id="@+id/ibNextMonth2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/tvLedgerMonth"
-
+        android:layout_toRightOf="@+id/tvLedgerMonth2"
+        android:layout_below="@+id/spnSelectLedger"
         android:src="@drawable/ic_chevron_right_black_24dp"
         android:background="#ffffff"
         />
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvLedger"
-        android:layout_below="@id/ibNextMonth"
+        android:id="@+id/rvLedger2"
+        android:layout_below="@id/ibNextMonth2"
 
         android:scrollbars="vertical"
         android:layout_width="match_parent"
@@ -47,29 +48,37 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvTotalincome"
+        android:id="@+id/tvTotalincome2"
         android:text="수입 합계"
         android:textSize="15dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/rvLedger"
+        android:layout_below="@id/rvLedger2"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvTotalconsume"
-        android:layout_below="@id/tvTotalincome"
+        android:id="@+id/tvTotalconsume2"
+        android:layout_below="@id/tvTotalincome2"
         android:layout_centerHorizontal="true"
         android:text="지출 합계"
         android:textSize="15dp"/>
 
     <TextView
-        android:id="@+id/tvPlusMinus"
+        android:id="@+id/tvPlusMinus2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvTotalconsume"
+        android:layout_below="@id/tvTotalconsume2"
         android:text="수익"
         android:textSize="15dp"
         android:layout_centerHorizontal="true"
+
+        />
+
+    <Spinner
+        android:id="@+id/spnSelectLedger"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
 
         />
 

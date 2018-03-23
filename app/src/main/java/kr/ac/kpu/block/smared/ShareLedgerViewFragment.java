@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,7 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class LedgerViewFragment extends android.app.Fragment {
+public class ShareLedgerViewFragment extends android.app.Fragment {
 
     String TAG = getClass().getSimpleName();
     RecyclerView mRecyclerView;
@@ -45,12 +47,16 @@ public class LedgerViewFragment extends android.app.Fragment {
     LedgerContent ledgerContent = new LedgerContent();
     List<Ledger> mLedger ; // 불러온 전체 가계부 목록
     List<Ledger> tempLedger ; // 불러온 부분 가계부 목록
+    List<String> listItems = new ArrayList<String>();
 
     int index=0;  // 년,월 인덱스
     Set<String> selectMonth = new HashSet<String>(); // 년,월 중복제거용
     List<String> monthList; // 중복 제거된 년,월 저장
+    String selectChatuid;
     String parsing;
-
+    String joinChatname;
+    CharSequence selectChatname = "";
+    ArrayAdapter spinneradapter;
 
     ImageButton ibLastMonth; // 왼쪽 화살표
     TextView tvLedgerMonth; // 년,월 출력부
@@ -58,7 +64,7 @@ public class LedgerViewFragment extends android.app.Fragment {
     TextView tvTotalconsume;
     TextView tvTotalincome;
     TextView tvPlusMinus;
-
+    Spinner spnSelectLedger;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,15 +80,17 @@ public class LedgerViewFragment extends android.app.Fragment {
 
 
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_ledger_view, container, false);
+        View v = inflater.inflate(R.layout.fragment_ledger_view_share, container, false);
 
-        ibLastMonth = (ImageButton) v.findViewById(R.id.ibLastMonth);
-        ibNextMonth = (ImageButton) v.findViewById(R.id.ibNextMonth);
-        tvLedgerMonth = (TextView) v.findViewById(R.id.tvLedgerMonth);
-        tvTotalincome = (TextView) v.findViewById(R.id.tvTotalincome);
-        tvTotalconsume = (TextView) v.findViewById(R.id.tvTotalconsume);
-        tvPlusMinus = (TextView) v.findViewById(R.id.tvPlusMinus);
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.rvLedger);
+        spnSelectLedger = (Spinner) v.findViewById(R.id.spnSelectLedger);
+        ibLastMonth = (ImageButton) v.findViewById(R.id.ibLastMonth2);
+        ibNextMonth = (ImageButton) v.findViewById(R.id.ibNextMonth2);
+        tvLedgerMonth = (TextView) v.findViewById(R.id.tvLedgerMonth2);
+        tvTotalincome = (TextView) v.findViewById(R.id.tvTotalincome2);
+        tvTotalconsume = (TextView) v.findViewById(R.id.tvTotalconsume2);
+        tvPlusMinus = (TextView) v.findViewById(R.id.tvPlusMinus2);
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.rvLedger2);
+
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
@@ -230,6 +238,19 @@ public class LedgerViewFragment extends android.app.Fragment {
                     }
                 });
 
+        viewLedgerName();
+        spinneradapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, listItems);
+        spnSelectLedger.setAdapter(spinneradapter);
+        spnSelectLedger.setSelection(0);
+
+      /*  spnSelectLedger.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                selectChatname = (String) adapterView.getItemAtPosition(position);
+                setChatUid();
+            }
+        });
+       */
 
         return v;
     }
@@ -248,7 +269,6 @@ public class LedgerViewFragment extends android.app.Fragment {
 
                     //  Toast.makeText(getActivity(),daySnapshot.getKey(),Toast.LENGTH_SHORT).show();
                     for (DataSnapshot classfySnapshot : daySnapshot.getChildren()) { // 분류
-
 
                         // Toast.makeText(getActivity(),classfySnapshot.getKey(),Toast.LENGTH_SHORT).show();
                         for (DataSnapshot timesSnapshot : classfySnapshot.getChildren()) { //
@@ -292,8 +312,57 @@ public class LedgerViewFragment extends android.app.Fragment {
 
 
 
+    public void viewLedgerName() {
+
+        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot chatSnapshot : dataSnapshot.getChildren()) {
+
+                    for (DataSnapshot userSnapshot : chatSnapshot.getChildren()) {
+
+                        for (DataSnapshot uidSnapshot : userSnapshot.getChildren())
+                        {
+                            if(uidSnapshot.getKey().equals(user.getUid())) {
+                                joinChatname = chatSnapshot.child("chatname").getValue(String.class);
+                                listItems.add(joinChatname);
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void setChatUid() {
+        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot chatSnapshot : dataSnapshot.getChildren()) {
+                    if ( chatSnapshot.child("chatname").getValue(String.class).equals(selectChatname) ) {
+                        selectChatuid = chatSnapshot.getKey();
 
 
+
+
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }
 
 

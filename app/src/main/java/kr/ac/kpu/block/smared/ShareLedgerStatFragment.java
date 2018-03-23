@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class LedgerStatFragment extends android.app.Fragment {
+public class ShareLedgerStatFragment extends android.app.Fragment {
 
     PieChart pieChart;
 
