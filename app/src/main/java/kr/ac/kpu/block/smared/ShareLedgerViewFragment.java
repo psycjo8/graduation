@@ -7,10 +7,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,6 +27,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static com.google.android.gms.internal.zzbfq.NULL;
 
 
 public class ShareLedgerViewFragment extends android.app.Fragment {
@@ -44,6 +48,7 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
     int i =0;
     int totalIncome=0;
     int totalConsume=0;
+    int count =0;
     LedgerContent ledgerContent = new LedgerContent();
     List<Ledger> mLedger ; // 불러온 전체 가계부 목록
     List<Ledger> tempLedger ; // 불러온 부분 가계부 목록
@@ -52,11 +57,11 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
     int index=0;  // 년,월 인덱스
     Set<String> selectMonth = new HashSet<String>(); // 년,월 중복제거용
     List<String> monthList; // 중복 제거된 년,월 저장
-    String selectChatuid;
+    String selectChatuid="";
     String parsing;
     String joinChatname;
     CharSequence selectChatname = "";
-    ArrayAdapter spinneradapter;
+    ArrayAdapter<String> spinneradapter;
 
     ImageButton ibLastMonth; // 왼쪽 화살표
     TextView tvLedgerMonth; // 년,월 출력부
@@ -215,63 +220,51 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
             }
         });
 
+        viewLedgerName("init");
 
-                myRef.child(user.getUid()).child("Ledger").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        tvLedgerMonth.setText("전체 가계부");
-                            ledgerView(dataSnapshot); // 유저 가계부 전체 리스트 생성
-                            monthList = new ArrayList(selectMonth); // 년 월만 빼서 따로 리스트 생성
-                            Collections.sort(monthList);
-                            if(monthList.isEmpty()) {
 
-                            } else {
-                                parsing = monthList.get(monthList.size() - 1).replaceAll("[^0-9]", "");
-                                index = monthList.size() - 1;
-                            }
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                        Log.w(TAG, "Failed to read value.", error.toException());
-                    }
-                });
-
-        viewLedgerName();
-        spinneradapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, listItems);
+        spinneradapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, listItems);
         spnSelectLedger.setAdapter(spinneradapter);
-        spnSelectLedger.setSelection(0);
+        spnSelectLedger.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                      @Override
+                                                      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                                          if (count != 0) {
 
-      /*  spnSelectLedger.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                selectChatname = (String) adapterView.getItemAtPosition(position);
-                setChatUid();
-            }
-        });
-       */
+                                                              selectChatname = (String) parent.getItemAtPosition(position);
+                                                              mLedger.clear(); // 가계부 초기화
+                                                              listItems.clear(); // 참여중인 가계부 목록 초기화
+                                                              selectMonth.clear();
+                                                              monthList.clear(); // 년,월 선택 초기화
+                                                              viewLedgerName(selectChatname);
+                                                          }
+                                                          count = 1;
+                                                      }
+
+                                                      @Override
+                                                      public void onNothingSelected(AdapterView<?> parent) {
+
+                                                      }
+                                                  }
+
+
+        );
 
         return v;
     }
 
 
 
-    public void ledgerView(DataSnapshot dataSnapshot) {
+    public void ledgerView(DataSnapshot dataSnapshot) { // 스냅샷 으로부터 가계부 정보 읽어오기
 
         for (DataSnapshot yearSnapshot : dataSnapshot.getChildren()) { // 년
 
-            //     Toast.makeText(getActivity(),yearSnapshot.getKey(),Toast.LENGTH_SHORT).show();
             for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) { // 월
 
-                //Toast.makeText(getActivity(),monthSnapshot.getKey(),Toast.LENGTH_SHORT).show();
                 for (DataSnapshot daySnapshot : monthSnapshot.getChildren()) { // 일
 
-                    //  Toast.makeText(getActivity(),daySnapshot.getKey(),Toast.LENGTH_SHORT).show();
                     for (DataSnapshot classfySnapshot : daySnapshot.getChildren()) { // 분류
 
-                        // Toast.makeText(getActivity(),classfySnapshot.getKey(),Toast.LENGTH_SHORT).show();
-                        for (DataSnapshot timesSnapshot : classfySnapshot.getChildren()) { //
+                        for (DataSnapshot timesSnapshot : classfySnapshot.getChildren()) {  // 가계부 정보 - 계정,가격,내용
                             ledger[i].setClassfy(classfySnapshot.getKey());
                             ledger[i].setYear(yearSnapshot.getKey());
                             ledger[i].setMonth(monthSnapshot.getKey());
@@ -279,7 +272,6 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
 
                             ledger[i].setDay(daySnapshot.getKey());
                             ledger[i].setTimes(timesSnapshot.getKey());
-                            //     Toast.makeText(getActivity(),timesSnapshot.getKey(),Toast.LENGTH_SHORT).show();
 
                             ledgerContent = timesSnapshot.getValue(LedgerContent.class);
                             ledger[i].setPaymemo(ledgerContent.getPaymemo()); ;
@@ -293,7 +285,7 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
 
                             mLedger.add(ledger[i]);
                             mRecyclerView.scrollToPosition(0);
-                            mAdapter.notifyItemInserted(mLedger.size() - 1);
+                            mAdapter.notifyDataSetChanged();
                             i++;
 
                         }
@@ -312,7 +304,8 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
 
 
 
-    public void viewLedgerName() {
+    public void viewLedgerName(final CharSequence chatname) { // 현재 참여중인 가계부 이름을 읽어옴
+
 
         chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -325,12 +318,25 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
                         for (DataSnapshot uidSnapshot : userSnapshot.getChildren())
                         {
                             if(uidSnapshot.getKey().equals(user.getUid())) {
-                                joinChatname = chatSnapshot.child("chatname").getValue(String.class);
-                                listItems.add(joinChatname);
+                                if(chatname.equals("init")) {
+                                    joinChatname = chatSnapshot.child("chatname").getValue(String.class);
+                                    listItems.add(joinChatname);
+                                    spinneradapter.notifyDataSetChanged();
+                                    selectChatname = listItems.get(0).toString();
+                                } else {
+                                    joinChatname = chatSnapshot.child("chatname").getValue(String.class);
+                                    listItems.add(joinChatname);
+                                    spinneradapter.notifyDataSetChanged();
+                                    selectChatname = chatname;
+
+                                }
                             }
                         }
                     }
                 }
+
+
+                setChatUid();
             }
 
             @Override
@@ -341,7 +347,7 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
 
     }
 
-    public void setChatUid() {
+    public void setChatUid() { // 선택된 가계부 이름으로 부터 가계부 키를 찾고 화면 출력
         chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -349,7 +355,27 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
                     if ( chatSnapshot.child("chatname").getValue(String.class).equals(selectChatname) ) {
                         selectChatuid = chatSnapshot.getKey();
 
+                        chatRef.child(selectChatuid).child("Ledger").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                tvLedgerMonth.setText("전체 가계부");
+                                ledgerView(dataSnapshot); // 유저 가계부 전체 리스트 생성
+                                monthList = new ArrayList(selectMonth); // 년 월만 빼서 따로 리스트 생성
+                                Collections.sort(monthList);
+                                if(monthList.isEmpty()) {
 
+                                } else {
+                                    parsing = monthList.get(monthList.size() - 1).replaceAll("[^0-9]", "");
+                                    index = monthList.size() - 1;
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError error) {
+                                Log.w(TAG, "Failed to read value.", error.toException());
+                            }
+                        });
 
 
 

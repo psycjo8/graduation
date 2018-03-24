@@ -31,6 +31,7 @@ public class ChatActivity extends AppCompatActivity {
 
     EditText etText;
     Button btnSend;
+    Button btnViewFriend;
     String email;
     String photo;
     String nickname;
@@ -46,6 +47,7 @@ public class ChatActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance(); // Firebase Database 연결
         etText = (EditText) findViewById(R.id.etText);
         btnSend = (Button) findViewById(R.id.btnSend);
+        btnViewFriend = (Button) findViewById(R.id.btnViewFriend);
         mRecyclerView = (RecyclerView) findViewById(R.id.rvChat);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser(); // 유저 정보 추출
@@ -59,7 +61,14 @@ public class ChatActivity extends AppCompatActivity {
 
         }
 
-
+        btnViewFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(ChatActivity.this,FriendActivity.class);
+                in.putExtra("chatUid",stChatId);
+                startActivity(in);
+            }
+        });
 
 
         btnSend.setOnClickListener(new View.OnClickListener() {

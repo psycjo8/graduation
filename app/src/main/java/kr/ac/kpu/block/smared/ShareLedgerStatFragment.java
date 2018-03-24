@@ -2,11 +2,17 @@ package kr.ac.kpu.block.smared;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -29,6 +35,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static android.content.ContentValues.TAG;
+
 
 public class ShareLedgerStatFragment extends android.app.Fragment {
 
@@ -47,55 +55,42 @@ public class ShareLedgerStatFragment extends android.app.Fragment {
     List<String> monthList; // 중복 제거된 년,월 저장
     List<Ledger> mLedger ;
     List<Ledger> tempLedger ; // 불러온 전체 가계부 목록
+    List<String> listItems = new ArrayList<String>();
     String parsing;
-
+    String selectChatuid="";
+    String joinChatname;
 
     ImageButton ibLastMonth2; // 왼쪽 화살표
     TextView tvLedgerMonth2; // 년,월 출력부
     ImageButton ibNextMonth2; // 오른쪽 화살표
-
+    Spinner spnSelectLedger;
+    CharSequence selectChatname = "";
+    ArrayAdapter<String> spinneradapter;
     int i =0;
     int j =0;
-
+    int count =0;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("users");
+        chatRef = database.getReference("chats");
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         for (i=0; i<1000; i++) {
             ledger[i] = new Ledger();
         }
 
-        View v = inflater.inflate(R.layout.fragment_ledger_stat, container, false);
+        View v = inflater.inflate(R.layout.fragment_ledger_stat_share, container, false);
         mLedger = new ArrayList<>();
         ibLastMonth2 = (ImageButton) v.findViewById(R.id.ibLastMonth2);
         ibNextMonth2 = (ImageButton) v.findViewById(R.id.ibNextMonth2);
         tvLedgerMonth2 = (TextView) v.findViewById(R.id.tvLedgerMonth2);
+        spnSelectLedger = (Spinner) v.findViewById(R.id.spnSelectLedger);
+
+
         i = 0;
         pieChart = (PieChart)v.findViewById(R.id.piechart);
-        myRef.child(user.getUid()).child("Ledger").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                tvLedgerMonth2.setText("전체 가계부");
-                ledgerView(dataSnapshot);
-                monthList = new ArrayList(selectMonth); // 년 월만 빼서 따로 리스트 생성
-                Collections.sort(monthList);
-                if(monthList.isEmpty()) {
-
-                } else {
-                    parsing = monthList.get(monthList.size() - 1).replaceAll("[^0-9]", "");
-                    index = monthList.size() - 1;
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         ibLastMonth2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,10 +154,38 @@ public class ShareLedgerStatFragment extends android.app.Fragment {
                 }
             }
         });
+        viewLedgerName("init");
 
+        spinneradapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, listItems);
+        spnSelectLedger.setAdapter(spinneradapter);
+        spnSelectLedger.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                      @Override
+                                                      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                                          if (count != 0) {
+
+                                                              selectChatname = (String) parent.getItemAtPosition(position);
+                                                              Toast.makeText(getActivity(), selectChatname, Toast.LENGTH_SHORT).show();
+                                                              mLedger.clear(); // 가계부 초기화
+                                                              listItems.clear(); // 참여중인 가계부 목록 초기화
+                                                              selectMonth.clear();
+                                                              monthList.clear(); // 년,월 선택 초기화
+                                                              viewLedgerName(selectChatname);
+                                                          }
+                                                          count = 1;
+                                                      }
+
+                                                      @Override
+                                                      public void onNothingSelected(AdapterView<?> parent) {
+
+                                                      }
+                                                  }
+
+
+        );
 
         return v;
     }
+
 
     public void ledgerView(DataSnapshot dataSnapshot) {
 
@@ -371,4 +394,90 @@ public class ShareLedgerStatFragment extends android.app.Fragment {
 
         pieChart.setData(data);
     }
-}
+
+
+    public void setChatUid() { // 선택된 가계부 이름으로 부터 가계부 키를 찾고 화면 출력
+        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot chatSnapshot : dataSnapshot.getChildren()) {
+                    if ( chatSnapshot.child("chatname").getValue(String.class).equals(selectChatname) ) {
+                        selectChatuid = chatSnapshot.getKey();
+
+                        chatRef.child(selectChatuid).child("Ledger").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                tvLedgerMonth2.setText("전체 가계부");
+                                ledgerView(dataSnapshot); // 유저 가계부 전체 리스트 생성
+                                monthList = new ArrayList(selectMonth); // 년 월만 빼서 따로 리스트 생성
+                                Collections.sort(monthList);
+                                if(monthList.isEmpty()) {
+
+                                } else {
+                                    parsing = monthList.get(monthList.size() - 1).replaceAll("[^0-9]", "");
+                                    index = monthList.size() - 1;
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError error) {
+                                Log.w(TAG, "Failed to read value.", error.toException());
+                            }
+                        });
+
+
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    public void viewLedgerName(final CharSequence chatname) { // 현재 참여중인 가계부 이름을 읽어옴
+
+
+        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot chatSnapshot : dataSnapshot.getChildren()) {
+
+                    for (DataSnapshot userSnapshot : chatSnapshot.getChildren()) {
+
+                        for (DataSnapshot uidSnapshot : userSnapshot.getChildren()) {
+                            if (uidSnapshot.getKey().equals(user.getUid())) {
+                                if (chatname.equals("init")) {
+                                    joinChatname = chatSnapshot.child("chatname").getValue(String.class);
+                                    listItems.add(joinChatname);
+                                    spinneradapter.notifyDataSetChanged();
+                                    selectChatname = listItems.get(0).toString();
+                                } else {
+                                    joinChatname = chatSnapshot.child("chatname").getValue(String.class);
+                                    listItems.add(joinChatname);
+                                    spinneradapter.notifyDataSetChanged();
+                                    selectChatname = chatname;
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+                setChatUid();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    }

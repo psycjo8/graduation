@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                             Hashtable<String, String> profile   // HashTable로 연결
                                     = new Hashtable<String, String>();
                             profile.put("email", stEmail);
-                            profile.put("photo","");
+                            profile.put("photo","https://firebasestorage.googleapis.com/v0/b/smared-d1166.appspot.com/o/users%2Fnoimage.jpg?alt=media&token=a07b849c-87c6-4840-9364-be7b8ca7d8ef");
                             profile.put("key",user.getUid());
                             profile.put("nickname",stNickname);
                             myRef.child(user.getUid()).setValue(profile);

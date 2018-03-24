@@ -95,6 +95,7 @@ public class ShareLedgerRegFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 stUseItem = (String) adapterView.getItemAtPosition(i);
+
             }
 
             @Override
@@ -130,9 +131,9 @@ public class ShareLedgerRegFragment extends Fragment {
 
 
                     if (rbConsume.isChecked()) {
-                        chatRef.child(selectChatuid).child("Ledger").child(stYear).child(stMonth).child(stDay).child("consume").child(stTime).setValue(ledger);
+                        chatRef.child(selectChatuid).child("Ledger").child(stYear).child(stMonth).child(stDay).child("지출").child(stTime).setValue(ledger);
                     } else {
-                        chatRef.child(selectChatuid).child("Ledger").child(stYear).child(stMonth).child(stDay).child("Income").child(stTime).setValue(ledger);
+                        chatRef.child(selectChatuid).child("Ledger").child(stYear).child(stMonth).child(stDay).child("수입").child(stTime).setValue(ledger);
                     }
 
                     Toast.makeText(getActivity(), "저장하였습니다.", Toast.LENGTH_SHORT).show();
@@ -370,13 +371,4 @@ public class ShareLedgerRegFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onDestroyView() { // 넘겨야돼
-        super.onDestroyView();
-        LedgerViewFragment fragment = new LedgerViewFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("chatUid",selectChatuid);
-        bundle.putInt("caseCheck",2);
-        fragment.setArguments(bundle);
-    }
 }

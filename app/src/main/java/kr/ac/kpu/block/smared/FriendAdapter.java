@@ -29,16 +29,16 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView tvEmail;
+        public TextView tvNickname;
         public ImageView ivUser;
-        public Button btnChat;
+
 
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tvEmail  = (TextView) itemView.findViewById(R.id.tvEmail);
+            tvNickname  = (TextView) itemView.findViewById(R.id.tvNickname);
             ivUser = (ImageView)itemView.findViewById(R.id.ivUser);
-            btnChat = (Button) itemView.findViewById(R.id.btnChat);
+
         }
     }
 
@@ -70,7 +70,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
-            holder.tvEmail.setText(mFriend.get(position).getEmail());
+            holder.tvNickname.setText(mFriend.get(position).getNickname());
             String stPhoto = mFriend.get(position).getPhoto();
 
             if (TextUtils.isEmpty(stPhoto)) {
@@ -79,16 +79,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                 Picasso.with(context).load(stPhoto).fit().centerInside().into(holder.ivUser);
 
             }
-
-            holder.btnChat.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String stFriendId = mFriend.get(position).getKey();
-                    Intent in = new Intent(context, ChatActivity.class);
-                    in.putExtra("friendUid", stFriendId);
-                    context.startActivity(in);
-                }
-            });
         }
 
 

@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -33,6 +34,7 @@ public class ImageProcessingActivity extends AppCompatActivity {
 
     ImageView imageVIewInput;
     ImageView imageVIewOuput;
+    Button btnRunOCR;
     private Mat img_input;
     private Mat img_output;
     String ImagePath;
@@ -187,6 +189,7 @@ public class ImageProcessingActivity extends AppCompatActivity {
         imageVIewOuput = (ImageView)findViewById(R.id.imageViewOutput);
         pbLogins = (ProgressBar)findViewById(R.id.pbLogins);
         pbLogins.setVisibility(View.GONE);
+        btnRunOCR = (Button) findViewById(R.id.btnRunOCR);
         Intent intent = getIntent();
         ImagePath = intent.getStringExtra("ipath");
 
@@ -197,6 +200,16 @@ public class ImageProcessingActivity extends AppCompatActivity {
             read_image_file();
             imageprocess_and_showResult();
         }
+
+        btnRunOCR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pbLogins.setVisibility(View.VISIBLE);
+                Intent intent=new Intent(ImageProcessingActivity.this,CloudActivity.class);
+                startActivity(intent);
+                pbLogins.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void imageprocess_and_showResult() {
@@ -230,10 +243,5 @@ public class ImageProcessingActivity extends AppCompatActivity {
     public native void loadImage(String imageFileName, long img);
     public native void imageprocessing(long inputImage, long outputImage);
 
-    public void onImageClick(View view) {
-        pbLogins.setVisibility(View.VISIBLE);
-        Intent intent=new Intent(ImageProcessingActivity.this,CloudActivity.class);
-        startActivity(intent);
-        pbLogins.setVisibility(View.GONE);
-    }
+
 }

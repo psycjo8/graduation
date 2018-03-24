@@ -37,6 +37,7 @@
         <activity android:name=".ImageActivity"/>
         <activity android:name=".SMSActivity"></activity>
         <activity android:name=".CloudActivity"></activity>
+        <activity android:name=".FriendActivity"></activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

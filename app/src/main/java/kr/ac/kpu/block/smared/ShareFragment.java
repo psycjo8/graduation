@@ -31,7 +31,7 @@ public class ShareFragment extends Fragment{
                     switchFragment(fragment);
                     return true;
                 case R.id.lednavi_statistic:
-                    fragment = new LedgerStatFragment();
+                    fragment = new ShareLedgerStatFragment();
                     switchFragment(fragment);
                     return true;
             }

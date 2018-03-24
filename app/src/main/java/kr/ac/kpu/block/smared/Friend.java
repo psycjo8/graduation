@@ -5,6 +5,7 @@ public class Friend {
     public String email;
     public String photo;
     public String key;
+    public String nickname;
 
 
     public Friend() {
@@ -35,5 +36,13 @@ public class Friend {
         this.photo = photo;
 
 
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

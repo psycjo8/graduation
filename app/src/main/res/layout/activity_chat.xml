@@ -13,7 +13,13 @@
         android:text="이전"
         android:id="@+id/btnFinish"
         />
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="참여자 보기"
+        android:id="@+id/btnViewFriend"
+        />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvChat"
         android:scrollbars="vertical"

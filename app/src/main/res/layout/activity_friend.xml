@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:clickable="true"
-    tools:context="kr.ac.kpu.block.smared.FriendsFragment">
+    tools:context="kr.ac.kpu.block.smared.FriendActivity">
 
     <!-- TODO: Update blank fragment layout -->
 
