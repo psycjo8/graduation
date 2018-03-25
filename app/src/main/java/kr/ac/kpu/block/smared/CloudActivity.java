@@ -51,12 +51,22 @@ import com.google.api.services.vision.v1.model.EntityAnnotation;
 import com.google.api.services.vision.v1.model.Feature;
 import com.google.api.services.vision.v1.model.Image;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class CloudActivity extends AppCompatActivity {
@@ -77,6 +87,8 @@ public class CloudActivity extends AppCompatActivity {
     private ImageView mMainImage;
     Bitmap image; //사용되는 이미지
     File imgFile = new File("/storage/emulated/0/SmaRed/s2.jpg");
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,10 +97,9 @@ public class CloudActivity extends AppCompatActivity {
         if(imgFile.exists()) {
             image = BitmapFactory.decodeFile(imgFile.getAbsolutePath()); //샘플이미지파일
         }
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+
+
 
 
         mImageDetails = findViewById(R.id.image_details);
@@ -215,7 +226,21 @@ public class CloudActivity extends AppCompatActivity {
             CloudActivity activity = mActivityWeakReference.get();
             if (activity != null && !activity.isFinishing()) {
                 TextView imageDetail = activity.findViewById(R.id.image_details);
-                imageDetail.setText(result);
+                String payMemo;
+                String payMemoResult="내용 : ";
+                String price;
+                String priceResult="가격 : ";
+                String date;
+                String dateResult= "날짜 : ";
+                String finalResult = "";
+                payMemo = result.replaceAll("[^.*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*\\n]","");
+                price = result.replaceAll("[^0-9\\.\\,\\n]","");
+                date = result.replaceAll("[^0-9\\.\\,\\-\\n]","");
+                dateResult += extractDate(date);
+                payMemoResult += extractPaymemo(payMemo);
+                priceResult += extractPrice(price);
+                finalResult = dateResult + priceResult + payMemoResult;
+                imageDetail.setText(finalResult);
             }
         }
     }
@@ -266,4 +291,57 @@ public class CloudActivity extends AppCompatActivity {
 
         return message;
     }
+
+
+    public static String extractDate(String str) {
+
+        List<String> list = new ArrayList<String>();
+        String dateResult= "";
+        Matcher matcher ;
+
+        if (str.isEmpty()) {
+            matcher = null;
+        } else {
+            String patternStr = "(19|20)\\d{2}[- /.]*(0[1-9]|1[012])[- /.]*(0[1-9]|[12][0-9]|3[01])"; // 날자를 패턴으로 지정
+
+            int flags = Pattern.MULTILINE | Pattern.CASE_INSENSITIVE;
+            Pattern pattern = Pattern.compile(patternStr, flags);
+            matcher = pattern.matcher(str);
+
+            int count = 0;
+            while (matcher.find()) {
+                list.add(matcher.group());
+            }
+        }
+
+        for(int i=0; i<list.size(); i++) {
+            dateResult += list.get(i)+"\n";
+        }
+        return dateResult;
+    }
+
+    public static String extractPaymemo(String str) {
+        String result="";
+
+        StringTokenizer stringTokenizer = new StringTokenizer(str,"\n");
+        result = stringTokenizer.nextToken();
+
+        return result;
+    }
+    public static String extractPrice(String str) {
+        String result="";
+        String temp;
+        StringTokenizer stringTokenizer = new StringTokenizer(str,"\n");
+        while(stringTokenizer.hasMoreTokens()){
+            temp = stringTokenizer.nextToken();
+            if(temp.contains(",") && temp.contains("0")) {
+                temp = temp.replaceAll("\\,", "");
+                temp = temp.replaceAll("\\.", "");
+                result += temp + " ";
+            }
+        }
+        result += "\n";
+        return result;
+    }
+
 }
