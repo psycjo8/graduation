@@ -44,13 +44,33 @@ public class LedgerAdapter extends RecyclerView.Adapter<LedgerAdapter.ViewHolder
         this.context = context;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+         return 2;
+        } else {
+            if (mLedger.get(position).getYear().equals(mLedger.get(position - 1).getYear()) &&
+                    mLedger.get(position).getMonth().equals(mLedger.get(position - 1).getMonth()) &&
+                    mLedger.get(position).getDay().equals(mLedger.get(position - 1).getDay())) {
+                return 1;
+            } else {
+                return 2;
+            }
+        }
+    }
     // Create new views (invoked by the layout manager)
     @Override
     public LedgerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                        int viewType) {
         View v;
-        v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_ledger, parent, false);
+
+        if (viewType == 1) {
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.list_content, parent, false);
+        } else {
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.list_ledger, parent, false);
+        }
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
@@ -60,12 +80,28 @@ public class LedgerAdapter extends RecyclerView.Adapter<LedgerAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-         holder.btnDay.setText(mLedger.get(position).getYear()+"-"+mLedger.get(position).getMonth()+"-"+mLedger.get(position).getDay());
-         holder.tvChoice.setText("[ "+mLedger.get(position).getClassfy() + " ]");
-         holder.tvUseitem.setText("분류 : " + mLedger.get(position).getUseItem());
-         holder.tvPrice.setText("가격 : " + mLedger.get(position).getPrice() + "원");
-         holder.tvPaymemo.setText("내용 : " + mLedger.get(position).getPaymemo());
-
+        if (position == 0) {
+            holder.btnDay.setText(mLedger.get(position).getYear() + "-" + mLedger.get(position).getMonth() + "-" + mLedger.get(position).getDay());
+            holder.tvChoice.setText("[ " + mLedger.get(position).getClassfy() + " ]");
+            holder.tvUseitem.setText("분류 : " + mLedger.get(position).getUseItem());
+            holder.tvPrice.setText("가격 : " + mLedger.get(position).getPrice() + "원");
+            holder.tvPaymemo.setText("내용 : " + mLedger.get(position).getPaymemo());
+        } else {
+            if (mLedger.get(position).getYear().equals(mLedger.get(position - 1).getYear()) &&
+                    mLedger.get(position).getMonth().equals(mLedger.get(position - 1).getMonth()) &&
+                    mLedger.get(position).getDay().equals(mLedger.get(position - 1).getDay())) {
+                holder.tvChoice.setText("[ " + mLedger.get(position).getClassfy() + " ]");
+                holder.tvUseitem.setText("분류 : " + mLedger.get(position).getUseItem());
+                holder.tvPrice.setText("가격 : " + mLedger.get(position).getPrice() + "원");
+                holder.tvPaymemo.setText("내용 : " + mLedger.get(position).getPaymemo());
+            } else {
+                holder.btnDay.setText(mLedger.get(position).getYear() + "-" + mLedger.get(position).getMonth() + "-" + mLedger.get(position).getDay());
+                holder.tvChoice.setText("[ " + mLedger.get(position).getClassfy() + " ]");
+                holder.tvUseitem.setText("분류 : " + mLedger.get(position).getUseItem());
+                holder.tvPrice.setText("가격 : " + mLedger.get(position).getPrice() + "원");
+                holder.tvPaymemo.setText("내용 : " + mLedger.get(position).getPaymemo());
+            }
+        }
 
         }
 

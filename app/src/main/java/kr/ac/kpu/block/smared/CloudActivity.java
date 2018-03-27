@@ -128,6 +128,19 @@ public class CloudActivity extends AppCompatActivity {
     static Spinner spnPrice;
     static List<String> listItems = new ArrayList<String>();
     Button btnFinish;
+    Button btnOCRResult;
+
+    static Intent ins;
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        listItems.clear();
+        spinneradapter.notifyDataSetChanged();
+        Intent in = new Intent(CloudActivity.this, TabActivity.class);
+        startActivity(in);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,7 +158,8 @@ public class CloudActivity extends AppCompatActivity {
         RadioButton rbIncome = (RadioButton) findViewById(R.id.rbIncome);
         spnPrice = (Spinner) findViewById(R.id.spnPrice);
         btnFinish = (Button) findViewById(R.id.btnFinish);
-
+        btnOCRResult = (Button) findViewById(R.id.btnOCRResult);
+        ins = new Intent(this,ContentActivity.class);
         spnUseitem.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -213,8 +227,17 @@ public class CloudActivity extends AppCompatActivity {
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                listItems.clear();
+                spinneradapter.notifyDataSetChanged();
                 Intent in = new Intent(CloudActivity.this, TabActivity.class);
                 startActivity(in);
+            }
+        });
+
+        btnOCRResult.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(ins);
             }
         });
         spinneradapter = new ArrayAdapter<String>(CloudActivity.this, R.layout.support_simple_spinner_dropdown_item, listItems);
@@ -352,14 +375,16 @@ public class CloudActivity extends AppCompatActivity {
                 String dateResult= "";
                 String finalResult = "";
                 payMemo = result.replaceAll("[^.*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*\\n]","");
-                price = result.replaceAll("[^0-9\\.\\,\\n]","");
+                price = result.replaceAll("[^0-9\\.\\,\\n\\s]","");
                 date = result.replaceAll("[^0-9\\.\\,\\-\\n]","");
                 dateResult += extractDate(date);
                 payMemoResult += extractPaymemo(payMemo);
                 priceResult += extractPrice(price);
-                finalResult = dateResult + priceResult + payMemoResult;
+                finalResult = "[ 분석 결과 ]\n" + dateResult + priceResult + payMemoResult;
+                ins.putExtra("result",result);
+                ins.putExtra("finalResult",finalResult);
 
-                etPaymemo.setText(payMemoResult);
+
 
             }
         }
@@ -400,7 +425,7 @@ public class CloudActivity extends AppCompatActivity {
     }
 
     private static String convertResponseToString(BatchAnnotateImagesResponse response) {
-        String message =("I found these things:\n\n");
+        String message =("");
 
         List<EntityAnnotation> labels = response.getResponses().get(0).getTextAnnotations();
         if (labels != null) {
@@ -417,12 +442,13 @@ public class CloudActivity extends AppCompatActivity {
 
         List<String> list = new ArrayList<String>();
         String dateResult= "";
+        String dateToast= "";
         Matcher matcher ;
 
         if (str.isEmpty()) {
             matcher = null;
         } else {
-            String patternStr = "(19|20)\\d{2}[- /.]*(0[1-9]|1[012])[- /.]*(0[1-9]|[12][0-9]|3[01])"; // 날자를 패턴으로 지정
+            String patternStr = "(19|20)\\d{2}[- /.]*(0[1-9]|1[012])[- /.]*(0[1-9]|[12][0-9]|3[01])"; // 날짜를 패턴으로 지정
 
             int flags = Pattern.MULTILINE | Pattern.CASE_INSENSITIVE;
             Pattern pattern = Pattern.compile(patternStr, flags);
@@ -437,47 +463,66 @@ public class CloudActivity extends AppCompatActivity {
         for(int i=0; i<list.size(); i++) {
             dateResult += list.get(i);
         }
+        if ( dateResult.equals("")) {
+            dateToast = "날짜 데이터 미 검출\n";
+        } else {
+            String parts[] = dateResult.split("-");
 
-        String parts[] = dateResult.split("-");
+            int year = Integer.parseInt(parts[0]);
+            int month = Integer.parseInt(parts[1]);
+            int day = Integer.parseInt(parts[2]);
 
-        int year = Integer.parseInt(parts[0]);
-        int month = Integer.parseInt(parts[1]);
-        int day = Integer.parseInt(parts[2]);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, month-1);
+            calendar.set(Calendar.DAY_OF_MONTH, day);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month);
-        calendar.set(Calendar.DAY_OF_MONTH, day);
-
-        long milliTime = calendar.getTimeInMillis();
-        cvCalender.setDate(milliTime, true, true);
-
-        return dateResult;
+            long milliTime = calendar.getTimeInMillis();
+            cvCalender.setDate(milliTime, true, true);
+        }
+        return dateToast;
     }
 
     public static String extractPaymemo(String str) {
         String result="";
-
+        String payMemoToast = "";
         StringTokenizer stringTokenizer = new StringTokenizer(str,"\n");
         result = stringTokenizer.nextToken();
 
-        return result;
+
+        if(result.equals("")) {
+            payMemoToast = "내용 미 검출";
+        } else {
+            etPaymemo.setText(result);
+        }
+        return payMemoToast;
     }
     public static String extractPrice(String str) {
         String result="";
-        String temp;
+        String temp="";
+        String priceToast="";
         StringTokenizer stringTokenizer = new StringTokenizer(str,"\n");
         while(stringTokenizer.hasMoreTokens()){
             temp = stringTokenizer.nextToken();
             if(temp.contains(",") && temp.contains("0")) {
-                temp = temp.replaceAll("\\,", "");
-                temp = temp.replaceAll("\\.", "");
-                listItems.add(temp);
-                spinneradapter.notifyDataSetChanged();
+                StringTokenizer stringTokenizer2 = new StringTokenizer(temp, " ");
+                while(stringTokenizer2.hasMoreTokens()){
+                    temp = stringTokenizer2.nextToken();
+                    if(temp.contains(",") && temp.contains("0")) {
+                        temp = temp.replace(",", "");
+                        temp = temp.replace(".", "");
+                        listItems.add(temp);
+                        spinneradapter.notifyDataSetChanged();
+                    }
+                }
             }
         }
 
-        return result;
+        if(listItems.size()==0) {
+            priceToast = "금액 미 검출\n";
+        }
+
+        return priceToast;
     }
 
 }

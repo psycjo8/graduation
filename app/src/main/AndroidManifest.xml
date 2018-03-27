@@ -39,7 +39,7 @@
         <activity android:name=".SMSActivity"></activity>
         <activity android:name=".CloudActivity"></activity>
         <activity android:name=".FriendActivity"></activity>
-
+        <activity android:name=".ContentActivity"></activity>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="kr.ac.kpu.block.smared.provider"
