@@ -52,6 +52,20 @@
         android:layout_below="@+id/tvPrice"
 
         />
+    <Button
+        android:id="@+id/btnEdit"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvChoice"
+        android:layout_alignParentRight="true"
+        android:text="수정"/>
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btnEdit"
+        android:text="삭제"/>
 
 
 </RelativeLayout>

@@ -1,11 +1,13 @@
 package kr.ac.kpu.block.smared;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -22,7 +24,8 @@ public class LedgerAdapter extends RecyclerView.Adapter<LedgerAdapter.ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
 
-
+        public Button btnDelete;
+        public Button btnEdit;
         public Button btnDay;
         public TextView tvUseitem;
         public TextView tvPrice;
@@ -36,6 +39,8 @@ public class LedgerAdapter extends RecyclerView.Adapter<LedgerAdapter.ViewHolder
             tvPrice = (TextView) itemView.findViewById(R.id.tvPrice);
             tvPaymemo = (TextView) itemView.findViewById(R.id.tvPaymemo);
             tvChoice = (TextView) itemView.findViewById(R.id.tvChoice);
+            btnDelete = (Button) itemView.findViewById(R.id.btnDelete);
+            btnEdit = (Button) itemView.findViewById(R.id.btnEdit);
         }
     }
 
@@ -102,6 +107,21 @@ public class LedgerAdapter extends RecyclerView.Adapter<LedgerAdapter.ViewHolder
                 holder.tvPaymemo.setText("내용 : " + mLedger.get(position).getPaymemo());
             }
         }
+        holder.btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            EditDialog dialog = new EditDialog(context);
+            dialog.show();
+
+            }
+        });
+
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         }
 
