@@ -38,8 +38,8 @@ public class LedgerRegFragment extends android.app.Fragment {
     String stPaymemo;
     Calendar c = Calendar.getInstance(); // Firebase내에 날짜로 저장
     SimpleDateFormat years = new SimpleDateFormat("yyyy");
-    SimpleDateFormat months = new SimpleDateFormat("M");
-    SimpleDateFormat days = new SimpleDateFormat("d");
+    SimpleDateFormat months = new SimpleDateFormat("MM");
+    SimpleDateFormat days = new SimpleDateFormat("dd");
     String stYear = years.format(c.getTime());
     String stMonth = months.format(c.getTime());
     String stDay = days.format(c.getTime());
