@@ -126,5 +126,12 @@
         android:layout_centerHorizontal="true"
         android:text="끝내기"/>
 
+    <Button
+        android:id="@+id/btnOCRResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="인식 결과"
+        />
+
 
 </RelativeLayout>
