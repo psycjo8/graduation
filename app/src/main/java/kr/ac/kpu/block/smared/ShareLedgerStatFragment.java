@@ -164,7 +164,7 @@ public class ShareLedgerStatFragment extends android.app.Fragment {
                                                           if (count != 0) {
 
                                                               selectChatname = (String) parent.getItemAtPosition(position);
-                                                              Toast.makeText(getActivity(), selectChatname, Toast.LENGTH_SHORT).show();
+
                                                               mLedger.clear(); // 가계부 초기화
                                                               listItems.clear(); // 참여중인 가계부 목록 초기화
                                                               selectMonth.clear();

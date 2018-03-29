@@ -15,7 +15,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
@@ -25,6 +27,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import static android.view.Gravity.CENTER;
 
 public class ImageProcessingActivity extends AppCompatActivity {
     static {
@@ -42,6 +46,7 @@ public class ImageProcessingActivity extends AppCompatActivity {
     private static final String TAG = "opencv";
     static final int PERMISSION_REQUEST_CODE = 1;
     String[] PERMISSIONS  = {"android.permission.WRITE_EXTERNAL_STORAGE"};
+    int fileCheck=0;
 
     @SuppressLint("WrongConstant")
     private boolean hasPermissions(String[] permissions) {
@@ -78,12 +83,11 @@ public class ImageProcessingActivity extends AppCompatActivity {
 
                         if (!writeAccepted )
                         {
-                            showDialogforPermission("앱을 실행하려면 퍼미션을 허가하셔야합니다.");
+                            showDialogforPermission("앱을 실행하려면 권한을 허가하셔야합니다.");
                             return;
                         }else
                         {
-                            read_image_file();
-                            imageprocess_and_showResult();
+
                         }
                     }
                 }
@@ -193,12 +197,47 @@ public class ImageProcessingActivity extends AppCompatActivity {
         Intent intent = getIntent();
         ImagePath = intent.getStringExtra("ipath");
 
+
+        AlertDialog.Builder alertdialog = new AlertDialog.Builder(ImageProcessingActivity.this);
+        Button scan = new Button(ImageProcessingActivity.this);
+        Button camera = new Button(ImageProcessingActivity.this);
+        LinearLayout layout = new LinearLayout(ImageProcessingActivity.this);
+        scan.setText("스캔 파일");
+        camera.setText("촬영한 파일");
+        layout.setOrientation(LinearLayout.HORIZONTAL);
+        layout.addView(scan);
+        layout.addView(camera);
+        layout.setGravity(CENTER);
+        alertdialog.setView(layout);
+        alertdialog.setTitle("파일 타입을 골라주세요");
+        AlertDialog alert = alertdialog.create();
+        alert.show();
+
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fileCheck = 1;
+                read_image_file();
+                imageprocess_and_showResult();
+                alert.cancel();
+            }
+        });
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fileCheck = 2;
+                read_image_file();
+                imageprocess_and_showResult();
+                alert.cancel();
+            }
+        });
+
+
         if (!hasPermissions(PERMISSIONS)) { //퍼미션 허가를 했었는지 여부를 확인
             requestNecessaryPermissions(PERMISSIONS);//퍼미션 허가안되어 있다면 사용자에게 요청
         } else {
             //이미 사용자에게 퍼미션 허가를 받음.
-            read_image_file();
-            imageprocess_and_showResult();
+
         }
 
         btnRunOCR.setOnClickListener(new View.OnClickListener() {
@@ -214,7 +253,7 @@ public class ImageProcessingActivity extends AppCompatActivity {
 
     private void imageprocess_and_showResult() {
 
-        imageprocessing(img_input.getNativeObjAddr(), img_output.getNativeObjAddr());
+        imageprocessing(img_input.getNativeObjAddr(), img_output.getNativeObjAddr(),fileCheck);
 
         Bitmap bitmapInput = Bitmap.createBitmap(img_input.cols(), img_input.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(img_input, bitmapInput);
@@ -241,7 +280,7 @@ public class ImageProcessingActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native void loadImage(String imageFileName, long img);
-    public native void imageprocessing(long inputImage, long outputImage);
+    public native void imageprocessing(long inputImage, long outputImage, int fileCheck);
 
 
 }

@@ -1,49 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content">
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:layout_marginLeft="60dp"
+    >
+
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="false"
         android:id="@+id/btnDay"
+        android:layout_alignParentRight="true"
+
         />
-    <TextView
-        android:layout_width="wrap_content"
+
+
+        <TextView
+            android:id="@+id/tvChoice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="60dp"
+
+            />
+
+        <TextView
+            android:id="@+id/tvUseitem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvChoice"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+
+            />
+
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvUseitem"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+
+            />
+
+        <TextView
+            android:id="@+id/tvPaymemo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvPrice"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+
+            />
+
+    <Button
+        android:id="@+id/btnEdit"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/tvChoice"
-        android:layout_below="@id/btnDay"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
+        android:layout_below="@id/tvChoice"
+        android:layout_alignParentRight="true"
+        android:text="수정"/>
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/tvUseitem"
-        android:layout_below="@+id/tvChoice"
-
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/tvPrice"
-       android:layout_below="@+id/tvChoice"
-        android:layout_toRightOf="@+id/tvUseitem"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/tvPaymemo"
-        android:layout_below="@+id/tvPrice"
-
-        />
-
-
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btnEdit"
+        android:text="삭제"/>
 </RelativeLayout>

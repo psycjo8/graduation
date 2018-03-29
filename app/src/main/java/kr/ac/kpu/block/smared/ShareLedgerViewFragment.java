@@ -105,8 +105,7 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
         mLedger = new ArrayList<>();
 
         // specify an adapter (see also next example)
-        mAdapter = new LedgerAdapter(mLedger, getActivity());
-        mRecyclerView.setAdapter(mAdapter);
+
 
 
         ibLastMonth.setOnClickListener(new View.OnClickListener() {
@@ -133,7 +132,7 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
                     tvPlusMinus.setText("수익 : " + (totalIncome - totalConsume) + "원");
                     totalIncome=0;
                     totalConsume=0;
-                    tempAdapter = new LedgerAdapter(tempLedger,getActivity());
+                    tempAdapter = new LedgerAdapter(tempLedger,getActivity(),selectChatuid);
                     mRecyclerView.setAdapter(tempAdapter);
 
 
@@ -158,7 +157,7 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
                     tvPlusMinus.setText("수익 : " + (totalIncome - totalConsume) + "원");
                     totalIncome=0;
                     totalConsume=0;
-                    tempAdapter = new LedgerAdapter(tempLedger,getActivity());
+                    tempAdapter = new LedgerAdapter(tempLedger,getActivity(),selectChatuid);
                     mRecyclerView.setAdapter(tempAdapter);
                 }
             }
@@ -191,7 +190,7 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
                     tvPlusMinus.setText("수익 : " + (totalIncome - totalConsume) + "원");
                     totalIncome=0;
                     totalConsume=0;
-                    tempAdapter = new LedgerAdapter(tempLedger,getActivity());
+                    tempAdapter = new LedgerAdapter(tempLedger,getActivity(),selectChatuid);
                     mRecyclerView.setAdapter(tempAdapter);
                 } else {   // 년,월이 마지막이면
                     index = 0;
@@ -214,7 +213,7 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
                     tvPlusMinus.setText("수익 : " + (totalIncome - totalConsume) + "원");
                     totalIncome=0;
                     totalConsume=0;
-                    tempAdapter = new LedgerAdapter(tempLedger,getActivity());
+                    tempAdapter = new LedgerAdapter(tempLedger,getActivity(),selectChatuid);
                     mRecyclerView.setAdapter(tempAdapter);
                 }
             }
@@ -354,7 +353,8 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
                 for (DataSnapshot chatSnapshot : dataSnapshot.getChildren()) {
                     if ( chatSnapshot.child("chatname").getValue(String.class).equals(selectChatname) ) {
                         selectChatuid = chatSnapshot.getKey();
-
+                        mAdapter = new LedgerAdapter(mLedger, getActivity(), selectChatuid);
+                        mRecyclerView.setAdapter(mAdapter);
                         chatRef.child(selectChatuid).child("Ledger").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {

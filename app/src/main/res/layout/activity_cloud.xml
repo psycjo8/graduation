@@ -1,34 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="kr.ac.kpu.block.smared.CloudActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <include layout="@layout/content_main" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <RadioGroup
+        android:id="@+id/rgChoice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_gallery" />
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="120dp">
 
-</android.support.design.widget.CoordinatorLayout>
+
+        <RadioButton
+            android:id="@+id/rbConsume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="지출" />
+
+
+        <RadioButton
+            android:id="@+id/rbIncome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="수입" />
+
+    </RadioGroup>
+
+
+    <CalendarView
+        android:id="@+id/cvCalender"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@+id/rgChoice"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cvCalender"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:text="분류"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:id="@+id/textView" />
+
+    <Spinner
+        android:id="@+id/spnUseitem"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cvCalender"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="60dp"
+        android:entries="@array/useItem"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spnUseitem"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="10dp"
+        android:text="금액"
+        android:textColor="#000000"
+        android:textSize="18sp"/>
+    <Spinner
+        android:id="@+id/spnPrice"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spnUseitem"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="60dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spnUseitem"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="270dp"
+        android:text="원"
+        android:textColor="#000000"
+        android:textSize="18sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spnPrice"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:text="내용"
+        android:textColor="#000000"
+        android:textSize="18sp"/>
+    <EditText
+        android:id="@+id/etPaymemo"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spnPrice"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="60dp"
+        android:hint="분석중.."
+        />
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spnPrice"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="260dp"
+        android:text="저장"
+        />
+    <Button
+        android:id="@+id/btnFinish"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnSave"
+        android:layout_centerHorizontal="true"
+        android:text="끝내기"/>
+
+    <Button
+        android:id="@+id/btnOCRResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="인식 결과"
+        />
+
+
+</RelativeLayout>

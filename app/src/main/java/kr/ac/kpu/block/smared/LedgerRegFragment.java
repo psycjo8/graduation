@@ -37,12 +37,12 @@ public class LedgerRegFragment extends android.app.Fragment {
     String stPrice;
     String stPaymemo;
     Calendar c = Calendar.getInstance(); // Firebase내에 날짜로 저장
-    SimpleDateFormat year = new SimpleDateFormat("yyyy");
-    SimpleDateFormat month = new SimpleDateFormat("M");
-    SimpleDateFormat day = new SimpleDateFormat("d");
-    String stYear = year.format(c.getTime());
-    String stMonth = month.format(c.getTime());
-    String stDay = day.format(c.getTime());
+    SimpleDateFormat years = new SimpleDateFormat("yyyy");
+    SimpleDateFormat months = new SimpleDateFormat("MM");
+    SimpleDateFormat days = new SimpleDateFormat("dd");
+    String stYear = years.format(c.getTime());
+    String stMonth = months.format(c.getTime());
+    String stDay = days.format(c.getTime());
 
     @Override
 
@@ -79,9 +79,11 @@ public class LedgerRegFragment extends android.app.Fragment {
         cvCalender.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
+
                 stYear = Integer.toString(year);
-                stMonth = Integer.toString(month+1);
-                stDay = Integer.toString(day);
+                stMonth = String.format("%02d",month+1);
+                stDay =  String.format("%02d",day);
+
                Toast.makeText(getActivity(), stYear+"-"+stMonth+"-"+stDay, Toast.LENGTH_SHORT).show();
             }
         });

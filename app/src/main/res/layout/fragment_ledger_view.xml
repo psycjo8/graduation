@@ -2,9 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@drawable/note"
     android:clickable="true"
-    tools:context="kr.ac.kpu.block.smared.LedgerViewFragment">
+    tools:context="kr.ac.kpu.block.smared.LedgerViewFragment"
+    >
 
     <!-- TODO: Update blank fragment layout -->
     <ImageButton
@@ -14,7 +15,7 @@
         android:layout_marginLeft="85dp"
         android:src="@drawable/ic_chevron_left_black_24dp"
 
-        android:background="#ffffff"
+        android:background="@android:color/transparent"
         />
     <TextView
         android:id="@+id/tvLedgerMonth"
@@ -34,7 +35,7 @@
         android:layout_toRightOf="@+id/tvLedgerMonth"
 
         android:src="@drawable/ic_chevron_right_black_24dp"
-        android:background="#ffffff"
+        android:background="@android:color/transparent"
         />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvLedger"
@@ -42,7 +43,7 @@
 
         android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="400dp"/>
+        android:layout_height="390dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -52,6 +53,7 @@
         android:textSize="15dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/rvLedger"
+        android:textColor="@color/DarkBlue"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -60,6 +62,7 @@
         android:layout_below="@id/tvTotalincome"
         android:layout_centerHorizontal="true"
         android:text="지출 합계"
+        android:textColor="@color/DarkBlue"
         android:textSize="15dp"/>
 
     <TextView
@@ -70,6 +73,7 @@
         android:text="수익"
         android:textSize="15dp"
         android:layout_centerHorizontal="true"
+        android:textColor="@color/DarkBlue"
 
         />
 
