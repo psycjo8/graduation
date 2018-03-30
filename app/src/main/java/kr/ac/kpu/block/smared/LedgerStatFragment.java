@@ -1,19 +1,27 @@
 package kr.ac.kpu.block.smared;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.ChartTouchListener;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -57,6 +65,22 @@ public class LedgerStatFragment extends android.app.Fragment {
     int i =0;
     int j =0;
 
+    float clothPrice=0;
+    float foodPrice=0;
+    float transPrice=0;
+    float etcPrice=0;
+    float marketPrice=0;
+    float homePrice=0;
+
+
+    float cloth=0f;
+    float food=0f;
+    float home=0f;
+    float trans=0f;
+    float market=0f;
+    float etc=0f;
+
+    float total=0f;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -166,13 +190,6 @@ public class LedgerStatFragment extends android.app.Fragment {
 
     public void ledgerView(DataSnapshot dataSnapshot) {
 
-        float cloth=0f;
-        float food=0f;
-        float home=0f;
-        float trans=0f;
-        float market=0f;
-        float etc=0f;
-        float total=0f;
         for (DataSnapshot yearSnapshot : dataSnapshot.getChildren()) { // 년
 
             for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) { // 월
@@ -211,34 +228,32 @@ public class LedgerStatFragment extends android.app.Fragment {
 
 
 
+
         for (j=0; j<i; j++) {
-            if (ledger[j].getUseItem().equals("의류비")) {
-                cloth ++;
-            }
-            else if (ledger[j].getUseItem().equals("식비")) {
-                food ++;
-            }
-            else if (ledger[j].getUseItem().equals("주거비")) {
-                home ++;
-            }
-            else if (ledger[j].getUseItem().equals("교통비")) {
-                trans ++;
-            }
-            else if (ledger[j].getUseItem().equals("생필품")) {
-                market ++;
-            }
-            else if (ledger[j].getUseItem().equals("기타")) {
-                etc ++;
+            if (ledger[j].getClassfy().equals("지출")) {
+                if (ledger[j].getUseItem().equals("의류비")) {
+                    clothPrice += Integer.parseInt(ledger[j].getPrice());
+                } else if (ledger[j].getUseItem().equals("식비")) {
+                    foodPrice += Integer.parseInt(ledger[j].getPrice());
+                } else if (ledger[j].getUseItem().equals("주거비")) {
+                    homePrice += Integer.parseInt(ledger[j].getPrice());
+                } else if (ledger[j].getUseItem().equals("교통비")) {
+                    transPrice += Integer.parseInt(ledger[j].getPrice());
+                } else if (ledger[j].getUseItem().equals("생필품")) {
+                    marketPrice += Integer.parseInt(ledger[j].getPrice());
+                } else if (ledger[j].getUseItem().equals("기타")) {
+                    etcPrice += Integer.parseInt(ledger[j].getPrice());
+                }
             }
         }
 
-        total = cloth + food + home + trans + market + etc;
-        cloth = (cloth / total) * 100;
-        food = (food / total) * 100;
-        home = (home / total) * 100;
-        trans = (trans / total) * 100;
-        market = (market / total) * 100;
-        etc = (etc / total) * 100;
+        total = clothPrice + foodPrice + homePrice + transPrice + marketPrice + etcPrice;
+        cloth = (clothPrice / total) * 100;
+        food = (foodPrice / total) * 100;
+        home = (homePrice / total) * 100;
+        trans = (transPrice / total) * 100;
+        market = (marketPrice / total) * 100;
+        etc = (etcPrice / total) * 100;
 
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
@@ -288,39 +303,77 @@ public class LedgerStatFragment extends android.app.Fragment {
         data.setValueTextColor(Color.BLACK);
 
         pieChart.setData(data);
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+
+                PieEntry pe = (PieEntry) e;
+
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                if (pe.getLabel().equals("의류비")) {
+                    alertDialog.setMessage("의류비 총계 : " + (int)clothPrice + "원");
+                } else if (pe.getLabel().equals("식비")) {
+                    alertDialog.setMessage("식비 총계 : " + (int)foodPrice + "원");
+                } else if (pe.getLabel().equals("주거비")) {
+                    alertDialog.setMessage("주거비 총계 : " + (int)homePrice + "원");
+                } else if (pe.getLabel().equals("교통비")) {
+                    alertDialog.setMessage("교통비 총계 : " + (int)transPrice + "원");
+                } else if (pe.getLabel().equals("생필품")) {
+                    alertDialog.setMessage("생필품비 총계 : " + (int)marketPrice + "원");
+                } else if (pe.getLabel().equals("기타")) {
+                    alertDialog.setMessage("기타 비용 총계 : " + (int)etcPrice + "원");
+                }
+                AlertDialog alert = alertDialog.create();
+                alert.show();
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
     }
 
     public void selectChart() {
-        float cloth = 0f;
-        float food = 0f;
-        float home = 0f;
-        float trans = 0f;
-        float market = 0f;
-        float etc = 0f;
-        float total = 0f;
+        clothPrice=0;
+        foodPrice=0;
+        transPrice=0;
+        etcPrice=0;
+        marketPrice=0;
+        homePrice=0;
+
+
+        cloth=0f;
+        food=0f;
+        home=0f;
+        trans=0f;
+        market=0f;
+        etc=0f;
+        total=0f;
 
         for (int j = 0; j < tempLedger.size(); j++) {
             if (tempLedger.get(j).getUseItem().equals("의류비")) {
-                cloth++;
+                clothPrice += Integer.parseInt(tempLedger.get(j).getPrice());
             } else if (tempLedger.get(j).getUseItem().equals("식비")) {
-                food++;
+                foodPrice += Integer.parseInt(tempLedger.get(j).getPrice());
             } else if (tempLedger.get(j).getUseItem().equals("주거비")) {
-                home++;
+                homePrice += Integer.parseInt(tempLedger.get(j).getPrice());
             } else if (tempLedger.get(j).getUseItem().equals("교통비")) {
-                trans++;
+                transPrice += Integer.parseInt(tempLedger.get(j).getPrice());
             } else if (tempLedger.get(j).getUseItem().equals("생필품")) {
-                market++;
+                marketPrice += Integer.parseInt(tempLedger.get(j).getPrice());
             } else if (tempLedger.get(j).getUseItem().equals("기타")) {
-                etc++;
+                etcPrice += Integer.parseInt(tempLedger.get(j).getPrice());
             }
         }
-        total = cloth + food + home + trans + market + etc;
-        cloth = (cloth / total) * 100;
-        food = (food / total) * 100;
-        home = (home / total) * 100;
-        trans = (trans / total) * 100;
-        market = (market / total) * 100;
-        etc = (etc / total) * 100;
+        total = clothPrice + foodPrice + homePrice + transPrice + marketPrice + etcPrice;
+        cloth = (clothPrice / total) * 100;
+        food = (foodPrice / total) * 100;
+        home = (homePrice / total) * 100;
+        trans = (transPrice / total) * 100;
+        market = (marketPrice / total) * 100;
+        etc = (etcPrice / total) * 100;
 
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
@@ -370,5 +423,35 @@ public class LedgerStatFragment extends android.app.Fragment {
         data.setValueTextColor(Color.BLACK);
 
         pieChart.setData(data);
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+
+                PieEntry pe = (PieEntry) e;
+
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                if (pe.getLabel().equals("의류비")) {
+                    alertDialog.setMessage("의류비 총계 : " + (int)clothPrice + "원");
+                } else if (pe.getLabel().equals("식비")) {
+                    alertDialog.setMessage("식비 총계 : " + (int)foodPrice + "원");
+                } else if (pe.getLabel().equals("주거비")) {
+                    alertDialog.setMessage("주거비 총계 : " + (int)homePrice + "원");
+                } else if (pe.getLabel().equals("교통비")) {
+                    alertDialog.setMessage("교통비 총계 : " + (int)transPrice + "원");
+                } else if (pe.getLabel().equals("생필품")) {
+                    alertDialog.setMessage("생필품비 총계 : " + (int)marketPrice + "원");
+                } else if (pe.getLabel().equals("기타")) {
+                    alertDialog.setMessage("기타 비용 총계 : " + (int)etcPrice + "원");
+                }
+                AlertDialog alert = alertDialog.create();
+                alert.show();
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
     }
 }
