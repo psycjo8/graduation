@@ -355,10 +355,13 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
                         selectChatuid = chatSnapshot.getKey();
                         mAdapter = new LedgerAdapter(mLedger, getActivity(), selectChatuid);
                         mRecyclerView.setAdapter(mAdapter);
-                        chatRef.child(selectChatuid).child("Ledger").addListenerForSingleValueEvent(new ValueEventListener() {
+                        chatRef.child(selectChatuid).child("Ledger").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 tvLedgerMonth.setText("전체 가계부");
+                                mLedger.clear();
+                                selectMonth.clear();
+                                mAdapter.notifyDataSetChanged();
                                 ledgerView(dataSnapshot); // 유저 가계부 전체 리스트 생성
                                 monthList = new ArrayList(selectMonth); // 년 월만 빼서 따로 리스트 생성
                                 Collections.sort(monthList);

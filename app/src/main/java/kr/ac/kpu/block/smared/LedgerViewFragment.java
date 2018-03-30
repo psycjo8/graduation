@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -94,7 +95,7 @@ public class LedgerViewFragment extends android.app.Fragment {
         // specify an adapter (see also next example)
         mAdapter = new LedgerAdapter(mLedger, getActivity());
         mRecyclerView.setAdapter(mAdapter);
-
+        mRecyclerView.scrollToPosition(0);
 
         ibLastMonth.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,12 +207,13 @@ public class LedgerViewFragment extends android.app.Fragment {
                 }
             }
         });
-
-
-                myRef.child(user.getUid()).child("Ledger").addListenerForSingleValueEvent(new ValueEventListener() {
+                myRef.child(user.getUid()).child("Ledger").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         tvLedgerMonth.setText("전체 가계부");
+                        mLedger.clear();
+                        selectMonth.clear();
+                        mAdapter.notifyDataSetChanged();
                             ledgerView(dataSnapshot); // 유저 가계부 전체 리스트 생성
                             monthList = new ArrayList(selectMonth); // 년 월만 빼서 따로 리스트 생성
                             Collections.sort(monthList);
@@ -272,7 +274,7 @@ public class LedgerViewFragment extends android.app.Fragment {
                             }
 
                             mLedger.add(ledger[i]);
-                            mRecyclerView.scrollToPosition(0);
+
                             mAdapter.notifyItemInserted(mLedger.size() - 1);
                             i++;
 

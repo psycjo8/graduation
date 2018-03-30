@@ -136,34 +136,37 @@ public class LedgerAdapter extends RecyclerView.Adapter<LedgerAdapter.ViewHolder
             public void onClick(View v) {
                 EditDialog dialogs = new EditDialog(context, mLedger, position, selectChatuid);
                 dialogs.show();
-                dialogs.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        holder.tvChoice.setText(dialogs.getStClassfy());
-                        holder.tvUseitem.setText("분류 : " + dialogs.getStUseitem());
-                        holder.tvPrice.setText("가격 : " + dialogs.getStPrice()+"원");
-                        holder.tvPaymemo.setText("내용 : " + dialogs.getStPaymemo());
-                    }
-                });
+
+
             }
         });
 
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectChatuid.equals("")) {
+                if (selectChatuid.equals("")) { // 일반 가계부면
                     AlertDialog.Builder alertdialog = new AlertDialog.Builder(context);
                     alertdialog.setMessage("정말 삭제 하시겠습니까?");
                     alertdialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            myRef.child(user.getUid()).child("Ledger").child(mLedger.get(position).getYear())
-                                    .child(mLedger.get(position).getMonth())
-                                    .child(mLedger.get(position).getDay())
-                                    .child("지출")
-                                    .child(mLedger.get(position).getTimes())
-                                    .removeValue();
-                            Toast.makeText(context, "삭제되었습니다", Toast.LENGTH_SHORT).show();
+                            if (mLedger.get(position).getClassfy().equals("지출")) {
+                                myRef.child(user.getUid()).child("Ledger").child(mLedger.get(position).getYear())
+                                        .child(mLedger.get(position).getMonth())
+                                        .child(mLedger.get(position).getDay())
+                                        .child("지출")
+                                        .child(mLedger.get(position).getTimes())
+                                        .removeValue();
+                                Toast.makeText(context, "삭제되었습니다", Toast.LENGTH_SHORT).show();
+                            } else {
+                                myRef.child(user.getUid()).child("Ledger").child(mLedger.get(position).getYear())
+                                        .child(mLedger.get(position).getMonth())
+                                        .child(mLedger.get(position).getDay())
+                                        .child("수입")
+                                        .child(mLedger.get(position).getTimes())
+                                        .removeValue();
+                                Toast.makeText(context, "삭제되었습니다", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                     alertdialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -176,19 +179,29 @@ public class LedgerAdapter extends RecyclerView.Adapter<LedgerAdapter.ViewHolder
                     alert.show();
                 }
                 else {
+
                     AlertDialog.Builder alertdialog = new AlertDialog.Builder(context);
                     TextView textView = new TextView(context);
                     alertdialog.setMessage("정말 삭제 하시겠습니까?");
                     alertdialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            chatRef.child(selectChatuid).child("Ledger").child(mLedger.get(position).getYear())
-                                    .child(mLedger.get(position).getMonth())
-                                    .child(mLedger.get(position).getDay())
-                                    .child("지출")
-                                    .child(mLedger.get(position).getTimes())
-                                    .removeValue();
-                            Toast.makeText(context, "삭제되었습니다", Toast.LENGTH_SHORT).show();
+                            if (mLedger.get(position).getClassfy().equals("지출")) {
+                                chatRef.child(selectChatuid).child("Ledger").child(mLedger.get(position).getYear())
+                                        .child(mLedger.get(position).getMonth())
+                                        .child(mLedger.get(position).getDay())
+                                        .child("지출")
+                                        .child(mLedger.get(position).getTimes())
+                                        .removeValue();
+                                Toast.makeText(context, "삭제되었습니다", Toast.LENGTH_SHORT).show();
+                            } else {
+                                chatRef.child(selectChatuid).child("Ledger").child(mLedger.get(position).getYear())
+                                        .child(mLedger.get(position).getMonth())
+                                        .child(mLedger.get(position).getDay())
+                                        .child("수입")
+                                        .child(mLedger.get(position).getTimes())
+                                        .removeValue();
+                            }
                         }
                     });
                     alertdialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {

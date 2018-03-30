@@ -134,7 +134,7 @@ public class SMSActivity extends AppCompatActivity {
                         }
                     }
                     tvCountSMS.setText(count+"건의 기록이 확인되었습니다.");
-                    check++;
+                    check=1; // 한 번만 불러오게 하기
                     count = 0;
                 }
             }

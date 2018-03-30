@@ -35,14 +35,14 @@ Java_kr_ac_kpu_block_smared_ImageProcessingActivity_imageprocessing(JNIEnv *env,
     Mat element5(5, 5, CV_8U, cv::Scalar(1));
     Mat element3(3, 3, CV_8U, cv::Scalar(1));
     if(fileCheck==1) {
-        cvtColor(img_input, img_input, CV_BGR2GRAY); // 흑백화
-        GaussianBlur(img_input, img_input, Size(7,7), 1.5, 1.5); // 잡티 제거
-        adaptiveThreshold(img_input, img_output, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY, 31, 5); // 이진화
+        cvtColor(img_input, img_output, CV_BGR2GRAY); // 흑백화
+        GaussianBlur(img_output, img_output, Size(7,7), 1.5, 1.5); // 잡티 제거
+        adaptiveThreshold(img_output, img_output, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY, 31, 5); // 이진화
     } else {
-        cvtColor(img_input, img_input, CV_BGR2GRAY); // 흑백화
-        GaussianBlur(img_input, img_input, Size(7,7), 1.5, 1.5); // 잡티 제거
-        adaptiveThreshold(img_input, img_input, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY, 31, 5); // 이진화
-        morphologyEx(img_input, img_output, MORPH_CLOSE, element5);
+        cvtColor(img_input, img_output, CV_BGR2GRAY); // 흑백화
+        GaussianBlur(img_output, img_output, Size(7,7), 1.5, 1.5); // 잡티 제거
+        adaptiveThreshold(img_output, img_output, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY, 31, 5); // 이진화
+        morphologyEx(img_output, img_output, MORPH_CLOSE, element5);
     }
 
     /*

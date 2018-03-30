@@ -44,6 +44,7 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> {
             tvSMSPrice= (TextView) itemView.findViewById(R.id.tvSMSPrice);
             tvSMSTime= (TextView) itemView.findViewById(R.id.tvSMSTime);
             btnAddSMS = (Button) itemView.findViewById(R.id.btnAddSMS);
+
         }
     }
 
@@ -59,12 +60,13 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> {
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("users");
         user = FirebaseAuth.getInstance().getCurrentUser();
-        for (int i=0; i<1000; i++) {
-            mledgerContent[i] = new LedgerContent();
-        }
+
         View v;
         v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_sms, parent, false);
+        for (int i=0; i<1000; i++) {
+            mledgerContent[i] = new LedgerContent();
+        }
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
@@ -74,19 +76,25 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-
+        mledgerContent[position].setPaymemo(mBody.get(position).getPayMemo());
+        mledgerContent[position].setPrice(mBody.get(position).getPrice());
+        mledgerContent[position].setUseItem("기타");
       holder.tvSMSPaymemo.setText(mBody.get(position).getPayMemo());
       holder.btnSMSDay.setText(mBody.get(position).getYear()+"-"+mBody.get(position).getMonth()+"-"+mBody.get(position).getDay());
       holder.tvSMSPrice.setText("-" + mBody.get(position).getPrice()+"원");
       holder.tvSMSTime.setText("[신한체크]" + mBody.get(position).getTime());
 
-      mledgerContent[position].setPaymemo(mBody.get(position).getPayMemo());
-      mledgerContent[position].setPrice(mBody.get(position).getPrice());
-      mledgerContent[position].setUseItem("기타");
+
       holder.btnAddSMS.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-              myRef.child(user.getUid()).child("Ledger").child(mBody.get(position).getYear()).child(mBody.get(position).getMonth()).child(mBody.get(position).getDay()).child("지출").child(mBody.get(position).getTime()).setValue(mledgerContent[position]);
+              myRef.child(user.getUid()).child("Ledger")
+                      .child(mBody.get(position).getYear())
+                      .child(mBody.get(position).getMonth()).
+                      child(mBody.get(position).getDay())
+                      .child("지출")
+                      .child(mBody.get(position).getTime())
+                      .setValue(mledgerContent[position]);
               Toast.makeText(context, "가계부에 추가되었습니다.", Toast.LENGTH_SHORT).show();
           }
       });

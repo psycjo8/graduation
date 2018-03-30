@@ -143,10 +143,22 @@ public class EditDialog extends Dialog {
                         myRef.child(user.getUid()).child("Ledger").child(mLedger.get(position).getYear())
                                 .child(mLedger.get(position).getMonth())
                                 .child(mLedger.get(position).getDay())
+                                .child("수입")
+                                .child(mLedger.get(position).getTimes())
+                                .removeValue();
+                        myRef.child(user.getUid()).child("Ledger").child(mLedger.get(position).getYear())
+                                .child(mLedger.get(position).getMonth())
+                                .child(mLedger.get(position).getDay())
                                 .child("지출")
                                 .child(mLedger.get(position).getTimes())
                                 .setValue(ledger);
                     } else {
+                        myRef.child(user.getUid()).child("Ledger").child(mLedger.get(position).getYear())
+                                .child(mLedger.get(position).getMonth())
+                                .child(mLedger.get(position).getDay())
+                                .child("지출")
+                                .child(mLedger.get(position).getTimes())
+                                .removeValue();
                         myRef.child(user.getUid()).child("Ledger").child(mLedger.get(position).getYear())
                                 .child(mLedger.get(position).getMonth())
                                 .child(mLedger.get(position).getDay())
@@ -159,10 +171,22 @@ public class EditDialog extends Dialog {
                         chatRef.child(selectChatuid).child("Ledger").child(mLedger.get(position).getYear())
                                 .child(mLedger.get(position).getMonth())
                                 .child(mLedger.get(position).getDay())
+                                .child("수입")
+                                .child(mLedger.get(position).getTimes())
+                                .removeValue();
+                        chatRef.child(selectChatuid).child("Ledger").child(mLedger.get(position).getYear())
+                                .child(mLedger.get(position).getMonth())
+                                .child(mLedger.get(position).getDay())
                                 .child("지출")
                                 .child(mLedger.get(position).getTimes())
                                 .setValue(ledger);
                     } else {
+                        chatRef.child(selectChatuid).child("Ledger").child(mLedger.get(position).getYear())
+                                .child(mLedger.get(position).getMonth())
+                                .child(mLedger.get(position).getDay())
+                                .child("지출")
+                                .child(mLedger.get(position).getTimes())
+                                .removeValue();
                         chatRef.child(selectChatuid).child("Ledger").child(mLedger.get(position).getYear())
                                 .child(mLedger.get(position).getMonth())
                                 .child(mLedger.get(position).getDay())
