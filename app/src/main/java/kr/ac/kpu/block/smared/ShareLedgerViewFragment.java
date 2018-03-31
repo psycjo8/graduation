@@ -3,9 +3,12 @@ package kr.ac.kpu.block.smared;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -86,6 +89,12 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
     Spinner spnSelectLedger;
     Button btnExport;
 
+    private String[] permissions = {android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+    private static final int MULTIPLE_PERMISSIONS = 101;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -94,7 +103,7 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
         myRef = database.getReference("users");
         chatRef = database.getReference("chats");
         user = FirebaseAuth.getInstance().getCurrentUser();
-
+        checkPermissions();
 
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_ledger_view_share, container, false);
@@ -124,54 +133,55 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
         ibLastMonth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tempLedger = new ArrayList<>();
-                if( index != 0) { // 년,월이 제일 처음이 아니면
-                    index--;
-                   tvLedgerMonth.setText(monthList.get(index));
-                    parsing= monthList.get(index).replaceAll("[^0-9]", "");
+                if (mLedger.size() != 0) {
+                    tempLedger = new ArrayList<>();
+                    if (index != 0) { // 년,월이 제일 처음이 아니면
+                        index--;
+                        tvLedgerMonth.setText(monthList.get(index));
+                        parsing = monthList.get(index).replaceAll("[^0-9]", "");
 
-                  for (int j=0; j<mLedger.size(); j++) {
-                        if( parsing.equals(mLedger.get(j).getYear() + mLedger.get(j).getMonth()) ) {
-                            tempLedger.add(mLedger.get(j));
-                            if (mLedger.get(j).getClassfy().equals("지출")) {
-                                totalConsume += Integer.parseInt(mLedger.get(j).getPrice());
-                            } else if (mLedger.get(j).getClassfy().equals("수입")) {
-                                totalIncome += Integer.parseInt(mLedger.get(j).getPrice());
+                        for (int j = 0; j < mLedger.size(); j++) {
+                            if (parsing.equals(mLedger.get(j).getYear() + mLedger.get(j).getMonth())) {
+                                tempLedger.add(mLedger.get(j));
+                                if (mLedger.get(j).getClassfy().equals("지출")) {
+                                    totalConsume += Integer.parseInt(mLedger.get(j).getPrice());
+                                } else if (mLedger.get(j).getClassfy().equals("수입")) {
+                                    totalIncome += Integer.parseInt(mLedger.get(j).getPrice());
+                                }
                             }
                         }
-                    }
-                    tvTotalincome.setText("수입 합계 : " + totalIncome + "원");
-                    tvTotalconsume.setText("지출 합계 : " + totalConsume + "원");
-                    tvPlusMinus.setText("수익 : " + (totalIncome - totalConsume) + "원");
-                    totalIncome=0;
-                    totalConsume=0;
-                    tempAdapter = new LedgerAdapter(tempLedger,getActivity(),selectChatuid);
-                    mRecyclerView.setAdapter(tempAdapter);
+                        tvTotalincome.setText("수입 합계 : " + totalIncome + "원");
+                        tvTotalconsume.setText("지출 합계 : " + totalConsume + "원");
+                        tvPlusMinus.setText("수익 : " + (totalIncome - totalConsume) + "원");
+                        totalIncome = 0;
+                        totalConsume = 0;
+                        tempAdapter = new LedgerAdapter(tempLedger, getActivity(), selectChatuid);
+                        mRecyclerView.setAdapter(tempAdapter);
 
 
+                    } else {   // 년,월이 처음이면
+                        index = monthList.size() - 1;
+                        tvLedgerMonth.setText(monthList.get(index));
+                        parsing = monthList.get(index).replaceAll("[^0-9]", "");
 
-                } else {   // 년,월이 처음이면
-                    index = monthList.size() - 1;
-                    tvLedgerMonth.setText(monthList.get(index));
-                    parsing= monthList.get(index).replaceAll("[^0-9]", "");
-
-                    for (int j=0; j<mLedger.size(); j++) {
-                        if( parsing.equals(mLedger.get(j).getYear() + mLedger.get(j).getMonth()) ) {
-                            tempLedger.add(mLedger.get(j));
-                            if (mLedger.get(j).getClassfy().equals("지출")) {
-                                totalConsume += Integer.parseInt(mLedger.get(j).getPrice());
-                            } else if (mLedger.get(j).getClassfy().equals("수입")) {
-                                totalIncome += Integer.parseInt(mLedger.get(j).getPrice());
+                        for (int j = 0; j < mLedger.size(); j++) {
+                            if (parsing.equals(mLedger.get(j).getYear() + mLedger.get(j).getMonth())) {
+                                tempLedger.add(mLedger.get(j));
+                                if (mLedger.get(j).getClassfy().equals("지출")) {
+                                    totalConsume += Integer.parseInt(mLedger.get(j).getPrice());
+                                } else if (mLedger.get(j).getClassfy().equals("수입")) {
+                                    totalIncome += Integer.parseInt(mLedger.get(j).getPrice());
+                                }
                             }
                         }
+                        tvTotalincome.setText("수입 합계 : " + totalIncome + "원");
+                        tvTotalconsume.setText("지출 합계 : " + totalConsume + "원");
+                        tvPlusMinus.setText("수익 : " + (totalIncome - totalConsume) + "원");
+                        totalIncome = 0;
+                        totalConsume = 0;
+                        tempAdapter = new LedgerAdapter(tempLedger, getActivity(), selectChatuid);
+                        mRecyclerView.setAdapter(tempAdapter);
                     }
-                    tvTotalincome.setText("수입 합계 : " + totalIncome + "원");
-                    tvTotalconsume.setText("지출 합계 : " + totalConsume + "원");
-                    tvPlusMinus.setText("수익 : " + (totalIncome - totalConsume) + "원");
-                    totalIncome=0;
-                    totalConsume=0;
-                    tempAdapter = new LedgerAdapter(tempLedger,getActivity(),selectChatuid);
-                    mRecyclerView.setAdapter(tempAdapter);
                 }
             }
         });
@@ -179,6 +189,7 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
         ibNextMonth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mLedger.size() != 0) {
                 tempLedger = new ArrayList<>();
                 if (index != monthList.size() - 1) { // 년, 월이 마지막이 아니면
                     index++;
@@ -229,6 +240,7 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
                     tempAdapter = new LedgerAdapter(tempLedger,getActivity(),selectChatuid);
                     mRecyclerView.setAdapter(tempAdapter);
                 }
+            }
             }
         });
 
@@ -497,6 +509,52 @@ public class ShareLedgerViewFragment extends android.app.Fragment {
 
 
     }
+
+    private boolean checkPermissions() {
+        int result;
+        List<String> permissionList = new ArrayList<>();
+        for (String pm : permissions) {
+            result = ContextCompat.checkSelfPermission(getActivity(), pm);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                permissionList.add(pm);
+            }
+        }
+        if (!permissionList.isEmpty()) {
+            ActivityCompat.requestPermissions(getActivity(), permissionList.toArray(new String[permissionList.size()]), MULTIPLE_PERMISSIONS);
+            return false;
+        }
+        return true;
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MULTIPLE_PERMISSIONS: {
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < permissions.length; i++) {
+                        if (permissions[i].equals(this.permissions[0])) {
+                            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                                showNoPermissionToastAndFinish();
+                            }
+                        } else if (permissions[i].equals(this.permissions[1])) {
+                            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                                showNoPermissionToastAndFinish();
+
+                            }
+                        }
+                    }
+                } else {
+                    showNoPermissionToastAndFinish();
+                }
+                return;
+            }
+        }
+    }
+
+    private void showNoPermissionToastAndFinish() {
+        Toast.makeText(getActivity(), "권한 요청에 동의 해주셔야 이용 가능합니다. 설정에서 권한 허용 하시기 바랍니다.", Toast.LENGTH_SHORT).show();
+        getActivity().finish();
+    }
+
 
 }
 

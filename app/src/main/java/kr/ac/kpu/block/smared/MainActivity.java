@@ -87,10 +87,20 @@ public class MainActivity extends AppCompatActivity {
                         stEmail = email.getText().toString();
                         stPassword = password.getText().toString();
                         stNickname = nickname.getText().toString();
+
+
+
+
+
+
                         if(stEmail.isEmpty() || stPassword.isEmpty() || stNickname.isEmpty()) {
                             Toast.makeText(MainActivity.this, "양식을 모두 채워주세요", Toast.LENGTH_SHORT).show();
                         } else {
-                            registerUser(stEmail,stPassword);
+                            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(stEmail).matches()) {
+                                Toast.makeText(MainActivity.this, "이메일 형식이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                registerUser(stEmail, stPassword);
+                            }
                         }
                     }
                 });

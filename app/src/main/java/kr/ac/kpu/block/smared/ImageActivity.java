@@ -133,9 +133,10 @@ public class ImageActivity extends Activity implements View.OnClickListener
                 goToAlbum();
                 break;
             case R.id.buttonI3:
+                if (!ImagePath.equals("")) {
                 Intent intent = new Intent(ImageActivity.this, ImageProcessingActivity.class);
                 intent.putExtra("ipath", ImagePath);
-                startActivity(intent);
+                startActivity(intent); }
                 break;
             case R.id.buttonI4:
                 finish();

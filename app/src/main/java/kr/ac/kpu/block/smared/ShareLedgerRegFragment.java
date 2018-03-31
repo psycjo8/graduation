@@ -194,6 +194,8 @@ public class ShareLedgerRegFragment extends Fragment {
                                     chatRef.child(chatId).child("user").child(stUid).setValue(stEmail);
                                         listItems.clear(); // 가계부 생성시 초기화 후 다시 가계부 뷰 리스트 채움
                                         viewLedgerName();
+                                        selectChatname = stChatname;
+                                        setChatUid();
                                         Toast.makeText(getActivity(), "가계부가 생성되었습니다.", Toast.LENGTH_SHORT).show();
                                     }
                                 });
@@ -228,6 +230,7 @@ public class ShareLedgerRegFragment extends Fragment {
                         AlertDialog alert = alertdialog.create();
                         alert.show();
                         listItems.clear();
+
                     }
                 }); // 가계부 선택 버튼 종료
 
@@ -248,14 +251,19 @@ public class ShareLedgerRegFragment extends Fragment {
                             myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
+                                    int check =0;
                                     for (DataSnapshot emailSnapshot : dataSnapshot.getChildren()) {
                                         if (editText.getText().toString().equals(emailSnapshot.child("email").getValue(String.class))) {
                                             inviteUser(emailSnapshot.child("key").getValue(String.class), emailSnapshot.child("email").getValue(String.class));  // CHATS에 UID 키 저장, 이메일 값 저장
                                             Toast.makeText(getActivity(), emailSnapshot.child("nickname").getValue(String.class) + "님을 " + selectChatname + " 가계부에 초대하였습니다.", Toast.LENGTH_SHORT).show();
-
+                                            check = 1;
                                         }
                                     }
+                                    if (check == 0) {
+                                        Toast.makeText(getActivity(), "사용자를 찾지 못하였습니다.", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
+
 
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {

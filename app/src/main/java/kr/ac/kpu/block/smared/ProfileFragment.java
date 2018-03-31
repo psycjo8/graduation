@@ -65,6 +65,7 @@ public class ProfileFragment extends Fragment {
 
     FirebaseDatabase database;
     DatabaseReference myRef;
+    DatabaseReference chatRef;
     FirebaseUser user;
 
     @Override
@@ -90,6 +91,7 @@ public class ProfileFragment extends Fragment {
 
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
+        chatRef = database.getReference("chats");
         myRef.child("users").child(stUid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -222,9 +224,35 @@ public class ProfileFragment extends Fragment {
                                             regStatus=0;
                                             myRef.child("users").child(stUid).removeValue();
 
+
+                                            chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                                    for (DataSnapshot chatSnapshot : dataSnapshot.getChildren()) {
+
+                                                        for (DataSnapshot userSnapshot : chatSnapshot.getChildren()) {
+
+                                                            for (DataSnapshot uidSnapshot : userSnapshot.getChildren())
+                                                            {
+                                                                if(uidSnapshot.getKey().equals(stUid)) {
+                                                                    chatRef.child(chatSnapshot.getKey()).child("user").child(uidSnapshot.getKey()).removeValue();
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
+
                                             Log.d(TAG, "User account deleted.");
 
                                             Toast.makeText(getActivity(),"계정이 삭제되었습니다.",Toast.LENGTH_SHORT).show();
+
                                             getActivity().finish();
                                         }
                                     }

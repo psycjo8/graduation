@@ -120,32 +120,33 @@ public class LedgerStatFragment extends android.app.Fragment {
         ibLastMonth2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mLedger.size() != 0) {
+                    tempLedger = new ArrayList<>();
+                    if (index != 0) { // 년,월이 제일 처음이 아니면
+                        index--;
+                        tvLedgerMonth2.setText(monthList.get(index));
+                        parsing = monthList.get(index).replaceAll("[^0-9]", ""); // 날짜를 20182 이런형식으로 파싱
 
-                tempLedger = new ArrayList<>();
-                if( index != 0) { // 년,월이 제일 처음이 아니면
-                    index--;
-                    tvLedgerMonth2.setText(monthList.get(index));
-                    parsing= monthList.get(index).replaceAll("[^0-9]", ""); // 날짜를 20182 이런형식으로 파싱
-
-                    for (int j=0; j<mLedger.size(); j++) {
-                        if( parsing.equals(mLedger.get(j).getYear() + mLedger.get(j).getMonth()) ) {
-                            tempLedger.add(mLedger.get(j));
-                        }
-
-                    }
-                    selectChart();
-                } else {   // 년,월이 처음이면
-                    index = monthList.size() - 1;
-                    tvLedgerMonth2.setText(monthList.get(index));
-                    parsing= monthList.get(index).replaceAll("[^0-9]", "");
-
-                    for (int j=0; j<mLedger.size(); j++) {
-                        if( parsing.equals(mLedger.get(j).getYear() + mLedger.get(j).getMonth()) ) {
-                            tempLedger.add(mLedger.get(j));
+                        for (int j = 0; j < mLedger.size(); j++) {
+                            if (parsing.equals(mLedger.get(j).getYear() + mLedger.get(j).getMonth())) {
+                                tempLedger.add(mLedger.get(j));
+                            }
 
                         }
+                        selectChart();
+                    } else {   // 년,월이 처음이면
+                        index = monthList.size() - 1;
+                        tvLedgerMonth2.setText(monthList.get(index));
+                        parsing = monthList.get(index).replaceAll("[^0-9]", "");
+
+                        for (int j = 0; j < mLedger.size(); j++) {
+                            if (parsing.equals(mLedger.get(j).getYear() + mLedger.get(j).getMonth())) {
+                                tempLedger.add(mLedger.get(j));
+
+                            }
+                        }
+                        selectChart();
                     }
-                    selectChart();
                 }
             }
         });
@@ -153,29 +154,31 @@ public class LedgerStatFragment extends android.app.Fragment {
         ibNextMonth2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tempLedger = new ArrayList<>();
-                if (index != monthList.size() - 1) { // 년, 월이 마지막이 아니면
-                    index++;
-                    tvLedgerMonth2.setText(monthList.get(index));
-                    parsing= monthList.get(index).replaceAll("[^0-9]", "");
+                if (mLedger.size() != 0) {
+                    tempLedger = new ArrayList<>();
+                    if (index != monthList.size() - 1) { // 년, 월이 마지막이 아니면
+                        index++;
+                        tvLedgerMonth2.setText(monthList.get(index));
+                        parsing = monthList.get(index).replaceAll("[^0-9]", "");
 
-                    for (int j=0; j<mLedger.size(); j++) {
-                        if( parsing.equals(mLedger.get(j).getYear() + mLedger.get(j).getMonth()) ) {
-                            tempLedger.add(mLedger.get(j));
+                        for (int j = 0; j < mLedger.size(); j++) {
+                            if (parsing.equals(mLedger.get(j).getYear() + mLedger.get(j).getMonth())) {
+                                tempLedger.add(mLedger.get(j));
+                            }
                         }
-                    }
-                    selectChart();
-                } else {   // 년,월이 마지막이면
-                    index = 0;
-                    tvLedgerMonth2.setText(monthList.get(index));
-                    parsing= monthList.get(index).replaceAll("[^0-9]", "");
+                        selectChart();
+                    } else {   // 년,월이 마지막이면
+                        index = 0;
+                        tvLedgerMonth2.setText(monthList.get(index));
+                        parsing = monthList.get(index).replaceAll("[^0-9]", "");
 
-                    for (int j=0; j<mLedger.size(); j++) {
-                        if( parsing.equals(mLedger.get(j).getYear() + mLedger.get(j).getMonth()) ) {
-                            tempLedger.add(mLedger.get(j));
+                        for (int j = 0; j < mLedger.size(); j++) {
+                            if (parsing.equals(mLedger.get(j).getYear() + mLedger.get(j).getMonth())) {
+                                tempLedger.add(mLedger.get(j));
+                            }
                         }
+                        selectChart();
                     }
-                    selectChart();
                 }
             }
         });
