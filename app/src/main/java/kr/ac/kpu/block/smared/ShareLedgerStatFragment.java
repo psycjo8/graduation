@@ -50,7 +50,6 @@ public class ShareLedgerStatFragment extends android.app.Fragment {
     DatabaseReference myRef;
     DatabaseReference chatRef;
     FirebaseUser user;
-    Ledger ledger[] = new Ledger[1000];
     LedgerContent ledgerContent = new LedgerContent();
 
 
@@ -70,8 +69,8 @@ public class ShareLedgerStatFragment extends android.app.Fragment {
     Spinner spnSelectLedger;
     CharSequence selectChatname = "";
     ArrayAdapter<String> spinneradapter;
-    int i =0;
-    int j =0;
+
+
     int count =0;
 
     float clothPrice=0;
@@ -108,7 +107,7 @@ public class ShareLedgerStatFragment extends android.app.Fragment {
         spnSelectLedger = (Spinner) v.findViewById(R.id.spnSelectLedger);
 
 
-        i = 0;
+
         pieChart = (PieChart)v.findViewById(R.id.piechart);
 
         ibLastMonth2.setOnClickListener(new View.OnClickListener() {
@@ -208,10 +207,7 @@ public class ShareLedgerStatFragment extends android.app.Fragment {
 
     public void ledgerView(DataSnapshot dataSnapshot) {
 
-        for (i=0; i<1000; i++) {
-            ledger[i] = new Ledger();
-        }
-        i=0;
+       Ledger ledger = new Ledger();
         for (DataSnapshot yearSnapshot : dataSnapshot.getChildren()) { // 년
 
             for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) { // 월
@@ -223,24 +219,24 @@ public class ShareLedgerStatFragment extends android.app.Fragment {
                         for (DataSnapshot timesSnapshot : classfySnapshot.getChildren()) { //
                             ledgerContent = timesSnapshot.getValue(LedgerContent.class);
 
-                            ledger[i].setClassfy(classfySnapshot.getKey());
-                            ledger[i].setYear(yearSnapshot.getKey());
-                            ledger[i].setMonth(monthSnapshot.getKey());
-                            selectMonth.add(ledger[i].getYear()+"년 "+ledger[i].getMonth()+"월");
+                            ledger.setClassfy(classfySnapshot.getKey());
+                            ledger.setYear(yearSnapshot.getKey());
+                            ledger.setMonth(monthSnapshot.getKey());
+                            selectMonth.add(ledger.getYear()+"년 "+ledger.getMonth()+"월");
 
-                            ledger[i].setDay(daySnapshot.getKey());
-                            ledger[i].setTimes(timesSnapshot.getKey());
+                            ledger.setDay(daySnapshot.getKey());
+                            ledger.setTimes(timesSnapshot.getKey());
                             //     Toast.makeText(getActivity(),timesSnapshot.getKey(),Toast.LENGTH_SHORT).show();
 
 
-                            ledger[i].setPaymemo(ledgerContent.getPaymemo()); ;
-                            ledger[i].setPrice(ledgerContent.getPrice()); ;
-                            ledger[i].setUseItem(ledgerContent.getUseItem()); ;
+                            ledger.setPaymemo(ledgerContent.getPaymemo()); ;
+                            ledger.setPrice(ledgerContent.getPrice()); ;
+                            ledger.setUseItem(ledgerContent.getUseItem()); ;
 
 
-                            mLedger.add(ledger[i]);
+                            mLedger.add(ledger);
+                            ledger = new Ledger();
 
-                            i++;
 
                         }
                     }
@@ -266,20 +262,20 @@ public class ShareLedgerStatFragment extends android.app.Fragment {
 
 
 
-        for (j=0; j<i; j++) {
-            if (ledger[j].getClassfy().equals("지출")) {
-                if (ledger[j].getUseItem().equals("의류비")) {
-                    clothPrice += Integer.parseInt(ledger[j].getPrice());
-                } else if (ledger[j].getUseItem().equals("식비")) {
-                    foodPrice += Integer.parseInt(ledger[j].getPrice());
-                } else if (ledger[j].getUseItem().equals("주거비")) {
-                    homePrice += Integer.parseInt(ledger[j].getPrice());
-                } else if (ledger[j].getUseItem().equals("교통비")) {
-                    transPrice += Integer.parseInt(ledger[j].getPrice());
-                } else if (ledger[j].getUseItem().equals("생필품")) {
-                    marketPrice += Integer.parseInt(ledger[j].getPrice());
-                } else if (ledger[j].getUseItem().equals("기타")) {
-                    etcPrice += Integer.parseInt(ledger[j].getPrice());
+        for (int j=0; j<mLedger.size(); j++) {
+            if (mLedger.get(j).getClassfy().equals("지출")) {
+                if (mLedger.get(j).getUseItem().equals("의류비")) {
+                    clothPrice += Integer.parseInt(mLedger.get(j).getPrice());
+                } else if (mLedger.get(j).getUseItem().equals("식비")) {
+                    foodPrice += Integer.parseInt(mLedger.get(j).getPrice());
+                } else if (mLedger.get(j).getUseItem().equals("주거비")) {
+                    homePrice += Integer.parseInt(mLedger.get(j).getPrice());
+                } else if (mLedger.get(j).getUseItem().equals("교통비")) {
+                    transPrice += Integer.parseInt(mLedger.get(j).getPrice());
+                } else if (mLedger.get(j).getUseItem().equals("생필품")) {
+                    marketPrice += Integer.parseInt(mLedger.get(j).getPrice());
+                } else if (mLedger.get(j).getUseItem().equals("기타")) {
+                    etcPrice += Integer.parseInt(mLedger.get(j).getPrice());
                 }
             }
         }

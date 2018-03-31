@@ -1,14 +1,22 @@
 package kr.ac.kpu.block.smared;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,6 +27,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -38,9 +55,9 @@ public class LedgerViewFragment extends android.app.Fragment {
     DatabaseReference myRef;
     DatabaseReference chatRef;
     FirebaseUser user;
-    Ledger ledger[] = new Ledger[1000];
 
-    int i =0;
+
+
     int totalIncome=0;
     int totalConsume=0;
     LedgerContent ledgerContent = new LedgerContent();
@@ -59,15 +76,14 @@ public class LedgerViewFragment extends android.app.Fragment {
     TextView tvTotalconsume;
     TextView tvTotalincome;
     TextView tvPlusMinus;
+    Button btnExport;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        for (i=0; i<1000; i++) {
-            ledger[i] = new Ledger();
-        }
-        i=0;
+
+
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("users");
         chatRef = database.getReference("chats");
@@ -84,6 +100,7 @@ public class LedgerViewFragment extends android.app.Fragment {
         tvTotalconsume = (TextView) v.findViewById(R.id.tvTotalconsume);
         tvPlusMinus = (TextView) v.findViewById(R.id.tvPlusMinus);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.rvLedger);
+        btnExport = (Button) v.findViewById(R.id.btnExport);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
@@ -232,6 +249,34 @@ public class LedgerViewFragment extends android.app.Fragment {
                     }
                 });
 
+                btnExport.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                        alertDialog.setTitle("저장할 가계부 이름을 설정해주세요");
+                        EditText editName = new EditText(getActivity());
+                        alertDialog.setView(editName);
+                        alertDialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                              String ledgerName = editName.getText().toString();
+                              if(ledgerName.isEmpty()) {
+                                  Toast.makeText(getActivity(), "파일 이름을 지정해 주세요", Toast.LENGTH_SHORT).show();
+                              } else {
+                                  saveExcel(ledgerName);
+                              }
+                            }
+                        });
+                        alertDialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        AlertDialog alert = alertDialog.create();
+                        alert.show();
+                    }
+                });
 
         return v;
     }
@@ -240,6 +285,7 @@ public class LedgerViewFragment extends android.app.Fragment {
 
     public void ledgerView(DataSnapshot dataSnapshot) {
 
+        Ledger ledger = new Ledger();
         for (DataSnapshot yearSnapshot : dataSnapshot.getChildren()) { // 년
 
             //     Toast.makeText(getActivity(),yearSnapshot.getKey(),Toast.LENGTH_SHORT).show();
@@ -254,29 +300,29 @@ public class LedgerViewFragment extends android.app.Fragment {
 
                         // Toast.makeText(getActivity(),classfySnapshot.getKey(),Toast.LENGTH_SHORT).show();
                         for (DataSnapshot timesSnapshot : classfySnapshot.getChildren()) { //
-                            ledger[i].setClassfy(classfySnapshot.getKey());
-                            ledger[i].setYear(yearSnapshot.getKey());
-                            ledger[i].setMonth(monthSnapshot.getKey());
-                            selectMonth.add(ledger[i].getYear()+"년 "+ledger[i].getMonth()+"월");
+                            ledger.setClassfy(classfySnapshot.getKey());
+                            ledger.setYear(yearSnapshot.getKey());
+                            ledger.setMonth(monthSnapshot.getKey());
+                            selectMonth.add(ledger.getYear()+"년 "+ledger.getMonth()+"월");
 
-                            ledger[i].setDay(daySnapshot.getKey());
-                            ledger[i].setTimes(timesSnapshot.getKey());
+                            ledger.setDay(daySnapshot.getKey());
+                            ledger.setTimes(timesSnapshot.getKey());
                             //     Toast.makeText(getActivity(),timesSnapshot.getKey(),Toast.LENGTH_SHORT).show();
 
                             ledgerContent = timesSnapshot.getValue(LedgerContent.class);
-                            ledger[i].setPaymemo(ledgerContent.getPaymemo()); ;
-                            ledger[i].setPrice(ledgerContent.getPrice()); ;
-                            ledger[i].setUseItem(ledgerContent.getUseItem()); ;
-                            if (ledger[i].getClassfy().equals("지출")) {
-                                totalConsume += Integer.parseInt(ledger[i].getPrice());
-                            } else if (ledger[i].getClassfy().equals("수입")) {
-                                totalIncome += Integer.parseInt(ledger[i].getPrice());
+                            ledger.setPaymemo(ledgerContent.getPaymemo()); ;
+                            ledger.setPrice(ledgerContent.getPrice()); ;
+                            ledger.setUseItem(ledgerContent.getUseItem()); ;
+                            if (ledger.getClassfy().equals("지출")) {
+                                totalConsume += Integer.parseInt(ledger.getPrice());
+                            } else if (ledger.getClassfy().equals("수입")) {
+                                totalIncome += Integer.parseInt(ledger.getPrice());
                             }
 
-                            mLedger.add(ledger[i]);
-
+                            mLedger.add(ledger);
+                            ledger = new Ledger();
                             mAdapter.notifyItemInserted(mLedger.size() - 1);
-                            i++;
+
 
                         }
                     }
@@ -288,6 +334,67 @@ public class LedgerViewFragment extends android.app.Fragment {
         tvPlusMinus.setText("수익 : " + (totalIncome - totalConsume) + "원");
         totalIncome=0;
         totalConsume=0;
+
+    }
+
+    private void saveExcel(String ledgerName){
+        Workbook workbook = new HSSFWorkbook();
+
+        Sheet sheet = workbook.createSheet(); // 새로운 시트 생성
+
+        Row row = sheet.createRow(0); // 새로운 행 생성
+        Cell cell;
+
+        cell = row.createCell(0); // 1번 셀 생성
+        cell.setCellValue("날짜"); // 1번 셀 값 입력
+
+        cell = row.createCell(1); // 2번 셀 생성
+        cell.setCellValue("소비 분류"); // 2번 셀 값 입력
+
+        cell = row.createCell(2); // 2번 셀 생성
+        cell.setCellValue("분류"); // 2번 셀 값 입력
+
+        cell = row.createCell(3); // 2번 셀 생성
+        cell.setCellValue("금액"); // 2번 셀 값 입력
+
+        cell = row.createCell(4); // 2번 셀 생성
+        cell.setCellValue("내용"); // 2번 셀 값 입력
+
+
+        for(int i = 0; i < mLedger.size() ; i++){ // 데이터 엑셀에 입력
+            row = sheet.createRow(i+1);
+            cell = row.createCell(0);
+            cell.setCellValue(mLedger.get(i).getYear() + "-" + mLedger.get(i).getMonth() + "-" + mLedger.get(i).getDay());
+            cell = row.createCell(1);
+            cell.setCellValue(mLedger.get(i).getClassfy());
+            cell = row.createCell(2);
+            cell.setCellValue(mLedger.get(i).getUseItem());
+            cell = row.createCell(3);
+            cell.setCellValue(mLedger.get(i).getPrice());
+            cell = row.createCell(4);
+            cell.setCellValue(mLedger.get(i).getPaymemo());
+        }
+
+        File storageDir = new File(Environment.getExternalStorageDirectory() + "/SmaRed/Excel");
+        if (!storageDir.exists()) {
+            storageDir.mkdirs();
+        }
+        File xlsFile = new File(Environment.getExternalStorageDirectory() + "/SmaRed/Excel",ledgerName+".xls");
+
+        try{
+            FileOutputStream os = new FileOutputStream(xlsFile);
+            workbook.write(os); // 외부 저장소에 엑셀 파일 생성
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        Toast.makeText(getActivity(),xlsFile.getAbsolutePath()+"에 저장되었습니다",Toast.LENGTH_SHORT).show();
+
+        Uri path = Uri.fromFile(xlsFile);
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("application/excel");
+        shareIntent.putExtra(Intent.EXTRA_STREAM,path);
+        startActivity(Intent.createChooser(shareIntent,"엑셀 내보내기"));
+
 
     }
 

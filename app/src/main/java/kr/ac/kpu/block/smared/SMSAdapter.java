@@ -23,7 +23,7 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> {
     DatabaseReference myRef;
     FirebaseUser user;
     Context context;
-    LedgerContent mledgerContent[] = new LedgerContent[1000];
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -64,9 +64,7 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> {
         View v;
         v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_sms, parent, false);
-        for (int i=0; i<1000; i++) {
-            mledgerContent[i] = new LedgerContent();
-        }
+
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
@@ -76,9 +74,7 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        mledgerContent[position].setPaymemo(mBody.get(position).getPayMemo());
-        mledgerContent[position].setPrice(mBody.get(position).getPrice());
-        mledgerContent[position].setUseItem("기타");
+
       holder.tvSMSPaymemo.setText(mBody.get(position).getPayMemo());
       holder.btnSMSDay.setText(mBody.get(position).getYear()+"-"+mBody.get(position).getMonth()+"-"+mBody.get(position).getDay());
       holder.tvSMSPrice.setText("-" + mBody.get(position).getPrice()+"원");
@@ -88,13 +84,18 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> {
       holder.btnAddSMS.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
+              LedgerContent mledgerContent = new LedgerContent();
+              mledgerContent.setPaymemo(mBody.get(position).getPayMemo());
+              mledgerContent.setPrice(mBody.get(position).getPrice());
+              mledgerContent.setUseItem("기타");
+
               myRef.child(user.getUid()).child("Ledger")
                       .child(mBody.get(position).getYear())
                       .child(mBody.get(position).getMonth()).
                       child(mBody.get(position).getDay())
                       .child("지출")
                       .child(mBody.get(position).getTime())
-                      .setValue(mledgerContent[position]);
+                      .setValue(mledgerContent);
               Toast.makeText(context, "가계부에 추가되었습니다.", Toast.LENGTH_SHORT).show();
           }
       });

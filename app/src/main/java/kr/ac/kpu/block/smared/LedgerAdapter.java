@@ -22,7 +22,6 @@ import java.util.List;
 public class LedgerAdapter extends RecyclerView.Adapter<LedgerAdapter.ViewHolder> {
 
     List<Ledger> mLedger;
-    String parsing;
     Context context;
     FirebaseDatabase database;
     DatabaseReference myRef;
