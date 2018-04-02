@@ -130,14 +130,18 @@ public class ShareLedgerRegFragment extends Fragment {
                     ledger.put("price", stPrice);
                     ledger.put("paymemo", stPaymemo);
 
-
-                    if (rbConsume.isChecked()) {
-                        chatRef.child(selectChatuid).child("Ledger").child(stYear).child(stMonth).child(stDay).child("지출").child(stTime).setValue(ledger);
+                    if (stPrice.equals("")) {
+                        Toast.makeText(getActivity(), "금액란을 채워주세요", Toast.LENGTH_SHORT).show();
                     } else {
-                        chatRef.child(selectChatuid).child("Ledger").child(stYear).child(stMonth).child(stDay).child("수입").child(stTime).setValue(ledger);
+                        if (rbConsume.isChecked()) {
+                            chatRef.child(selectChatuid).child("Ledger").child(stYear).child(stMonth).child(stDay).child("지출").child(stTime).setValue(ledger);
+                            Toast.makeText(getActivity(), "저장하였습니다.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            chatRef.child(selectChatuid).child("Ledger").child(stYear).child(stMonth).child(stDay).child("수입").child(stTime).setValue(ledger);
+                            Toast.makeText(getActivity(), "저장하였습니다.", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
-                    Toast.makeText(getActivity(), "저장하였습니다.", Toast.LENGTH_SHORT).show();
                     etPrice.setText("");
                     etPaymemo.setText("");
                 }

@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@drawable/login"
     tools:context="kr.ac.kpu.block.smared.MainActivity">
 
 
@@ -17,64 +17,49 @@
         android:layout_centerInParent='true'
         >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="스마트 가계부"
 
-            android:id="@+id/tvHello"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="30dp"
-            android:textColor="#ffffff"
-            android:textSize="30dp"
-            />
 
         <EditText
+            android:layout_marginTop="100dp"
+            android:layout_marginRight="30dp"
             android:layout_width="200dp"
             android:layout_height="40dp"
             android:hint='Email'
             android:id="@+id/etEmail"
+            android:layout_centerHorizontal="true"
             android:background="#ffffff"
-            android:layout_below="@+id/tvHello"
-
             />
 
         <EditText
             android:layout_width="200dp"
             android:layout_height="40dp"
-            android:layout_marginTop="1dp"
+            android:layout_marginTop="5dp"
             android:id="@+id/etPassword"
             android:hint='Password'
             android:inputType="textPassword"
             android:background="#ffffff"
             android:layout_below="@+id/etEmail"
+            android:layout_centerHorizontal="true"
+            />
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:id="@+id/btnRegister"
+            android:text="회원가입"
+            android:layout_below="@id/etPassword"
+            android:layout_centerHorizontal="true"
 
             />
         <Button
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:id="@+id/btnRegister"
-            android:text="Register"
-            android:layout_below="@id/etPassword"
-            android:layout_centerHorizontal="true"
-            />
-        <Button
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
             android:id="@+id/btnLogin"
-            android:text="Login"
+            android:text="로그인"
             android:layout_below="@id/btnRegister"
             android:layout_centerHorizontal="true"
             />
-        <Button
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:id="@+id/btnCancel"
-            android:text="CANCEL"
-            android:layout_below="@id/btnLogin"
-            android:layout_centerHorizontal="true"
-            />
+
 
     </RelativeLayout>
 

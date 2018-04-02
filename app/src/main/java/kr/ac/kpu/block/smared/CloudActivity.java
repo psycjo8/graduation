@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -132,6 +133,11 @@ public class CloudActivity extends AppCompatActivity {
 
     static Intent ins;
 
+
+    Button button;
+    String key = "E2D50DDB2065F44A008A9D55885E3390";
+    String data;
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -160,6 +166,15 @@ public class CloudActivity extends AppCompatActivity {
         btnFinish = (Button) findViewById(R.id.btnFinish);
         btnOCRResult = (Button) findViewById(R.id.btnOCRResult);
         ins = new Intent(this,ContentActivity.class);
+
+        if (android.os.Build.VERSION.SDK_INT > 9) { //oncreate 에서 바로 쓰레드돌릴려고 임시방편으로 넣어둔소스
+
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+            StrictMode.setThreadPolicy(policy);
+
+        }
+
         spnUseitem.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -376,7 +391,7 @@ public class CloudActivity extends AppCompatActivity {
                 String finalResult = "";
                 payMemo = result.replaceAll("[^.*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*\\n]","");
                 price = result.replaceAll("[^0-9\\.\\,\\n\\s]","");
-                date = result.replaceAll("[^0-9\\.\\,\\-\\n]","");
+                date = result.replaceAll("[^0-9\\.\\,\\-\\n\\/년월일]","");
                 dateResult += extractDate(date);
                 payMemoResult += extractPaymemo(payMemo);
                 priceResult += extractPrice(price);
@@ -448,7 +463,8 @@ public class CloudActivity extends AppCompatActivity {
         if (str.isEmpty()) {
             matcher = null;
         } else {
-            String patternStr = "(19|20)\\d{2}[- /.]*(0[1-9]|1[012])[- /.]*(0[1-9]|[12][0-9]|3[01])"; // 날짜를 패턴으로 지정
+
+            String patternStr = "(19|20)\\d{2}[-/.년]*([1-9]|0[1-9]|1[012])[-/.월]*(0[1-9]|[12][0-9]|3[01])"; // 날짜를 패턴으로 지정
 
             int flags = Pattern.MULTILINE | Pattern.CASE_INSENSITIVE;
             Pattern pattern = Pattern.compile(patternStr, flags);
@@ -466,6 +482,8 @@ public class CloudActivity extends AppCompatActivity {
         if ( dateResult.equals("")) {
             dateToast = "날짜 데이터 미 검출\n";
         } else {
+            dateResult = dateResult.replaceAll("[년월일/.]","-");
+
             String parts[] = dateResult.split("-");
 
             int year = Integer.parseInt(parts[0]);
@@ -487,14 +505,23 @@ public class CloudActivity extends AppCompatActivity {
         String result="";
         String payMemoToast = "";
         StringTokenizer stringTokenizer = new StringTokenizer(str,"\n");
-        result = stringTokenizer.nextToken();
-
+        while(stringTokenizer.hasMoreTokens()){
+            result = getXmlData(stringTokenizer.nextToken());
+            if (result.equals("")) {
+                payMemoToast = "내용 미 검출";
+            } else {
+                etPaymemo.setText(result);
+                return "";
+            }
+        }
+/*
 
         if(result.equals("")) {
             payMemoToast = "내용 미 검출";
         } else {
             etPaymemo.setText(result);
         }
+*/
         return payMemoToast;
     }
     public static String extractPrice(String str) {
@@ -516,6 +543,19 @@ public class CloudActivity extends AppCompatActivity {
                     }
                 }
             }
+
+            if(temp.contains(".") && temp.contains("0")) {
+                StringTokenizer stringTokenizer2 = new StringTokenizer(temp, " ");
+                while(stringTokenizer2.hasMoreTokens()){
+                    temp = stringTokenizer2.nextToken();
+                    if(temp.contains(".") && temp.contains("0")) {
+                        temp = temp.replace(",", "");
+                        temp = temp.replace(".", "");
+                        listItems.add(temp);
+                        spinneradapter.notifyDataSetChanged();
+                    }
+                }
+            }
         }
 
         if(listItems.size()==0) {
@@ -523,6 +563,86 @@ public class CloudActivity extends AppCompatActivity {
         }
 
         return priceToast;
+    }
+
+
+
+    public static String getXmlData(String word) {
+
+        StringBuffer buffer = new StringBuffer();
+        String key = "E2D50DDB2065F44A008A9D55885E3390";
+        String location = URLEncoder.encode(word);//한글의 경우 인식이 안되기에 utf-8 방식으로 encoding     //지역 검색 위한 변수
+
+//    http://apis.data.go.kr/B552015/NpsBplcInfoInqireService/getBassInfoSearch?wkpl_nm=%EC%82%BC%EC%84%B1%EC%A0%84%EC%9E%90&pageNo=1&numOfRows=1000&ServiceKey=Lz740sHQu2L6IOw74qbxCW5mDwmQ%2BQSKDJBxNoE0XvJqhWooSjb1WbZxQSex10e8RR8i5cLcFsGPUkYfob%2BHrg%3D%3D
+
+        //E2D50DDB2065F44A008A9D55885E3390
+        String queryUrl = "https://opendict.korean.go.kr/api/search?"//요청 URL
+                + "key=" + key
+                + "&target_type=search&part=word&sort=dict&start=1&num=10&q=" + location;
+        https://opendict.korean.go.kr/api/search?key=E2D50DDB2065F44A008A9D55885E3390&target_type=search&part=word&q=%EC%98%81%EC%88%98%EC%A6%9D&sort=dict&start=1&num=10
+
+              /* String queryUrl = "http://apis.data.go.kr/B552015/NpsBplcInfoInqireService/getBassInfoSearch?"//요청 URL
+                + "wkpl_nm=" + location
+                + "&pageNo=1&numOfRows=10&ServiceKey=" + key;
+            */
+
+
+
+        try {
+            URL url = new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성.
+            InputStream is = url.openStream(); //url위치로 입력스트림 연결
+
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new InputStreamReader(is, "UTF-8")); //inputstream 으로부터 xml 입력받기
+
+            String tag;
+
+            xpp.next();
+            int eventType = xpp.getEventType();
+
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                switch (eventType) {
+                    case XmlPullParser.START_DOCUMENT:
+                        buffer.append("파싱 시작...\n\n");
+                        break;
+
+                    case XmlPullParser.START_TAG:
+                        tag = xpp.getName();//태그 이름 얻어오기
+
+                        if (tag.equals("total")) {
+                            xpp.next();
+                            if (xpp.getText().contains("0"))
+                            {
+                                System.out.println(word);
+                                return word;
+                            }
+                        }
+
+                        break;
+
+                    case XmlPullParser.TEXT:
+                        break;
+
+                    case XmlPullParser.END_TAG:
+                        tag = xpp.getName(); //태그 이름 얻어오기
+
+                        if (tag.equals("item")) buffer.append("\n");// 첫번째 검색결과종료..줄바꿈
+
+                        break;
+                }
+
+                eventType = xpp.next();
+            }
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch blocke.printStackTrace();
+        }
+
+        buffer.append("파싱 끝\n");
+
+        return "";//StringBuffer 문자열 객체 반환
+
     }
 
 }
