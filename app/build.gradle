@@ -31,8 +31,8 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-repositories{
-    maven {url "https://jitpack.io"}
+repositories {
+    maven { url "https://jitpack.io" }
 }
 configurations {
     all {
