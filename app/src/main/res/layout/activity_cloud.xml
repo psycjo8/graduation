@@ -49,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cvCalender"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:text="분류"
         android:textColor="#000000"
@@ -58,54 +58,69 @@
 
     <Spinner
         android:id="@+id/spnUseitem"
-        android:layout_width="250dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cvCalender"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="40dp"
+        android:layout_toRightOf="@+id/textView"
         android:entries="@array/useItem"
         />
+
     <TextView
+        android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spnUseitem"
-        android:layout_marginTop="25dp"
+        android:layout_below="@id/textView"
+        android:layout_marginTop="15dp"
         android:layout_marginLeft="10dp"
         android:text="금액"
         android:textColor="#000000"
-        android:textSize="18sp"/>
+        android:textSize="18sp" />
     <Spinner
         android:id="@+id/spnPrice"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spnUseitem"
         android:layout_marginTop="15dp"
-        android:layout_marginLeft="60dp"
+        android:layout_marginLeft="40dp"
+        android:layout_toRightOf="@id/price"
+        />
+    <Spinner
+        android:id="@+id/spnPaymemo"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spnPrice"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="40dp"
+        android:layout_toRightOf="@+id/textView3"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spnUseitem"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="270dp"
+        android:layout_marginTop="15dp"
         android:text="원"
         android:textColor="#000000"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:layout_toRightOf="@id/spnPrice"
+        android:id="@+id/textView2" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spnPrice"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:layout_marginLeft="10dp"
         android:text="내용"
         android:textColor="#000000"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:id="@+id/textView3" />
     <EditText
         android:id="@+id/etPaymemo"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spnPrice"
-        android:layout_marginTop="20dp"
+        android:layout_below="@+id/spnPaymemo"
+        android:layout_marginTop="15dp"
         android:layout_marginLeft="60dp"
         android:hint="분석중.."
         />
@@ -113,9 +128,9 @@
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spnPrice"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="260dp"
+        android:layout_below="@+id/spnPaymemo"
+        android:layout_marginTop="15dp"
+        android:layout_toRightOf="@id/etPaymemo"
         android:text="저장"
         />
     <Button

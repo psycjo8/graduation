@@ -136,6 +136,7 @@ public class ImageActivity extends Activity implements View.OnClickListener
                 if (!ImagePath.equals("")) {
                 Intent intent = new Intent(ImageActivity.this, ImageProcessingActivity.class);
                 intent.putExtra("ipath", ImagePath);
+                intent.putExtra("input",photoUri);
                 startActivity(intent); }
                 break;
             case R.id.buttonI4:
@@ -233,8 +234,8 @@ public class ImageActivity extends Activity implements View.OnClickListener
                 intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             }
             intent.putExtra("crop", "true");
-            intent.putExtra("aspectX", 1);
-            intent.putExtra("aspectY", 1);
+            //intent.putExtra("aspectX", 0.5);
+            //intent.putExtra("aspectY", 2);
             intent.putExtra("scale", true);
             File croppedFileName = null;
             try {

@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -47,7 +48,7 @@ public class ImageProcessingActivity extends AppCompatActivity {
     static final int PERMISSION_REQUEST_CODE = 1;
     String[] PERMISSIONS  = {"android.permission.WRITE_EXTERNAL_STORAGE"};
     int fileCheck=0;
-
+    Uri photoUri;
     @SuppressLint("WrongConstant")
     private boolean hasPermissions(String[] permissions) {
         int ret = 0;
@@ -196,7 +197,7 @@ public class ImageProcessingActivity extends AppCompatActivity {
         btnRunOCR = (Button) findViewById(R.id.btnRunOCR);
         Intent intent = getIntent();
         ImagePath = intent.getStringExtra("ipath");
-
+        photoUri = intent.getParcelableExtra("input");
 
         AlertDialog.Builder alertdialog = new AlertDialog.Builder(ImageProcessingActivity.this);
         Button scan = new Button(ImageProcessingActivity.this);
@@ -255,9 +256,10 @@ public class ImageProcessingActivity extends AppCompatActivity {
 
         imageprocessing(img_input.getNativeObjAddr(), img_output.getNativeObjAddr(),fileCheck);
 
-        Bitmap bitmapInput = Bitmap.createBitmap(img_input.cols(), img_input.rows(), Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(img_input, bitmapInput);
-        imageVIewInput.setImageBitmap(bitmapInput);
+    //    Bitmap bitmapInput = Bitmap.createBitmap(img_input.cols(), img_input.rows(), Bitmap.Config.ARGB_8888);
+     //   Utils.matToBitmap(img_input, bitmapInput);
+       // imageVIewInput.setImageBitmap(bitmapInput);
+        imageVIewInput.setImageURI(photoUri);
 
         Bitmap bitmapOutput = Bitmap.createBitmap(img_output.cols(), img_output.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(img_output, bitmapOutput);

@@ -9,6 +9,14 @@
         android:clickable="false"
         />
 
+    <Spinner
+        android:id="@+id/smsUseitem"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:entries="@array/useItem"
+        android:layout_toLeftOf="@id/tvSMSTime"
+        android:layout_below="@id/btnSMSDay"
+        ></Spinner>
 
     <Button
         android:id="@+id/btnAddSMS"

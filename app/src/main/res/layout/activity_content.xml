@@ -8,6 +8,7 @@
 
     tools:context="kr.ac.kpu.block.smared.ContentActivity">
 
+
     <TextView
         android:id="@+id/OCRResult"
         android:layout_width="wrap_content"

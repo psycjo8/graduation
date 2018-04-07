@@ -126,8 +126,11 @@ public class CloudActivity extends AppCompatActivity {
     static EditText etPaymemo ;
     static CalendarView cvCalender;
     static ArrayAdapter<String> spinneradapter;
+    static ArrayAdapter<String> spinneradapterMemo;
     static Spinner spnPrice;
+    static Spinner spnPaymemo;
     static List<String> listItems = new ArrayList<String>();
+    static List<String> memoItems = new ArrayList<String>();
     Button btnFinish;
     Button btnOCRResult;
 
@@ -142,7 +145,9 @@ public class CloudActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         listItems.clear();
+        memoItems.clear();
         spinneradapter.notifyDataSetChanged();
+        spinneradapterMemo.notifyDataSetChanged();
         Intent in = new Intent(CloudActivity.this, TabActivity.class);
         startActivity(in);
     }
@@ -159,10 +164,12 @@ public class CloudActivity extends AppCompatActivity {
         etPaymemo = (EditText) findViewById(R.id.etPaymemo);
         cvCalender = (CalendarView) findViewById(R.id.cvCalender);
         final Spinner spnUseitem = (Spinner) findViewById(R.id.spnUseitem);
+
         Button btnSave = (Button) findViewById(R.id.btnSave);
         final RadioButton rbConsume = (RadioButton) findViewById(R.id.rbConsume);
         RadioButton rbIncome = (RadioButton) findViewById(R.id.rbIncome);
         spnPrice = (Spinner) findViewById(R.id.spnPrice);
+        spnPaymemo = (Spinner) findViewById(R.id.spnPaymemo);
         btnFinish = (Button) findViewById(R.id.btnFinish);
         btnOCRResult = (Button) findViewById(R.id.btnOCRResult);
         ins = new Intent(this,ContentActivity.class);
@@ -208,6 +215,18 @@ public class CloudActivity extends AppCompatActivity {
             }
         });
 
+        spnPaymemo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                etPaymemo.setText((String) parent.getItemAtPosition(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -243,7 +262,9 @@ public class CloudActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 listItems.clear();
+                memoItems.clear();
                 spinneradapter.notifyDataSetChanged();
+                spinneradapterMemo.notifyDataSetChanged();
                 Intent in = new Intent(CloudActivity.this, TabActivity.class);
                 startActivity(in);
             }
@@ -257,6 +278,8 @@ public class CloudActivity extends AppCompatActivity {
         });
         spinneradapter = new ArrayAdapter<String>(CloudActivity.this, R.layout.support_simple_spinner_dropdown_item, listItems);
         spnPrice.setAdapter(spinneradapter);
+        spinneradapterMemo = new ArrayAdapter<String>(CloudActivity.this, R.layout.support_simple_spinner_dropdown_item, memoItems);
+        spnPaymemo.setAdapter(spinneradapterMemo);
 
 
 
@@ -389,7 +412,7 @@ public class CloudActivity extends AppCompatActivity {
                 String date;
                 String dateResult= "";
                 String finalResult = "";
-                payMemo = result.replaceAll("[^.*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*\\n]","");
+                payMemo = result.replaceAll("[^[ㄱ-ㅎㅏ-ㅣ가-힣]\\n]","");
                 price = result.replaceAll("[^0-9\\.\\,\\n\\s]","");
                 date = result.replaceAll("[^0-9\\.\\,\\-\\n\\/년월일]","");
                 dateResult += extractDate(date);
@@ -505,13 +528,11 @@ public class CloudActivity extends AppCompatActivity {
         String result="";
         String payMemoToast = "";
         StringTokenizer stringTokenizer = new StringTokenizer(str,"\n");
+
         while(stringTokenizer.hasMoreTokens()){
             result = getXmlData(stringTokenizer.nextToken());
             if (result.equals("")) {
                 payMemoToast = "내용 미 검출";
-            } else {
-                etPaymemo.setText(result);
-                return "";
             }
         }
 /*
@@ -614,7 +635,8 @@ public class CloudActivity extends AppCompatActivity {
                             xpp.next();
                             if (xpp.getText().contains("0"))
                             {
-                                System.out.println(word);
+                                memoItems.add(word);
+                                spinneradapterMemo.notifyDataSetChanged();
                                 return word;
                             }
                         }

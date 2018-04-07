@@ -5,7 +5,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +25,7 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> {
     DatabaseReference myRef;
     FirebaseUser user;
     Context context;
-
+    String stUseitem;
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -36,6 +38,7 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> {
         public TextView tvSMSPrice;
         public TextView tvSMSTime;
         public Button btnAddSMS;
+        public Spinner smsUseitem;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -44,7 +47,7 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> {
             tvSMSPrice= (TextView) itemView.findViewById(R.id.tvSMSPrice);
             tvSMSTime= (TextView) itemView.findViewById(R.id.tvSMSTime);
             btnAddSMS = (Button) itemView.findViewById(R.id.btnAddSMS);
-
+            smsUseitem = (Spinner) itemView.findViewById(R.id.smsUseitem);
         }
     }
 
@@ -80,6 +83,17 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> {
       holder.tvSMSPrice.setText("-" + mBody.get(position).getPrice()+"원");
       holder.tvSMSTime.setText("[신한체크]" + mBody.get(position).getTime());
 
+      holder.smsUseitem.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+          @Override
+          public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+              stUseitem = (String) parent.getItemAtPosition(position);
+          }
+
+          @Override
+          public void onNothingSelected(AdapterView<?> parent) {
+
+          }
+      });
 
       holder.btnAddSMS.setOnClickListener(new View.OnClickListener() {
           @Override
@@ -87,7 +101,7 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> {
               LedgerContent mledgerContent = new LedgerContent();
               mledgerContent.setPaymemo(mBody.get(position).getPayMemo());
               mledgerContent.setPrice(mBody.get(position).getPrice());
-              mledgerContent.setUseItem("기타");
+              mledgerContent.setUseItem(stUseitem);
 
               myRef.child(user.getUid()).child("Ledger")
                       .child(mBody.get(position).getYear())
