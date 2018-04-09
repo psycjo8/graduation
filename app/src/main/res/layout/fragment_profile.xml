@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
     android:clickable="true"
     tools:context="kr.ac.kpu.block.smared.ProfileFragment">
 
@@ -46,43 +45,53 @@
         android:layout_below="@+id/ivUser"
         android:textSize="20sp"
         />
+
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/btnChangePhoto"
-        android:text="사진 변경"
-        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
         android:layout_below="@+id/tvNickname"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        />
+        android:background="@drawable/mybutton"
+        android:text="사진 변경"
+        android:textColor="#FFFFFF" />
+
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/btnChangeNickname"
-        android:text="닉네임 변경"
-        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
         android:layout_below="@+id/btnChangePhoto"
-        />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnLogout"
-        android:text="로그아웃"
         android:layout_centerHorizontal="true"
+        android:text="닉네임 변경"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/mybutton"
+        android:textColor="#FFFFFF" />
 
-
-        android:layout_below="@id/btnChangeNickname"
-        />
     <Button
+        android:id="@+id/btnLogout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@id/btnChangeNickname"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/mybutton"
+        android:layout_marginTop="20dp"
+        android:text="로그아웃"
+
+
+        android:textColor="#FFFFFF" />
+
+    <Button
         android:id="@+id/btnWithdrawal"
-        android:text="회원 탈퇴"
-        android:layout_marginRight="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/btnLogout"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/mybutton"
         android:layout_marginTop="20dp"
-        />
+        android:text="회원 탈퇴"
+        android:textColor="#FFFFFF" />
 
 
 

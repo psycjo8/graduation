@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
     android:clickable="true"
     android:orientation="vertical"
     tools:context="kr.ac.kpu.block.smared.LedgerRegFragment">
@@ -13,17 +12,17 @@
         android:id="@+id/rgChoice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginLeft="120dp"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="120dp">
+        android:orientation="horizontal">
 
 
-    <RadioButton
-        android:id="@+id/rbConsume"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="true"
-        android:text="지출" />
+        <RadioButton
+            android:id="@+id/rbConsume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="지출" />
 
 
         <RadioButton
@@ -33,7 +32,7 @@
             android:layout_marginLeft="15dp"
             android:text="수입" />
 
-        </RadioGroup>
+    </RadioGroup>
 
 
     <CalendarView
@@ -41,100 +40,117 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_below="@+id/rgChoice"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+
+        android:dateTextAppearance="@android:style/TextAppearance"
+        android:focusedMonthDateColor="@color/AliceBlue"
+        android:unfocusedMonthDateColor="@color/Aqua"
+        android:weekSeparatorLineColor="@color/Black" />
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cvCalender"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="25dp"
         android:text="분류"
         android:textColor="#000000"
-        android:textSize="18sp"
-        android:id="@+id/textView" />
+        android:textSize="18sp" />
 
     <Spinner
         android:id="@+id/spnUseitem"
-        android:layout_width="250dp"
+        android:layout_width="185dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cvCalender"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="100dp"
-        android:entries="@array/useItem"
-        />
+        android:layout_marginLeft="85dp"
+        android:layout_marginTop="25dp"
+        android:entries="@array/useItem" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spnUseitem"
+        android:layout_marginLeft="25dp"
         android:layout_marginTop="25dp"
-        android:layout_marginLeft="30dp"
         android:text="금액"
         android:textColor="#000000"
-        android:textSize="18sp"/>
+        android:textSize="18sp" />
+
     <EditText
         android:id="@+id/etPrice"
-        android:layout_width="200dp"
+        android:layout_width="185dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spnUseitem"
+        android:layout_marginLeft="85dp"
         android:layout_marginTop="15dp"
-        android:layout_marginLeft="100dp"
-        android:inputType="number"
-        android:hint="금액을 입력해 주세요"/>
+        android:hint="금액을 입력해 주세요"
+        android:inputType="number" />
+
     <TextView
+        android:id="@+id/tvPrice2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spnUseitem"
+        android:layout_marginLeft="1dp"
         android:layout_marginTop="25dp"
-        android:layout_marginLeft="310dp"
+        android:layout_toRightOf="@+id/etPrice"
         android:text="원"
         android:textColor="#000000"
-        android:textSize="18sp"/>
+        android:textSize="18sp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etPrice"
+        android:layout_marginLeft="25dp"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="30dp"
         android:text="내용"
         android:textColor="#000000"
-        android:textSize="18sp"/>
+        android:textSize="18sp" />
+
     <EditText
         android:id="@+id/etPaymemo"
-        android:layout_width="200dp"
+        android:layout_width="185dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etPrice"
+        android:layout_marginLeft="85dp"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="100dp"
-        android:hint="내용을 입력해 주세요"
-        />
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etPrice"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="300dp"
-        android:text="저장"
-        />
+        android:hint="내용을 입력해 주세요" />
 
-    <Button
-        android:id="@+id/btnOcr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/textView"
-        android:text="OCR" />
+    <LinearLayout
+        android:layout_width="62dp"
+        android:layout_height="137dp"
+        android:layout_alignTop="@+id/textView"
+        android:layout_toRightOf="@+id/tvPrice2"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnSMS"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_toEndOf="@+id/rgChoice"
-        android:layout_toRightOf="@+id/rgChoice"
-        android:text="sms" />
+        <Button
+            android:id="@+id/btnOcr"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@drawable/mybutton"
+            android:text="OCR"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/btnSMS"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/mybutton"
+            android:text="sms"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/mybutton"
+            android:text="저장"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
 </RelativeLayout>

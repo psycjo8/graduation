@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
     android:clickable="true"
     tools:context="kr.ac.kpu.block.smared.LedgerStatFragment">
 
@@ -14,7 +13,7 @@
         android:layout_marginLeft="85dp"
         android:src="@drawable/ic_chevron_left_black_24dp"
 
-        android:background="#ffffff"
+        android:background="#FAF2AD"
         />
     <TextView
         android:id="@+id/tvLedgerMonth2"
@@ -35,14 +34,13 @@
         android:layout_toRightOf="@+id/tvLedgerMonth2"
 
         android:src="@drawable/ic_chevron_right_black_24dp"
-        android:background="#ffffff"
+        android:background="#FAF2AD"
         />
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/piechart"
         android:layout_width="match_parent"
         android:layout_height="420dp"
         android:layout_below="@id/ibLastMonth2"
-
         >
 
     </com.github.mikephil.charting.charts.PieChart>
