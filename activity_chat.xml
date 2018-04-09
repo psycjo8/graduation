@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="kr.ac.kpu.block.smared.ChatActivity">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="이전"
+        android:id="@+id/btnFinish"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="참여자 보기"
+        android:id="@+id/btnViewFriend"
+        />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvChat"
+        android:scrollbars="vertical"
+        android:layout_below="@+id/btnFinish"
+        android:layout_above="@+id/etText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="메시지 입력"
+        android:layout_toLeftOf="@id/btnSend"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/etText"
+
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Send"
+        android:id="@+id/btnSend"
+        />
+</RelativeLayout>

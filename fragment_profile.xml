@@ -1,0 +1,90 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    tools:context="kr.ac.kpu.block.smared.ProfileFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="프로필"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:id="@+id/tvTitle"
+        />
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:id="@+id/ivUser"
+        android:tooltipText="프로필 사진"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tvTitle"
+        android:layout_marginTop="20dp"
+        android:background="#eeeeee"
+        android:scaleType="fitXY"
+        />
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"
+        android:id="@+id/pbLogin"
+        />
+    <TextView
+        android:id="@+id/tvNickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/ivUser"
+        android:textSize="20sp"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnChangePhoto"
+        android:text="사진 변경"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tvNickname"
+        android:layout_marginTop="20dp"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnChangeNickname"
+        android:text="닉네임 변경"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/btnChangePhoto"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnLogout"
+        android:text="로그아웃"
+        android:layout_centerHorizontal="true"
+
+
+        android:layout_below="@id/btnChangeNickname"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnWithdrawal"
+        android:text="회원 탈퇴"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btnLogout"
+        android:layout_marginTop="20dp"
+        />
+
+
+
+
+
+</RelativeLayout>
