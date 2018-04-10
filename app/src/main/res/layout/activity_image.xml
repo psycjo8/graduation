@@ -22,12 +22,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/mybutton"
+            android:textColor="#FFFFFF"
             android:text="카메라" />
 
         <Button
             android:id="@+id/buttonI2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/mybutton"
+            android:textColor="#FFFFFF"
             android:layout_weight="1"
             android:text="갤러리" />
 
@@ -43,6 +47,8 @@
             android:id="@+id/buttonI3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/mybutton"
+            android:textColor="#FFFFFF"
             android:layout_weight="1"
             android:text="이미지 처리" />
 
@@ -50,6 +56,8 @@
             android:id="@+id/buttonI4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/mybutton"
+            android:textColor="#FFFFFF"
             android:layout_weight="1"
             android:text="취소" />
     </LinearLayout>

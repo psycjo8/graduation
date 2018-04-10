@@ -11,6 +11,7 @@
         android:clickable="false"
         />
 
+
     <TextView
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
@@ -19,6 +20,7 @@
         android:layout_marginLeft="10dp"
         android:id="@+id/tvChoice"
         android:layout_below="@id/btnDay"
+        android:textColor="#000000"
         />
 
     <TextView
@@ -29,6 +31,7 @@
         android:layout_marginLeft="10dp"
         android:id="@+id/tvUseitem"
         android:layout_below="@+id/tvChoice"
+        android:textColor="#000000"
 
         />
     <TextView
@@ -39,6 +42,7 @@
         android:layout_marginLeft="10dp"
         android:id="@+id/tvPrice"
        android:layout_below="@+id/tvUseitem"
+        android:textColor="#000000"
 
         />
     <TextView
@@ -49,22 +53,30 @@
         android:layout_marginLeft="10dp"
         android:id="@+id/tvPaymemo"
         android:layout_below="@+id/tvPrice"
+        android:textColor="#000000"
+
 
         />
+
     <Button
         android:id="@+id/btnEdit"
         android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvChoice"
+        android:layout_height="40dp"
         android:layout_alignParentRight="true"
-        android:text="수정"/>
+        android:layout_below="@id/tvChoice"
+        android:background="@drawable/mybutton"
+        android:text="수정"
+        android:textColor="#FFFFFF" />
+
     <Button
         android:id="@+id/btnDelete"
         android:layout_width="60dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/btnEdit"
-        android:text="삭제"/>
+        android:background="@drawable/mybutton"
+        android:text="삭제"
+        android:textColor="#FFFFFF" />
 
 
 </RelativeLayout>

@@ -11,6 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:text="이전"
+        android:background="@drawable/mybutton"
+        android:textColor="#FFFFFF"
         android:id="@+id/btnFinish"
         />
     <Button
@@ -18,6 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:text="참여자 보기"
+        android:background="@drawable/mybutton"
+        android:textColor="#FFFFFF"
         android:id="@+id/btnViewFriend"
         />
     <android.support.v7.widget.RecyclerView
@@ -42,6 +46,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:text="Send"
+        android:background="@drawable/mybutton"
+        android:textColor="#FFFFFF"
         android:id="@+id/btnSend"
         />
 </RelativeLayout>

@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="85dp"
         android:src="@drawable/ic_chevron_left_black_24dp"
-
         android:background="@android:color/transparent"
         />
     <TextView
@@ -43,7 +42,7 @@
 
         android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="390dp"/>
+        android:layout_height="370dp"/>
 
     <TextView
         android:layout_width="wrap_content"

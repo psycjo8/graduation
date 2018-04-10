@@ -1,59 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="kr.ac.kpu.block.smared.CloudActivity">
 
+    <LinearLayout
+        android:id="@+id/linear3"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
 
-    <RadioGroup
-        android:id="@+id/rgChoice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="120dp">
-
-
-        <RadioButton
-            android:id="@+id/rbConsume"
+        <RadioGroup
+            android:id="@+id/rgChoice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="지출" />
+            android:orientation="horizontal">
 
 
-        <RadioButton
-            android:id="@+id/rbIncome"
-            android:layout_width="wrap_content"
+            <RadioButton
+                android:id="@+id/rbConsume"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="지출" />
+
+
+            <RadioButton
+                android:id="@+id/rbIncome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="수입" />
+
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/btnOCRResult"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:text="수입" />
+            android:layout_marginLeft="25dp"
+            android:background="@drawable/mybutton"
+            android:text="인식 결과 확인"
+            android:textColor="#FFFFFF" />
 
-    </RadioGroup>
+    </LinearLayout>
 
 
     <CalendarView
         android:id="@+id/cvCalender"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_below="@+id/rgChoice"
+        android:layout_below="@+id/linear3"
         android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cvCalender"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:text="분류"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="5dp"
         android:textColor="#000000"
         android:textSize="18sp"
+        android:text="분류"
         android:id="@+id/textView" />
 
     <Spinner
@@ -61,92 +73,85 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cvCalender"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="40dp"
-        android:layout_toRightOf="@+id/textView"
-        android:entries="@array/useItem"
-        />
-
+        android:layout_marginLeft="85dp"
+        android:layout_marginTop="5dp"
+        android:entries="@array/useItem" />
     <TextView
-        android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/spnUseitem"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
         android:text="금액"
         android:textColor="#000000"
-        android:textSize="18sp" />
+        android:textSize="18sp"/>
     <Spinner
         android:id="@+id/spnPrice"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spnUseitem"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="40dp"
-        android:layout_toRightOf="@id/price"
-        />
-    <Spinner
-        android:id="@+id/spnPaymemo"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/spnPrice"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="40dp"
-        android:layout_toRightOf="@+id/textView3"
+        android:layout_marginLeft="85dp"
+        android:layout_marginTop="10dp"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spnUseitem"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="270dp"
         android:text="원"
         android:textColor="#000000"
-        android:textSize="18sp"
-        android:layout_toRightOf="@id/spnPrice"
-        android:id="@+id/textView2" />
+        android:textSize="18sp"/>
     <TextView
+        android:id="@+id/content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spnPrice"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
         android:text="내용"
         android:textColor="#000000"
-        android:textSize="18sp"
-        android:id="@+id/textView3" />
+        android:textSize="18sp"/>
+
     <EditText
         android:id="@+id/etPaymemo"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spnPaymemo"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="60dp"
-        android:hint="분석중.."
-        />
+        android:layout_marginLeft="85dp"
+        android:layout_marginTop="10dp"
+        android:hint="분석중입니다..." />
+
     <Button
         android:id="@+id/btnSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="62dp"
+        android:layout_height="35dp"
         android:layout_below="@+id/spnPaymemo"
-        android:layout_marginTop="15dp"
-        android:layout_toRightOf="@id/etPaymemo"
+        android:layout_marginTop="18dp"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/etPaymemo"
+        android:background="@drawable/mybutton"
         android:text="저장"
-        />
+        android:textColor="#FFFFFF" />
+
     <Button
         android:id="@+id/btnFinish"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_width="155dp"
+        android:layout_height="37dp"
         android:layout_below="@id/btnSave"
         android:layout_centerHorizontal="true"
-        android:text="끝내기"/>
+        android:layout_marginTop="17dp"
+        android:background="@drawable/mybutton"
+        android:text="끝내기"
+        android:textColor="#FFFFFF" />
 
-    <Button
-        android:id="@+id/btnOCRResult"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="인식 결과"
+    <Spinner android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_marginLeft="85dp"
+        android:id="@+id/spnPaymemo"
+        android:layout_below="@+id/spnPrice"
+        android:layout_marginTop="10dp"
+
         />
-
 
 </RelativeLayout>
