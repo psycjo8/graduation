@@ -8,16 +8,25 @@
     tools:context="kr.ac.kpu.block.smared.MainActivity">
 
 
-
     <TextView
+        android:id="@+id/tvSmared"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="75dp"
+        android:layout_centerHorizontal="true"
+        android:text="SmaRed"
+        android:textColor="#800000"
+        android:textSize="60dp"
+        />
+    <TextView
+        android:layout_below="@+id/tvSmared"
         android:id="@+id/tvHello"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginTop="150dp"
         android:layout_centerHorizontal="true"
         android:text="스마트 가계부"
         android:textColor="#800000"
-        android:textSize="30dp"
+        android:textSize="25dp"
         />
     <EditText
         android:id="@+id/etEmail"

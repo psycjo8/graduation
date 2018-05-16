@@ -559,7 +559,10 @@ public class CloudActivity extends AppCompatActivity {
                     if(temp.contains(",") && temp.contains("0")) {
                         temp = temp.replace(",", "");
                         temp = temp.replace(".", "");
-                        listItems.add(temp);
+
+                      if (!listItems.contains(temp)) {
+                          listItems.add(temp);
+                      }
                         spinneradapter.notifyDataSetChanged();
                     }
                 }
@@ -572,7 +575,10 @@ public class CloudActivity extends AppCompatActivity {
                     if(temp.contains(".") && temp.contains("0")) {
                         temp = temp.replace(",", "");
                         temp = temp.replace(".", "");
-                        listItems.add(temp);
+
+                        if (!listItems.contains(temp)) {
+                            listItems.add(temp);
+                        }
                         spinneradapter.notifyDataSetChanged();
                     }
                 }
@@ -594,18 +600,10 @@ public class CloudActivity extends AppCompatActivity {
         String key = "E2D50DDB2065F44A008A9D55885E3390";
         String location = URLEncoder.encode(word);//한글의 경우 인식이 안되기에 utf-8 방식으로 encoding     //지역 검색 위한 변수
 
-//    http://apis.data.go.kr/B552015/NpsBplcInfoInqireService/getBassInfoSearch?wkpl_nm=%EC%82%BC%EC%84%B1%EC%A0%84%EC%9E%90&pageNo=1&numOfRows=1000&ServiceKey=Lz740sHQu2L6IOw74qbxCW5mDwmQ%2BQSKDJBxNoE0XvJqhWooSjb1WbZxQSex10e8RR8i5cLcFsGPUkYfob%2BHrg%3D%3D
-
-        //E2D50DDB2065F44A008A9D55885E3390
         String queryUrl = "https://opendict.korean.go.kr/api/search?"//요청 URL
                 + "key=" + key
                 + "&target_type=search&part=word&sort=dict&start=1&num=10&q=" + location;
-        https://opendict.korean.go.kr/api/search?key=E2D50DDB2065F44A008A9D55885E3390&target_type=search&part=word&q=%EC%98%81%EC%88%98%EC%A6%9D&sort=dict&start=1&num=10
 
-              /* String queryUrl = "http://apis.data.go.kr/B552015/NpsBplcInfoInqireService/getBassInfoSearch?"//요청 URL
-                + "wkpl_nm=" + location
-                + "&pageNo=1&numOfRows=10&ServiceKey=" + key;
-            */
 
 
 
@@ -635,7 +633,10 @@ public class CloudActivity extends AppCompatActivity {
                             xpp.next();
                             if (xpp.getText().contains("0"))
                             {
-                                memoItems.add(word);
+
+                                if (!memoItems.contains(word)) {
+                                    memoItems.add(word);
+                                }
                                 spinneradapterMemo.notifyDataSetChanged();
                                 return word;
                             }

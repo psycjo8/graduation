@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.WRITE_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
 
     <uses-feature android:name="android.hardware.CAMERA" />
 
@@ -34,7 +36,7 @@
         <activity
             android:name=".TabActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".OCRActivity" />
+
         <activity android:name=".ImageProcessingActivity" />
         <activity android:name=".ImageActivity" />
         <activity android:name=".SMSActivity" />
@@ -78,6 +80,18 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
+        <receiver
+            android:name=".SMSReceiver"
+            android:enabled="true"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+
+        </receiver>
+
+
 
 
     </application>

@@ -89,12 +89,13 @@
     <Button
         android:id="@+id/btnWithdrawal"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_centerHorizontal="true"
+        android:layout_height="40dp"
+        android:layout_toRightOf="@+id/btnChangeNickname"
+        android:layout_marginLeft="25dp"
         android:layout_below="@+id/btnLogout"
-        android:layout_marginRight="20dp"
+
         android:background="@drawable/mybutton"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         android:text="회원 탈퇴"
         android:textColor="#FFFFFF" />
 
