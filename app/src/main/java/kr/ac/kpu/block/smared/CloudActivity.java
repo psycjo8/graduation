@@ -16,8 +16,13 @@
 
 package kr.ac.kpu.block.smared;
 
+
 import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Notification;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,7 +35,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -79,6 +84,7 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -86,7 +92,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class CloudActivity extends AppCompatActivity {
+public class CloudActivity extends Activity {
     private static final String CLOUD_VISION_API_KEY = "AIzaSyC6FyPlYCwLuwVhE8s3Td_zbbbwcMr41Oc";
     public static final String FILE_NAME = "temp.jpg";
     private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
@@ -131,11 +137,16 @@ public class CloudActivity extends AppCompatActivity {
     static Spinner spnPaymemo;
     static List<String> listItems = new ArrayList<String>();
     static List<String> memoItems = new ArrayList<String>();
+
+    static List<String> koreanitems = new ArrayList<String>();
+    static List<String> numberitems = new ArrayList<String>();
+
+    static Hashtable<String,Integer> auto = new Hashtable<String,Integer>();
     Button btnFinish;
     Button btnOCRResult;
 
     static Intent ins;
-
+    CloudActivity activity = CloudActivity.this;
 
     Button button;
     String key = "E2D50DDB2065F44A008A9D55885E3390";
@@ -403,6 +414,7 @@ public class CloudActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             CloudActivity activity = mActivityWeakReference.get();
+
             if (activity != null && !activity.isFinishing()) {
 
                 String payMemo;
@@ -417,6 +429,7 @@ public class CloudActivity extends AppCompatActivity {
                 date = result.replaceAll("[^0-9\\.\\,\\-\\n\\/년월일]","");
                 dateResult += extractDate(date);
                 payMemoResult += extractPaymemo(payMemo);
+                extract(result,activity);
                 priceResult += extractPrice(price);
                 finalResult = "[ 분석 결과 ]\n" + dateResult + priceResult + payMemoResult;
                 ins.putExtra("result",result);
@@ -475,6 +488,22 @@ public class CloudActivity extends AppCompatActivity {
         return message;
     }
 
+    public static String extractPaymemo(String str) {
+        String result="";
+        String payMemoToast = "";
+        StringTokenizer stringTokenizer = new StringTokenizer(str,"\n");
+
+
+        while(stringTokenizer.hasMoreTokens()){
+            result = getXmlData(stringTokenizer.nextToken());
+            if (result.equals("")) {
+                payMemoToast = "내용 미 검출";
+            }
+        }
+
+
+        return payMemoToast;
+    }
 
     public static String extractDate(String str) {
 
@@ -524,27 +553,85 @@ public class CloudActivity extends AppCompatActivity {
         return dateToast;
     }
 
-    public static String extractPaymemo(String str) {
+    public static String extract(String str,CloudActivity activity) {
         String result="";
         String payMemoToast = "";
         StringTokenizer stringTokenizer = new StringTokenizer(str,"\n");
+        String temp="";
+        String temp2="";
+        String korean="";
+        String number="";
+        int count = 0;
 
-        while(stringTokenizer.hasMoreTokens()){
-            result = getXmlData(stringTokenizer.nextToken());
-            if (result.equals("")) {
-                payMemoToast = "내용 미 검출";
+        while(stringTokenizer.hasMoreTokens()) {
+            temp = stringTokenizer.nextToken();
+            if (count == 1) {
+                if (temp.contains("공급") || temp.contains("면세") || temp.contains("과세") || temp.contains("주문")) {
+                    count = 2;
+                } else if (temp.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*")) {
+                    korean = temp.replaceAll("[^[ㄱ-ㅎㅏ-ㅣ가-힣]\\n]", "");
+                    if (!koreanitems.contains(korean)) {
+                        koreanitems.add(korean);
+                    }
+                }
+                else {
+                    number = temp.replaceAll("[^0-9\\.\\,\\n\\s]", "");
+                    StringTokenizer stringTokenizer2 = new StringTokenizer(number, " ");
+                    while (stringTokenizer2.hasMoreTokens()) {
+                        temp2 = stringTokenizer2.nextToken();
+                        char last = temp2.charAt(temp2.length() - 1);
+                        if (/*(temp2.contains(",") || temp2.contains(".")) &&*/ last == '0') {
+
+                            temp2 = temp2.replace(",", "");
+                            temp2 = temp2.replace(".", "");
+
+                            if (!numberitems.contains(temp2)) {
+                                numberitems.add(temp2);
+                            }
+                        }
+                    }
+                }
+
             }
-        }
-/*
+                if (temp.contains("금액") && count == 0) {
+                    count = 1;
+                }
+                if (result.equals("")) {
+                    payMemoToast = "내용 미 검출";
+                }
+            }
 
-        if(result.equals("")) {
-            payMemoToast = "내용 미 검출";
-        } else {
-            etPaymemo.setText(result);
+
+        for(int i=0; i<koreanitems.size(); i++) {
+            result += koreanitems.get(i);
+            result += "\n";
         }
-*/
+        for(int i=0; i<numberitems.size(); i++) {
+            result += numberitems.get(i);
+            result += "\n";
+        }
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+        alertDialog.setTitle("자동 인식 결과");
+        alertDialog.setMessage(result);
+        alertDialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                numberitems.clear();
+                koreanitems.clear();
+            }
+        });
+        alertDialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                numberitems.clear();
+                koreanitems.clear();
+            }
+        });
+        AlertDialog alert = alertDialog.create();
+        alert.show();
         return payMemoToast;
     }
+
     public static String extractPrice(String str) {
         String result="";
         String temp="";
@@ -552,11 +639,13 @@ public class CloudActivity extends AppCompatActivity {
         StringTokenizer stringTokenizer = new StringTokenizer(str,"\n");
         while(stringTokenizer.hasMoreTokens()){
             temp = stringTokenizer.nextToken();
+
             if(temp.contains(",") && temp.contains("0")) {
                 StringTokenizer stringTokenizer2 = new StringTokenizer(temp, " ");
                 while(stringTokenizer2.hasMoreTokens()){
                     temp = stringTokenizer2.nextToken();
-                    if(temp.contains(",") && temp.contains("0")) {
+                    char last = temp.charAt(temp.length() - 1);
+                    if(temp.contains(",") && last == '0') {
                         temp = temp.replace(",", "");
                         temp = temp.replace(".", "");
 
@@ -572,7 +661,9 @@ public class CloudActivity extends AppCompatActivity {
                 StringTokenizer stringTokenizer2 = new StringTokenizer(temp, " ");
                 while(stringTokenizer2.hasMoreTokens()){
                     temp = stringTokenizer2.nextToken();
-                    if(temp.contains(".") && temp.contains("0")) {
+                    char last = temp.charAt(temp.length() - 1);
+                    if(temp.contains(".") && last == '0') {
+
                         temp = temp.replace(",", "");
                         temp = temp.replace(".", "");
 
@@ -594,7 +685,7 @@ public class CloudActivity extends AppCompatActivity {
 
 
 
-    public static String getXmlData(String word) {
+     public static String getXmlData(String word) {
 
         StringBuffer buffer = new StringBuffer();
         String key = "E2D50DDB2065F44A008A9D55885E3390";

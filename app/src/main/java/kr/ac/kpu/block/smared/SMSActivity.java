@@ -2,6 +2,10 @@ package kr.ac.kpu.block.smared;
 
 import android.*;
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -31,6 +35,7 @@ public class SMSActivity extends AppCompatActivity {
     TextView tvCountSMS;
     SMS mSMS;
     int check = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,6 +165,8 @@ public class SMSActivity extends AppCompatActivity {
                 }
             }
         });
+
+
 
 
 

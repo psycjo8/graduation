@@ -15,6 +15,8 @@
         android:textColor="#FFFFFF"
         android:text="문자 불러오기"
         />
+
+
     <TextView
         android:id="@+id/tvCountSMS"
         android:layout_width="wrap_content"

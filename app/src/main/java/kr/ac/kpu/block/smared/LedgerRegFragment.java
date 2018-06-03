@@ -135,6 +135,7 @@ public class LedgerRegFragment extends android.app.Fragment {
             }
         });
 
+
         return v;
     }
 

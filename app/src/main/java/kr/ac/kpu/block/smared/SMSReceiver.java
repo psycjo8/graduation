@@ -41,17 +41,6 @@ public class SMSReceiver extends BroadcastReceiver {
         if (intent.getAction().equals(ACTION)) {
 
 
-
-            final NotificationManager notificationManager =
-                    (NotificationManager)context.getSystemService(context.NOTIFICATION_SERVICE);
-            final Intent intents = new Intent(context.getApplicationContext(),MainActivity.class);
-            final Notification.Builder builder = new Notification.Builder(context.getApplicationContext());
-            intents.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            PendingIntent pendnoti = PendingIntent.getActivity(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
-            builder.setSmallIcon(R.drawable.ic_launcher_background).setTicker("Ticker").setWhen(System.currentTimeMillis())
-                    .setNumber(1).setContentTitle("스마렛").setContentText("문자메시지 도착!")
-                    .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE).setContentIntent(pendnoti).setAutoCancel(true).setOngoing(true);
-            notificationManager.notify(1, builder.build());
             //Bundel 널 체크
 
             Bundle bundle = intent.getExtras();
@@ -82,24 +71,23 @@ public class SMSReceiver extends BroadcastReceiver {
 
                 smsMessages[i] = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
 
-                Log.e(logTag, "NEW SMS " + i + "th");
-                Log.e(logTag, "DisplayOriginatingAddress : "
-                        + smsMessages[i].getDisplayOriginatingAddress());
-                Log.e(logTag, "DisplayMessageBody : "
-                        + smsMessages[i].getDisplayMessageBody());
-                Log.e(logTag, "EmailBody : "
-                        + smsMessages[i].getEmailBody());
-                Log.e(logTag, "EmailFrom : "
-                        + smsMessages[i].getEmailFrom());
-                Log.e(logTag, "OriginatingAddress : "
-                        + smsMessages[i].getOriginatingAddress());
-                Log.e(logTag, "MessageBody : "
-                        + smsMessages[i].getMessageBody());
-                Log.e(logTag, "ServiceCenterAddress : "
-                        + smsMessages[i].getServiceCenterAddress());
-                Log.e(logTag, "TimestampMillis : "
-                        + smsMessages[i].getTimestampMillis());
-                Toast.makeText(context, smsMessages[i].getMessageBody(), Toast.LENGTH_SHORT).show();
+                if ( smsMessages[i].getMessageBody().contains("신한체크승인") ) {
+                    NotificationManager notificationManager =
+                            (NotificationManager)context.getSystemService(context.NOTIFICATION_SERVICE);
+                    Intent intents = new Intent(context.getApplicationContext(),TabActivity.class);
+                    intents.putExtra("sms",smsMessages[i].getMessageBody());
+                    intents.putExtra("smsdate",smsMessages[i].getTimestampMillis());
+                    Notification.Builder builder = new Notification.Builder(context.getApplicationContext());
+                    intents.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    PendingIntent pendnoti = PendingIntent.getActivity(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
+                    builder.setSmallIcon(R.drawable.logo).setTicker("Ticker").setWhen(System.currentTimeMillis())
+                            .setNumber(1).setContentTitle("SmaRed").setContentText("[신한체크카드 사용] 가계부에 추가하시겠습니까?")
+                            .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE).setContentIntent(pendnoti).setAutoCancel(true).setOngoing(true);
+                    notificationManager.notify(1, builder.build());
+                    Toast.makeText(context, smsMessages[i].getMessageBody(), Toast.LENGTH_SHORT).show();
+
+                }
+
 
             }
         }

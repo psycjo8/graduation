@@ -28,8 +28,8 @@ public class TabActivity extends AppCompatActivity  {
     FirebaseDatabase database;
     DatabaseReference myRef;
     FirebaseUser user;
-
-
+    String sms="";
+    long smsdate=0;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -58,6 +58,14 @@ public class TabActivity extends AppCompatActivity  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
+
+        Intent in = getIntent();
+        sms = in.getStringExtra("sms");
+        smsdate = in.getLongExtra("smsdate",0);
+        if (sms != null) {
+            SMSEditDialog editDialog = new SMSEditDialog(TabActivity.this,sms,smsdate);
+            editDialog.show();
+        }
 
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("users");
