@@ -492,10 +492,29 @@ public class CloudActivity extends Activity {
         String result="";
         String payMemoToast = "";
         StringTokenizer stringTokenizer = new StringTokenizer(str,"\n");
-
+        int count = 0; // 금액부터 내용 추출
 
         while(stringTokenizer.hasMoreTokens()){
-            result = getXmlData(stringTokenizer.nextToken());
+           // result = getXmlData(stringTokenizer.nextToken());
+            result = stringTokenizer.nextToken();
+            if (result.contains("금액") && count == 0) {
+                count = 1;
+            }
+            if (count == 1) {
+                if (result.contains("공급") || result.contains("면세") || result.contains("과세") || result.contains("주문")) {
+                    count = 2;
+                    break;
+                }
+
+                if (!result.contains("금액") && !memoItems.contains(result)) {
+                    memoItems.add(result);
+                }
+
+
+            }
+
+            spinneradapterMemo.notifyDataSetChanged();
+
             if (result.equals("")) {
                 payMemoToast = "내용 미 검출";
             }
@@ -566,8 +585,8 @@ public class CloudActivity extends Activity {
         while(stringTokenizer.hasMoreTokens()) {
             temp = stringTokenizer.nextToken();
             if (count == 1) {
-                if (temp.contains("공급") || temp.contains("면세") || temp.contains("과세") || temp.contains("주문")) {
-                    count = 2;
+                        if (temp.contains("공급") || temp.contains("면세") || temp.contains("과세") || temp.contains("주문")) {
+                            count = 2;
                 } else if (temp.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*")) {
                     korean = temp.replaceAll("[^[ㄱ-ㅎㅏ-ㅣ가-힣]\\n]", "");
                     if (!koreanitems.contains(korean)) {
