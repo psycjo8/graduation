@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+<<<<<<< HEAD
+    <item android:state_checked="true" android:color="#ADD8E6" />
+    <item android:color="#800000"  />
+=======
     <item android:state_checked="true"
         android:color="#FAFAFA" />
     <item android:color="#FAF2AD"  />
+>>>>>>> 6541bad66dc8a6321d5bc0862837cb26193dd6c2
 </selector>
