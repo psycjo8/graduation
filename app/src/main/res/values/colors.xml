@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="backup">#FEFE84</color>
+    <color name="background">#FAF2AD</color>
+    <color name="tab">#800000</color>
+
     <color name="colorPrimary">#3F51B5</color>
+<<<<<<< HEAD
+    <color name="colorPrimaryDark">#550000</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="White">#FFFFFF</color>
+    <color name="Ivory">#fffff0</color>
+=======
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF4081</color>
     <color name="White">#FFFFFF</color>
     <color name="Ivory">#FFFFF0</color>
+>>>>>>> 6541bad66dc8a6321d5bc0862837cb26193dd6c2
     <color name="LightYellow">#FFFFE0</color>
     <color name="Yellow">#FFFF00</color>
     <color name="Snow">#FFFAFA</color>
     <color name="FloralWhite">#FFFAF0</color>
     <color name="LemonChiffon">#FFFACD</color>
+<<<<<<< HEAD
+    <color name="Cornsilk">#fff8dc</color>
+=======
     <color name="Cornsilk">#FFF8DC</color>
+>>>>>>> 6541bad66dc8a6321d5bc0862837cb26193dd6c2
     <color name="Seashell">#FFF5EE</color>
     <color name="LavenderBlush">#FFF0F5</color>
     <color name="PapayaWhip">#FFEFD5</color>
@@ -47,7 +62,11 @@
     <color name="SandyBrown">#F4A460</color>
     <color name="Azure">#F0FFFF</color>
     <color name="Honeydew">#F0FFF0</color>
+<<<<<<< HEAD
+    <color name="AliceBlue">#f0f8ff</color>
+=======
     <color name="AliceBlue">#F0F8FF</color>
+>>>>>>> 6541bad66dc8a6321d5bc0862837cb26193dd6c2
     <color name="Khaki">#F0E68C</color>
     <color name="LightCoral">#F08080</color>
     <color name="PaleGoldenrod">#EEE8AA</color>
@@ -55,7 +74,11 @@
     <color name="DarkSalmon">#E9967A</color>
     <color name="Lavender">#E6E6FA</color>
     <color name="LightCyan">#E0FFFF</color>
+<<<<<<< HEAD
+    <color name="BurlyWood">#deb887</color>
+=======
     <color name="BurlyWood">#DEB887</color>
+>>>>>>> 6541bad66dc8a6321d5bc0862837cb26193dd6c2
     <color name="Plum">#DDA0DD</color>
     <color name="Gainsboro">#DCDCDC</color>
     <color name="Crimson">#DC143C</color>
@@ -127,7 +150,11 @@
     <color name="LightSeaGreen">#20B2AA</color>
     <color name="DodgerBlue">#1E90FF</color>
     <color name="MidnightBlue">#191970</color>
+<<<<<<< HEAD
+    <color name="Aqua">#00ffff</color>
+=======
     <color name="Aqua">#00FFFF</color>
+>>>>>>> 6541bad66dc8a6321d5bc0862837cb26193dd6c2
     <color name="Cyan">#00FFFF</color>
     <color name="SpringGreen">#00FF7F</color>
     <color name="Lime">#00FF00</color>
@@ -138,7 +165,11 @@
     <color name="Teal">#008080</color>
     <color name="Green">#008000</color>
     <color name="DarkGreen">#006400</color>
+<<<<<<< HEAD
+    <color name="Blue">#0000ff</color>
+=======
     <color name="Blue">#0000FF</color>
+>>>>>>> 6541bad66dc8a6321d5bc0862837cb26193dd6c2
     <color name="MediumBlue">#0000CD</color>
     <color name="DarkBlue">#00008B</color>
     <color name="Navy">#000080</color>
