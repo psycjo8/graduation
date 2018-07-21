@@ -1,106 +1,199 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    tools:context="kr.ac.kpu.block.smared.ProfileFragment">
+    tools:context="kr.ac.kpu.block.smared.ProfileFragment"
+    android:background="@color/grayLight"
+    android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="프로필"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginTop="10dp"
-        android:id="@+id/tvTitle"
-        />
-    <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:id="@+id/ivUser"
-        android:tooltipText="프로필 사진"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/tvTitle"
-        android:layout_marginTop="20dp"
-        android:background="#eeeeee"
-        android:scaleType="fitXY"
-        />
-    <ProgressBar
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="120dp"
-        android:id="@+id/pbLogin"
-        />
-    <TextView
-        android:id="@+id/tvNickname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:layout_below="@+id/ivUser"
-        android:textSize="20sp"
-        android:text="닉네임"
-        />
 
-    <Button
-        android:id="@+id/btnChangePhoto"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_below="@+id/tvNickname"
-        android:layout_toLeftOf="@id/btnChangeNickname"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/mybutton"
-        android:text="사진 변경"
-        android:textColor="#FFFFFF" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btnChangeNickname"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        <ProgressBar
+            android:id="@+id/pbLogin"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="120dp" />
+
+        <LinearLayout
+            android:id="@+id/prMain"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@color/endBlue"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="프로필"
+                android:textColor="#fff"
+
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ivUser"
+                android:layout_width="200dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:background="#eeeeee"
+                android:backgroundTint="@color/endBlue" />
+
+            <TextView
+                android:id="@+id/tvNickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="닉네임"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
 
-        android:layout_below="@+id/tvNickname"
-        android:layout_centerHorizontal="true"
-        android:text="닉네임 변경"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/mybutton"
-        android:textColor="#FFFFFF" />
+        <android.support.v7.widget.CardView
+            android:id="@+id/cvCard"
+            android:layout_width="275dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="275dp"
+            android:background="@color/White"
+            android:backgroundTint="@color/Bisque">
 
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_below="@id/tvNickname"
-        android:layout_toRightOf="@id/btnChangeNickname"
-        android:layout_marginLeft="25dp"
-        android:background="@drawable/mybutton"
-        android:layout_marginTop="20dp"
-        android:text="로그아웃"
+            <LinearLayout
+                android:id="@+id/prMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/prMain"
+                android:background="@color/White"
+                android:orientation="horizontal">
 
-
-        android:textColor="#FFFFFF" />
-
-    <Button
-        android:id="@+id/btnWithdrawal"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_toRightOf="@+id/btnChangeNickname"
-        android:layout_marginLeft="25dp"
-        android:layout_below="@+id/btnLogout"
-
-        android:background="@drawable/mybutton"
-        android:layout_marginTop="50dp"
-        android:text="회원 탈퇴"
-        android:textColor="#FFFFFF" />
+                <Button
+                    android:id="@+id/btnChangePhoto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="@color/White"
+                    android:shadowColor="#1398A8"
+                    android:shadowDx="0"
 
 
+                    android:shadowDy="0"
+                    android:shadowRadius="5"
+                    android:text="사진 변경"
+                    android:textColor="@color/Black" />
+
+                <Button
+                    android:id="@+id/btnChangeNickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/White"
+                    android:text="닉네임 변경"
+                    android:textColor="@color/Black" />
+
+                <Button
+                    android:id="@+id/btnLogout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="@color/White"
+                    android:text="로그아웃"
+                    android:textColor="@color/Black" />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <ImageView
+            android:id="@+id/ivGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cvCard"
+            android:layout_marginLeft="85dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_group_blue_24dp" />
 
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cvCard"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@+id/ivGroup"
+            android:text="Contact us"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/ivPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivGroup"
+            android:layout_marginLeft="90dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_phone_iphone_black_24dp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivGroup"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@+id/ivPhone"
+            android:text="010 - 4044 - 6430 " />
+
+        <ImageView
+            android:id="@+id/ivEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivPhone"
+            android:layout_marginLeft="90dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_email_black_24dp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivPhone"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/ivEmail"
+            android:text="psycjo8@gmail.com" />
+
+        <Button
+            android:id="@+id/btnWithdrawal"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="500dp"
+            android:background="@drawable/profile_button"
+            android:text="회원 탈퇴"
+            android:textColor="#FFFFFF" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>
+</ScrollView>
