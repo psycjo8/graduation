@@ -34,8 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#550000"
-            app:itemIconTint="@color/state_list"
-            app:itemTextColor="@color/state_list"
+            app:itemIconTint="@color/belowtap_color"
+            app:itemTextColor="@color/belowtap_color"
             app:menu="@menu/navigation" />
     </LinearLayout>
 
