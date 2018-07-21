@@ -104,7 +104,7 @@ public class ProfileFragment extends Fragment {
                     String value = dataSnapshot.getValue().toString();
                     String stPhoto = dataSnapshot.child("photo").getValue().toString();
                     stNickname = dataSnapshot.child("nickname").getValue().toString();
-                    tvNickname.setText("닉네임 : " + stNickname);
+                    tvNickname.setText(stNickname);
 
                     if (TextUtils.isEmpty(stPhoto)) {
                         pbLogin.setVisibility(getView().GONE);

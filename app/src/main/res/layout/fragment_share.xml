@@ -23,7 +23,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
 
-        android:background="#550000"
+        android:background="#dde5f1"
         app:itemIconTint="@color/state_list"
         app:itemTextColor="@color/state_list"
         app:menu="@menu/lednavi" />
