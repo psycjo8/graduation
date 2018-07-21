@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -71,7 +75,7 @@
     <Spinner
         android:id="@+id/spnUseitem"
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_height="25dp"
         android:layout_below="@+id/cvCalender"
         android:layout_marginLeft="85dp"
         android:layout_marginTop="5dp"
@@ -81,34 +85,36 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/spnUseitem"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:text="금액"
         android:textColor="#000000"
         android:textSize="18sp"/>
     <Spinner
         android:id="@+id/spnPrice"
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_height="25dp"
         android:layout_below="@+id/spnUseitem"
         android:layout_marginLeft="85dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/spnUseitem"
         android:layout_below="@+id/spnUseitem"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="270dp"
+        android:layout_marginTop="20dp"
         android:text="원"
         android:textColor="#000000"
-        android:textSize="18sp"/>
+        android:textSize="18sp" />
     <TextView
         android:id="@+id/content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spnPrice"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:text="내용"
         android:textColor="#000000"
         android:textSize="18sp"/>
@@ -127,7 +133,7 @@
         android:layout_width="62dp"
         android:layout_height="35dp"
         android:layout_below="@+id/spnPaymemo"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/etPaymemo"
         android:background="@drawable/mybutton"
@@ -140,18 +146,20 @@
         android:layout_height="37dp"
         android:layout_below="@id/btnSave"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="7dp"
         android:background="@drawable/mybutton"
         android:text="끝내기"
         android:textColor="#FFFFFF" />
 
-    <Spinner android:layout_height="wrap_content"
+    <Spinner
+        android:layout_height="25dp"
         android:layout_width="200dp"
         android:layout_marginLeft="85dp"
         android:id="@+id/spnPaymemo"
         android:layout_below="@+id/spnPrice"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
 
         />
 
 </RelativeLayout>
+</ScrollView>
