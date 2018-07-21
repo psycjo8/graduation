@@ -28,7 +28,7 @@
             android:id="@+id/prMain"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:background="@color/endBlue"
+            android:background="#dde5f1"
             android:orientation="vertical">
 
             <TextView
@@ -38,8 +38,6 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 android:text="프로필"
-                android:textColor="#fff"
-
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -50,7 +48,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
                 android:background="#eeeeee"
-                android:backgroundTint="@color/endBlue" />
+                android:backgroundTint="#dde5f1" />
 
             <TextView
                 android:id="@+id/tvNickname"
@@ -59,7 +57,6 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 android:text="닉네임"
-                android:textColor="#fff"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -188,9 +185,8 @@
 
             android:layout_centerHorizontal="true"
             android:layout_marginTop="500dp"
-            android:background="@drawable/profile_button"
-            android:text="회원 탈퇴"
-            android:textColor="#FFFFFF" />
+            android:background="@color/amore"
+            android:text="회원 탈퇴" />
 
 
     </RelativeLayout>
